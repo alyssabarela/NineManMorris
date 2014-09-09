@@ -55,20 +55,20 @@
                 })();
             }
 
-            for(var n = 0; n < 3; n++) {
-                (function() {
-                    var i = n;
-                    var circle = new Kinetic.Circle({
-                        x: i * 100,
-                        y: 0,
-                        radius: 5,
-                        fill: 'black',
-                        stroke: 'black',
-                        strokeWidth: 1
-                    });
-
-                    group.add(circle);
-                })();
+            for(var i = 0; i < 3; i++) {
+                for(var j = 0; j < 3; j++) {
+                    if(i != 1 || j != 1) {
+                        var circle = new Kinetic.Circle({
+                            x: i * 200,
+                            y: j * 200,
+                            radius: 5,
+                            fill: 'black',
+                            stroke: 'black',
+                            strokeWidth: 1
+                        });
+                        group.add(circle);
+                    }
+                }
             }
 
             shapesLayer.add(group);
