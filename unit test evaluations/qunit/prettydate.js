@@ -1,3 +1,5 @@
+//this example from
+//http://qunitjs.com/intro/
 function prettyDate(now, time){
     var date = new Date(time || ""),
         diff = (((new Date(now)).getTime() - date.getTime()) / 1000),
