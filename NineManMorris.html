@@ -12,48 +12,42 @@
     <body>
         <div id="container"></div>
         <script defer="defer">
-            //TODO make board_offset.x and .y so the board
-            //     can move around as needed
-            //     or make board_offsetter.x(x_coordinate)
-            //     and a similar function for y
+            //POSSIBLE GAME STRUCTURE
+            //Game object contains pieces containers and board
+            //it's "main method" looks for a div with the id "container"
+            //and puts itself in the container
 
-            //TODO use new board_offset.y to move board
-            //     down to make use of game pieces
+            //TODO make game piece container group
+            //     for each set of game pieces
+            //     position them correctly
 
-            //TODO make game pieces
+            //TODO DRY up existing code
+            //         create class for lines
 
             //TODO make game_board it's own object
             //     game_board.add_to_layer(layer)
-
-            //TODO create class for lines
-
-            //TODO center board?
-            //     need to make board_offset.x and .y
-
-            //TODO make dots smaller
-
-            //TODO make boxes the right proportions
 
             //TODO are these good variable names?
 
             //TODO get rid of magic numbers?
 
+            //TODO make script a separate file
+
             var stage = new Kinetic.Stage({
                 container: 'container',
                 width: 500,
-                height: 500
+                height: 600
             });
 
             var layer = new Kinetic.Layer();
 
             var game_board = new Kinetic.Group({
-                x: 0,
-                y: 0
+                x: 50,
+                y: 80
             });
 
-            var board_xy_offset = 10;
             for(var i = 0; i < 3; i++) {
-                var box_xy_offset = board_xy_offset + i * 50;
+                var box_xy_offset = i * 50;
                 var box_side_length = 400 - (i * 100);
                 var box = new Kinetic.Rect({
                     x: box_xy_offset,
@@ -66,24 +60,14 @@
                 });
 
                 if(i == 2) {
-                    var add_offset = function(x_or_y_coordinate) {
-                        return x_or_y_coordinate + board_xy_offset;
-                    }
-
                     var  vertical_line = new Kinetic.Line({
-                        points: [add_offset(200),
-                                 add_offset(0),
-                                 add_offset(200),
-                                 add_offset(400)],
+                        points: [200, 0, 200, 400],
                         stroke: 'black',
                         strokeWidth: 4
                     });
 
                     var  horizontal_line = new Kinetic.Line({
-                        points: [add_offset(0),
-                                 add_offset(200),
-                                 add_offset(400),
-                                 add_offset(200)],
+                        points: [0, 200, 400, 200],
                         stroke: 'black',
                         strokeWidth: 4
                     });
@@ -91,7 +75,6 @@
                     game_board.add(horizontal_line);
                     game_board.add(vertical_line);
                 }
-
                 game_board.add(box);
 
                 var get_coordinate = function(index) {
@@ -111,8 +94,33 @@
                     }
                 }
             }
-
             layer.add(game_board);
+
+            for(var t = 0; t < 9; t++) {
+                var white_game_piece = new Kinetic.Circle({
+                    x: 30 + 15 * t,
+                    y: 30,
+                    radius: 20,
+                    fill: 'white',
+                    stroke: 'black',
+                    strokeWidth: 2,
+                    draggable: true
+                });
+
+                var red_game_piece = new Kinetic.Circle({
+                    x: 390 - 15 * t,
+                    y: 30,
+                    radius: 20,
+                    fill: 'red',
+                    stroke: 'black',
+                    strokeWidth: 2,
+                    draggable: true
+                });
+
+                layer.add(white_game_piece);
+                layer.add(red_game_piece);
+            }
+
             stage.add(layer);
         </script>
     </body>
