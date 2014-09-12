@@ -14,7 +14,7 @@
 //TODO make script a separate file
 
 
-var stage = instantiateGame()
+var stage = instantiateGame();
 
 
 
@@ -31,6 +31,7 @@ function instantiateGame(){
     gameBoardLayer.add(game_board);
     drawGamePieces(gameBoardLayer);
     stageContainer.add(gameBoardLayer);
+    // return stageContainer;
     return stageContainer;
 }
 
