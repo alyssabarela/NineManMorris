@@ -59,7 +59,7 @@ for(var i = 0; i < 3; i++) {
     });
 
     //This if statement checks to see if the second box has
-    //been drawn. If it has then the horizontal and verical
+    //been drawn. If it has then the horizontal and vertical
     //lines are drawn.
     if(i == 2) {
         var  vertical_line = new Kinetic.Line({
