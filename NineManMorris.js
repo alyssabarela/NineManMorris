@@ -2,6 +2,8 @@
 //Game object contains pieces containers and board
 //it's "main method" looks for a div with the id "container"
 //and puts itself in the container
+//TODO confirm that we have the correct
+//     number of game pieces.
 //TODO make game piece container group
 //     for each set of game pieces
 //     position them correctly
@@ -24,14 +26,28 @@ var stage = new Kinetic.Stage({
 
 var layer = new Kinetic.Layer();
 
+//The game board is built out of KinetcJS primitives, namely:
+//3 successively smaller boxes, each on top of the other
+//1 horizontal line crossing the middle of the board, covered
+//    by the smallest box.
+//1 vertical line crossing the middle of the board, covered
+//    by the smallest box.
+//24 dots on the corners and midpoints of the sides of each box.
+//
+//None of these primitives are draggable
 var game_board = new Kinetic.Group({
     x: 50,
     y: 80
 });
 
+//The outer for-loop draws each box and the the vertical and
+//horizontal lines.
 for(var i = 0; i < 3; i++) {
     var box_xy_offset = i * 50;
     var box_side_length = 400 - (i * 100);
+
+    //This object is created in each iteration of the for-loop
+    //and is made successively smaller.
     var box = new Kinetic.Rect({
         x: box_xy_offset,
         y: box_xy_offset,
@@ -42,6 +58,9 @@ for(var i = 0; i < 3; i++) {
         strokeWidth: 4
     });
 
+    //This if statement checks to see if the second box has
+    //been drawn. If it has then the horizontal and verical
+    //lines are drawn.
     if(i == 2) {
         var  vertical_line = new Kinetic.Line({
             points: [200, 0, 200, 400],
@@ -60,9 +79,14 @@ for(var i = 0; i < 3; i++) {
     }
     game_board.add(box);
 
+    //This function helps the for-loop below determine the
+    //x or y position for each of the 24 dots
     var get_coordinate = function(index) {
         return box_xy_offset + index * .5 * box_side_length;
     }
+    //This for-loop draws the 24 dots
+    //j helps determine the x position of the dot
+    //k helps determine the y position of the dot
     for(var j = 0; j < 3; j++) {
         for(var k = 0; k < 3; k++) {
             if(j != 1 || k != 1) {
@@ -79,6 +103,7 @@ for(var i = 0; i < 3; i++) {
 }
 layer.add(game_board);
 
+//This for-loop creates all game pieces
 for(var t = 0; t < 9; t++) {
     var white_game_piece = new Kinetic.Circle({
         x: 30 + 15 * t,

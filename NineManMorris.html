@@ -10,8 +10,9 @@
     function supports_canvas() {
         return !!document.createElement('canvas').getContext;
     }
-    if(! supports_canvas()){
-        alert("I'm sorry, it appears your current browser doesn't support canvas objects, please try another browser!");
+    if(!supports_canvas()) {
+        alert("I'm sorry, it appears your current browser " +
+              "doesn't support canvas objects, please try another browser!");
     }
     </script>
     <div id="container"></div>
