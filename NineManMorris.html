@@ -6,6 +6,14 @@
     <title>The Dino-Riders: Nine Men's Morris</title>
 </head>
 <body>
+    <script>
+    function supports_canvas() {
+        return !!document.createElement('canvas').getContext;
+    }
+    if(! supports_canvas()){
+        alert("I'm sorry, it appears your current browser doesn't support canvas objects, please try another browser!");
+    }
+    </script>
     <div id="container"></div>
     <script defer="defer" src="NineManMorris.js"></script>
 </body>
