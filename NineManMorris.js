@@ -2,8 +2,6 @@
 //Game object contains pieces containers and board
 //it's "main method" looks for a div with the id "container"
 //and puts itself in the container
-//TODO confirm that we have the correct
-//     number of game pieces.
 //TODO make game piece container group
 //     for each set of game pieces
 //     position them correctly
@@ -16,35 +14,51 @@
 //TODO make script a separate file
 
 
+var stage = instantiateGame()
 
 
-var stage = new Kinetic.Stage({
-    container: 'container',
-    width: 500,
-    height: 600
-});
 
-var layer = new Kinetic.Layer();
+function instantiateGame(){
+    var stageContainer = new Kinetic.Stage({
+        container: 'container',
+        width: 500,
+        height: 600
+    });
 
-//The game board is built out of KinetcJS primitives, namely:
-//3 successively smaller boxes, each on top of the other
-//1 horizontal line crossing the middle of the board, covered
-//    by the smallest box.
-//1 vertical line crossing the middle of the board, covered
-//    by the smallest box.
-//24 dots on the corners and midpoints of the sides of each box.
-//
-//None of these primitives are draggable
-var game_board = new Kinetic.Group({
-    x: 50,
-    y: 80
-});
+    var gameBoardLayer = new Kinetic.Layer();
+    var game_board = createGameboard();
+    drawBoxes(game_board);
+    gameBoardLayer.add(game_board);
+    drawGamePieces(gameBoardLayer);
+    stageContainer.add(gameBoardLayer);
+    return stageContainer;
+}
 
-//The outer for-loop draws each box and the the vertical and
-//horizontal lines.
-for(var i = 0; i < 3; i++) {
-    var box_xy_offset = i * 50;
-    var box_side_length = 400 - (i * 100);
+function createGameboard(){
+    /*
+    The game board is built out of KinetcJS primitives, namely:
+    3 successively smaller boxes, each on top of the other
+    1 horizontal line crossing the middle of the board, covered
+    by the smallest box.
+    1 vertical line crossing the middle of the board, covered
+    by the smallest box.
+    24 dots on the corners and midpoints of the sides of each box.
+
+    None of these primitives are draggable
+    */
+    var game_board = new Kinetic.Group({
+        x: 50,
+        y: 80
+    });
+    return game_board;
+}
+
+function drawBoxes(game_board){
+    //The outer for-loop draws each box and the the vertical and
+    //horizontal lines.
+    for(var i = 0; i < 3; i++) {
+        var box_xy_offset = i * 50;
+        var box_side_length = 400 - (i * 100);
 
     //This object is created in each iteration of the for-loop
     //and is made successively smaller.
@@ -62,23 +76,32 @@ for(var i = 0; i < 3; i++) {
     //been drawn. If it has then the horizontal and vertical
     //lines are drawn.
     if(i == 2) {
-        var  vertical_line = new Kinetic.Line({
-            points: [200, 0, 200, 400],
-            stroke: 'black',
-            strokeWidth: 4
-        });
-
-        var  horizontal_line = new Kinetic.Line({
-            points: [0, 200, 400, 200],
-            stroke: 'black',
-            strokeWidth: 4
-        });
-
-        game_board.add(horizontal_line);
-        game_board.add(vertical_line);
+        drawLines(game_board);
     }
     game_board.add(box);
 
+    drawSpaces(game_board, box_xy_offset, box_side_length);
+    }
+}
+
+function drawLines(game_board){
+    var  vertical_line = new Kinetic.Line({
+        points: [200, 0, 200, 400],
+        stroke: 'black',
+        strokeWidth: 4
+    });
+
+    var  horizontal_line = new Kinetic.Line({
+        points: [0, 200, 400, 200],
+        stroke: 'black',
+        strokeWidth: 4
+    });
+
+    game_board.add(horizontal_line);
+    game_board.add(vertical_line);
+}
+
+function drawSpaces(game_board, box_xy_offset, box_side_length){
     //This function helps the for-loop below determine the
     //x or y position for each of the 24 dots
     var get_coordinate = function(index) {
@@ -100,33 +123,33 @@ for(var i = 0; i < 3; i++) {
             }
         }
     }
-}
-layer.add(game_board);
 
-//This for-loop creates all game pieces
-for(var t = 0; t < 9; t++) {
-    var white_game_piece = new Kinetic.Circle({
-        x: 30 + 15 * t,
-        y: 30,
-        radius: 20,
-        fill: 'white',
-        stroke: 'black',
-        strokeWidth: 2,
-        draggable: true
-    });
-
-    var red_game_piece = new Kinetic.Circle({
-        x: 390 - 15 * t,
-        y: 30,
-        radius: 20,
-        fill: 'red',
-        stroke: 'black',
-        strokeWidth: 2,
-        draggable: true
-    });
-
-    layer.add(white_game_piece);
-    layer.add(red_game_piece);
 }
 
-stage.add(layer);
+function drawGamePieces(gameBoardLayer){
+    //This for-loop creates all game pieces
+    for(var t = 0; t < 9; t++) {
+        var white_game_piece = new Kinetic.Circle({
+            x: 30 + 15 * t,
+            y: 30,
+            radius: 20,
+            fill: 'white',
+            stroke: 'black',
+            strokeWidth: 2,
+            draggable: true
+        });
+
+        var red_game_piece = new Kinetic.Circle({
+            x: 390 - 15 * t,
+            y: 30,
+            radius: 20,
+            fill: 'red',
+            stroke: 'black',
+            strokeWidth: 2,
+            draggable: true
+        });
+
+        gameBoardLayer.add(white_game_piece);
+        gameBoardLayer.add(red_game_piece);
+    }
+}
