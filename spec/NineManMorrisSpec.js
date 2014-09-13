@@ -1,4 +1,3 @@
-//as of right now, i have to keep copying the js file into src file here rather than referencing it from our actual source files, need to remedy this
 describe("Game is created", function() {
     it("creates a stage", function() {
        var ExpectedStage = new Kinetic.Stage({
@@ -6,7 +5,7 @@ describe("Game is created", function() {
         width: 500,
         height: 600
     });
-        var ActualStage = instantiateGame();
+        var ActualStage = gameFactory.createGame();
         expect(ActualStage.attrs).toEqual(ExpectedStage.attrs);
     });
 
@@ -16,7 +15,7 @@ describe("Game is created", function() {
             x: 50,
             y: 80
         });
-        var Actual_game_board = createGameboard();
+        var Actual_game_board = gameFactory.createGameboard();
         //Kinetic objects are a bit complex, if you just grab attrs, it contains the attributes we actually set, such as x and y here
         expect(Actual_game_board.attrs).toEqual(Expected_game_board.attrs);
     });
