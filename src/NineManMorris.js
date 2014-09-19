@@ -133,30 +133,37 @@ GameBoard.prototype.drawSpaces = function(game_board, box_xy_offset, box_side_le
 
 GameBoard.prototype.drawGamePieces = function(layer) {
 	//This for-loop creates all game pieces
+	
+	var whitePieceArray = new Array();
+	var redPieceArray = new Array();
+	
 	for(var t = 0; t < 9; t++) {
-		var white_game_piece = new Kinetic.Circle({
-			x: this.x + 15 * t,
-			y: this.y - 50,
-			radius: 20,
-			fill: 'white',
-			stroke: 'black',
-			strokeWidth: 2,
-			draggable: true
-		});
 
-		var red_game_piece = new Kinetic.Circle({
-			x: this.x + this.sideLength - 15 * t,
-			y: this.y - 50,
-			radius: 20,
-			fill: 'red',
-			stroke: 'black',
-			strokeWidth: 2,
-			draggable: true
-		});
-
-		layer.add(white_game_piece);
-		layer.add(red_game_piece);
+		//the t == 8 results in a boolean value, used to set the "draggable" option
+		whitePieceArray.push(new GamePiece(this.x + 15 * t, this.y - 50, 20, 'white', 'black', 2, t==8, layer));
+		redPieceArray.push(new GamePiece(this.x + this.sideLength - 15 * t, this.y - 50, 20, 'red', 'black', 2, t==8, layer));
+	
+		//layer.add(whitePieceArray[t].game_piece);
+		//layer.add(redPieceArray[t].game_piece);
+		
 	}
+	
+}
+
+
+function GamePiece(xPos, yPos, radius, fill, stroke, strokeWidth, draggable, layer){
+
+	var game_piece = new Kinetic.Circle({
+		x: xPos,
+		y: yPos,
+		radius: radius,
+		fill: fill,
+		stroke: stroke,
+		strokeWidth: strokeWidth,
+		draggable: draggable
+	});
+	
+	layer.add(game_piece);
 }
 
 
