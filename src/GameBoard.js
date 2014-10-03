@@ -187,13 +187,100 @@ GameBoard.prototype.drawGamePieces = function(layer, gPieceArray) {
 		
 	}
 	
-	for(var t = 17; t > 0; t--) {
-	    gPieceArray[t].on('dragend', function() {
+	gPieceArray[17].on('dragend', function() {
 		this.draggable(false);
 		gPieceArray[16].draggable(true);
 	    });
+		
+		gPieceArray[16].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[15].draggable(true);
+	    });
+		
+		gPieceArray[15].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[14].draggable(true);
+	    });
+		
+		gPieceArray[14].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[13].draggable(true);
+	    });
+		
+		gPieceArray[13].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[12].draggable(true);
+	    });
+		
+		gPieceArray[12].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[11].draggable(true);
+	    });
+		
+		gPieceArray[11].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[10].draggable(true);
+	    });
+		
+		gPieceArray[10].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[9].draggable(true);
+	    });
+		
+		gPieceArray[9].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[8].draggable(true);
+	    });
+		
+		gPieceArray[8].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[7].draggable(true);
+	    });
+		
+		gPieceArray[7].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[6].draggable(true);
+	    });
+		
+		gPieceArray[6].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[5].draggable(true);
+	    });
+		
+		gPieceArray[5].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[4].draggable(true);
+	    });
+		
+		gPieceArray[4].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[3].draggable(true);
+	    });
+		
+		gPieceArray[3].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[2].draggable(true);
+	    });
+		
+		gPieceArray[2].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[1].draggable(true);
+	    });
+		
+		gPieceArray[1].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[0].draggable(true);
+	    });
+	
+	/*
+	for(var i = 17; i > 0; i--) {
+	    gPieceArray[i].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[i-1].draggable(true);
+	    });
 	    //gPieceArray[t].draggable(true);
 	}
+	*/
 	
 	//var piecePlease = gPieceArray[5].getPiece;
 	
