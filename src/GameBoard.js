@@ -116,20 +116,88 @@ GameBoard.prototype.drawSpaces = function(game_board, box_xy_offset, box_side_le
 
 
 GameBoard.prototype.drawGamePieces = function(layer) {
-	//This for-loop creates all game pieces
-	
-	var whitePieceArray = new Array();
-	var redPieceArray = new Array();
-	
+	//This for-loop creates all game pieces	
 	for(var t = 0; t < 9; t++) {
+	  
+		var game_piece = new Kinetic.Circle({
+		  x: this.x + this.sideLength - 15 * t,
+		  y: this.y - 50,
+		  radius: 20,
+		  fill: 'red',
+		  stroke: 'black',
+		  strokeWidth: 2,
+		  draggable: false
+		});
+		
+		//game_piece.on('dragend', function() {
+		//    this.draggable(false);
+		//});
+		
+		gPieceArray.push(game_piece);
+		layer.add(game_piece);
+		
+		game_piece = new Kinetic.Circle({
+		  x: this.x + 15 * t,
+		  y: this.y - 50,
+		  radius: 20,
+		  fill: 'white',
+		  stroke: 'black',
+		  strokeWidth: 2,
+		  draggable: t==8
+		});
+		
+		//game_piece.on('dragend', function() {
+		//    this.draggable(false);
+		//});
+		
+		gPieceArray.push(game_piece);
+		layer.add(game_piece);
 
 		//the t == 8 results in a boolean value, used to set the "draggable" option
-		whitePieceArray.push(new GamePiece(this.x + 15 * t, this.y - 50, 20, 'white', 'black', 2, t==8, layer));
-		redPieceArray.push(new GamePiece(this.x + this.sideLength - 15 * t, this.y - 50, 20, 'red', 'black', 2, t==8, layer));
-	
+		//gPieceArray.push(new GamePiece(this.x + this.sideLength - 15 * t, this.y - 50, 20, 'red', 'black', 2, false, layer, gPieceArray));
+		//gPieceArray.push(new GamePiece(this.x + 15 * t, this.y - 50, 20, 'white', 'black', 2, t==8, layer, gPieceArray));
+		
+		
+		//gPieceArray[17].game_piece.on('dragend', function() {
+		    //this.writeMessage('dragend');
+		  
+		//});
+		/*
+		gArray[0].game_piece.draggable(true);
+		gArray[1].game_piece.draggable(true);
+		gArray[2].game_piece.draggable(true);
+		gArray[3].game_piece.draggable(true);
+		gArray[4].game_piece.draggable(true);
+		gArray[5].game_piece.draggable(true);
+		gArray[6].game_piece.draggable(true);
+		gArray[7].game_piece.draggable(true);
+		gArray[8].game_piece.draggable(true);
+		*/
+		//this.draggable(false);
+		//gArray[0].game_piece.draggable(true);
+
+		
+		//});
 		//layer.add(whitePieceArray[t].game_piece);
 		//layer.add(redPieceArray[t].game_piece);
 		
+		
+		
 	}
+	
+	for(var t = 17; t > 0; t--) {
+	    gPieceArray[t].on('dragend', function() {
+		this.draggable(false);
+		gPieceArray[16].draggable(true);
+	    });
+	    //gPieceArray[t].draggable(true);
+	}
+	
+	//var piecePlease = gPieceArray[5].getPiece;
+	
+	//piecePlease.draggable(true);
+	
+	
+	
 	
 }
