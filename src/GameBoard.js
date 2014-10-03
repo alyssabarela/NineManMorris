@@ -4,7 +4,7 @@
 	this.x = xLoc;
 	this.y = yLoc;
 	this.sideLength = sideLength;
-	
+	var gamePieceArray = new Array();
 	/*
 	The game board is built out of KinetcJS primitives, namely:
 	3 successively smaller boxes, each on top of the other
@@ -34,7 +34,7 @@
 	
 	gameBoardLayer.add(game_board);
 	
-	this.drawGamePieces(gameBoardLayer);
+	this.drawGamePieces(gameBoardLayer, gamePieceArray);
 	
 	stageContainer.add(gameBoardLayer);
 
@@ -115,8 +115,10 @@ GameBoard.prototype.drawSpaces = function(game_board, box_xy_offset, box_side_le
 
 
 
-GameBoard.prototype.drawGamePieces = function(layer) {
+GameBoard.prototype.drawGamePieces = function(layer, gPieceArray) {
 	//This for-loop creates all game pieces	
+	
+	
 	for(var t = 0; t < 9; t++) {
 	  
 		var game_piece = new Kinetic.Circle({
@@ -172,7 +174,7 @@ GameBoard.prototype.drawGamePieces = function(layer) {
 		gArray[6].game_piece.draggable(true);
 		gArray[7].game_piece.draggable(true);
 		gArray[8].game_piece.draggable(true);
-		*/
+		
 		//this.draggable(false);
 		//gArray[0].game_piece.draggable(true);
 
@@ -180,7 +182,7 @@ GameBoard.prototype.drawGamePieces = function(layer) {
 		//});
 		//layer.add(whitePieceArray[t].game_piece);
 		//layer.add(redPieceArray[t].game_piece);
-		
+		*/
 		
 		
 	}
