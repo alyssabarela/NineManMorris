@@ -1,9 +1,12 @@
 
-	function GameBoard(xLoc, yLoc, sideLength){
+function GameBoard(xLoc, yLoc, box_lengths){
 
 	this.x = xLoc;
 	this.y = yLoc;
-	this.sideLength = sideLength;
+    this.box_lengths = box_lengths;
+	this.sideLength = box_lengths.biggest_side;
+    this.number_of_boxes = 3;
+
 	var gamePieceArray = new Array();
 	/*
 	The game board is built out of KinetcJS primitives, namely:
@@ -12,7 +15,7 @@
 	by the smallest box.
 	1 vertical line crossing the middle of the board, covered
 	by the smallest box.
-	24 dots on the corners and midpoints of the sides of each box.
+	24 game_spaces on the corners and midpoints of the sides of each box.
 
 	None of these primitives are draggable
 	*/
@@ -41,33 +44,53 @@
 }
 	
 GameBoard.prototype.drawBoxes = function(game_board) {
+    for(var box_length in this.box_lengths) {
+        console.log(box_length);
+
+        var box_side_length = this.box_lengths[box_length];
+        var box_xy_offset = (this.box_lengths["biggest_side"] - box_side_length)/2;
+
+        console.log("xy offset = " + box_xy_offset);
+
+        var box = new Kinetic.Rect({
+            x: box_xy_offset,
+            y: box_xy_offset,
+            width: box_side_length,
+            height: box_side_length,
+            fill: 'white',
+            stroke: 'black',
+            strokeWidth: 4
+        });
+    }
+
+
 	//The outer for-loop draws each box and the the vertical and
 	//horizontal lines.
-	for(var i = 0; i < 3; i++) {
-		var box_xy_offset = i * 50;
+	for(var i = 0; i < this.number_of_boxes; i++) {
+		box_xy_offset = i * 50;
 		var box_side_length = this.sideLength - (i * 100);
 
-	//This object is created in each iteration of the for-loop
-	//and is made successively smaller.
-	var box = new Kinetic.Rect({
-		x: box_xy_offset,
-		y: box_xy_offset,
-		width: box_side_length,
-		height: box_side_length,
-		fill: 'white',
-		stroke: 'black',
-		strokeWidth: 4
-	});
+        //This object is created in each iteration of the for-loop
+        //and is made successively smaller.
+        var box = new Kinetic.Rect({
+            x: box_xy_offset,
+            y: box_xy_offset,
+            width: box_side_length,
+            height: box_side_length,
+            fill: 'white',
+            stroke: 'black',
+            strokeWidth: 4
+        });
 
-	//This if statement checks to see if the second box has
-	//been drawn. If it has then the horizontal and vertical
-	//lines are drawn.
-	if(i == 2) {
-		this.drawLines(game_board);
-	}
-	game_board.add(box);
+        //This if statement checks to see if the second box has
+        //been drawn. If it has then the horizontal and vertical
+        //lines are drawn.
+        if(i == 2) {
+            this.drawLines(game_board);
+        }
+        game_board.add(box);
 
-	this.drawSpaces(game_board, box_xy_offset, box_side_length);
+        this.drawSpaces(game_board, box_xy_offset, box_side_length);
 	}
 }
 
@@ -90,23 +113,32 @@ GameBoard.prototype.drawLines = function(game_board) {
 
 GameBoard.prototype.drawSpaces = function(game_board, box_xy_offset, box_side_length) {
 	//This function helps the for-loop below determine the
-	//x or y position for each of the 24 dots
-	var get_coordinate = function(index) {
-		return box_xy_offset + index * .5 * box_side_length;
+	//x or y position for each of the 24 game_spaces
+	var get_game_space_coordinate = function(j_or_k) {
+		return box_xy_offset + j_or_k * .5 * box_side_length;
 	}
-	//This for-loop draws the 24 dots
-	//j helps determine the x position of the dot
-	//k helps determine the y position of the dot
-	for(var j = 0; j < 3; j++) {
-		for(var k = 0; k < 3; k++) {
-			if(j != 1 || k != 1) {
-				var dot = new Kinetic.Circle({
-					x: get_coordinate(j),
-					y: get_coordinate(k),
-					radius: 10,
+
+	//This for-loop draws the 24 game_spaces
+	//j helps determine the x position of the game_space
+	//k helps determine the y position of the game_space
+    number_of_game_space_columns = 3;
+    number_of_game_space_rows    = 3;
+    missing_game_space_coordinates = {x:1, y:1};
+    game_space_radius            = 10;
+
+    //Draw game spaces in double for loop
+	for(var j = 0; j < number_of_game_space_columns; j++) {
+		for(var k = 0; k < number_of_game_space_rows; k++) {
+            //If this game_space isn't our missing game_space, draw it.
+            //Basically it skips the center game_space.
+			if(j != missing_game_space_coordinates.x || k != missing_game_space_coordinates.y) {
+				var game_space = new Kinetic.Circle({
+					x: get_game_space_coordinate(j),
+					y: get_game_space_coordinate(k),
+					radius: game_space_radius,
 					fill: 'black'
 				});
-				game_board.add(dot);
+				game_board.add(game_space);
 			}
 		}
 	}
@@ -117,10 +149,7 @@ GameBoard.prototype.drawSpaces = function(game_board, box_xy_offset, box_side_le
 
 GameBoard.prototype.drawGamePieces = function(layer, gPieceArray) {
 	//This for-loop creates all game pieces	
-	
-	
 	for(var t = 0; t < 9; t++) {
-	  
 		var game_piece = new Kinetic.Circle({
 		  x: this.x + this.sideLength - 15 * t,
 		  y: this.y - 50,
@@ -130,10 +159,6 @@ GameBoard.prototype.drawGamePieces = function(layer, gPieceArray) {
 		  strokeWidth: 2,
 		  draggable: false
 		});
-		
-		//game_piece.on('dragend', function() {
-		//    this.draggable(false);
-		//});
 		
 		gPieceArray.push(game_piece);
 		layer.add(game_piece);
@@ -148,43 +173,8 @@ GameBoard.prototype.drawGamePieces = function(layer, gPieceArray) {
 		  draggable: t==8
 		});
 		
-		//game_piece.on('dragend', function() {
-		//    this.draggable(false);
-		//});
-		
 		gPieceArray.push(game_piece);
 		layer.add(game_piece);
-
-		//the t == 8 results in a boolean value, used to set the "draggable" option
-		//gPieceArray.push(new GamePiece(this.x + this.sideLength - 15 * t, this.y - 50, 20, 'red', 'black', 2, false, layer, gPieceArray));
-		//gPieceArray.push(new GamePiece(this.x + 15 * t, this.y - 50, 20, 'white', 'black', 2, t==8, layer, gPieceArray));
-		
-		
-		//gPieceArray[17].game_piece.on('dragend', function() {
-		    //this.writeMessage('dragend');
-		  
-		//});
-		/*
-		gArray[0].game_piece.draggable(true);
-		gArray[1].game_piece.draggable(true);
-		gArray[2].game_piece.draggable(true);
-		gArray[3].game_piece.draggable(true);
-		gArray[4].game_piece.draggable(true);
-		gArray[5].game_piece.draggable(true);
-		gArray[6].game_piece.draggable(true);
-		gArray[7].game_piece.draggable(true);
-		gArray[8].game_piece.draggable(true);
-		
-		//this.draggable(false);
-		//gArray[0].game_piece.draggable(true);
-
-		
-		//});
-		//layer.add(whitePieceArray[t].game_piece);
-		//layer.add(redPieceArray[t].game_piece);
-		*/
-		
-		
 	}
 	
 	gPieceArray[17].on('dragend', function() {
@@ -271,22 +261,4 @@ GameBoard.prototype.drawGamePieces = function(layer, gPieceArray) {
 		this.draggable(false);
 		gPieceArray[0].draggable(true);
 	    });
-	
-	/*
-	for(var i = 17; i > 0; i--) {
-	    gPieceArray[i].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[i-1].draggable(true);
-	    });
-	    //gPieceArray[t].draggable(true);
-	}
-	*/
-	
-	//var piecePlease = gPieceArray[5].getPiece;
-	
-	//piecePlease.draggable(true);
-	
-	
-	
-	
 }

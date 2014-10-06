@@ -3,4 +3,4 @@
 **
 */
 
-var gameBoard = new GameBoard(50, 80, 400);
+var gameBoard = new GameBoard(50, 80, {biggest_side: 400, middle_side: 300, smallest_side:200});
