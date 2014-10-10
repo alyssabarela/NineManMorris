@@ -1,6 +1,4 @@
-
-function GameBoard(xLoc, yLoc, box_lengths){
-
+function GameBoard(xLoc, yLoc, box_lengths) {
 	this.x = xLoc;
 	this.y = yLoc;
     this.box_lengths = box_lengths;
@@ -85,153 +83,64 @@ GameBoard.prototype.drawLines = function(game_board) {
 }
 
 GameBoard.prototype.drawSpaces = function(game_board, box_xy_offset, box_side_length) {
+    number_of_rows_cols = 3;
+    center_game_space   = {x:1, y:1};
+    game_space_radius   = 10;
+
 	//This function helps the for-loop below determine the
 	//x or y position for each of the 24 game_spaces
-	var get_game_space_coordinate = function(j_or_k) {
-		return box_xy_offset + j_or_k * .5 * box_side_length;
+	var get_game_space_coordinate = function(x_or_y_position) {
+        space_between_rows_cols = box_side_length/(number_of_rows_cols - 1);
+		return box_xy_offset + x_or_y_position * space_between_rows_cols;
 	}
 
 	//This for-loop draws the 24 game_spaces
-	//j helps determine the x position of the game_space
-	//k helps determine the y position of the game_space
-    number_of_game_space_columns = 3;
-    number_of_game_space_rows    = 3;
-    missing_game_space_coordinates = {x:1, y:1};
-    game_space_radius            = 10;
-
-    //Draw game spaces in double for loop
-	for(var j = 0; j < number_of_game_space_columns; j++) {
-		for(var k = 0; k < number_of_game_space_rows; k++) {
-            //If this game_space isn't our missing game_space, draw it.
-            //Basically it skips the center game_space.
-			if(j != missing_game_space_coordinates.x || k != missing_game_space_coordinates.y) {
-				var game_space = new Kinetic.Circle({
-					x: get_game_space_coordinate(j),
-					y: get_game_space_coordinate(k),
-					radius: game_space_radius,
-					fill: 'black'
-				});
-				game_board.add(game_space);
+    //There is no center game space, so none is drawn
+	for(var x_position = 0; x_position < number_of_rows_cols; x_position++) {
+		for(var y_position = 0; y_position < number_of_rows_cols; y_position++) {
+			if(x_position != center_game_space.x || y_position != center_game_space.y) {
+		        game_board.add(
+                    new Kinetic.Circle(
+                        {x:      get_game_space_coordinate(x_position),
+                         y:      get_game_space_coordinate(y_position),
+                         radius: game_space_radius,
+                         fill:   'black'}));
 			}
 		}
 	}
 
 }
 
-
-
 GameBoard.prototype.drawGamePieces = function(layer, gPieceArray) {
-	//This for-loop creates all game pieces	
-	for(var t = 0; t < 9; t++) {
-		var game_piece = new Kinetic.Circle({
-		  x: this.x + this.sideLength - 15 * t,
-		  y: this.y - 50,
-		  radius: 20,
-		  fill: 'red',
-		  stroke: 'black',
-		  strokeWidth: 2,
-		  draggable: false
-		});
-		
-		gPieceArray.push(game_piece);
-		layer.add(game_piece);
-		
-		game_piece = new Kinetic.Circle({
-		  x: this.x + 15 * t,
-		  y: this.y - 50,
-		  radius: 20,
-		  fill: 'white',
-		  stroke: 'black',
-		  strokeWidth: 2,
-		  draggable: t==8
-		});
-		
-		gPieceArray.push(game_piece);
-		layer.add(game_piece);
+    number_of_player_pieces = 9;
+    y_offset = this.y - 50;
+    game_piece_offset = 15;
+
+    //helper functions for piece-creation for-loop below
+    red_position = function(x, sideLength, t) {
+        return x + sideLength - game_piece_offset * t;
+    }
+    white_position = function(x, t) {
+        return x + game_piece_offset * t;
+    }
+
+	//create all game pieces	
+	for(var t = 0; t < number_of_player_pieces; t++) {
+		gPieceArray.push(new GamePiece(red_position(this.x, this.sideLength, t),
+                                       y_offset,
+                                       'red',
+                                       false,
+                                       layer));
+
+		gPieceArray.push(new GamePiece(white_position(this.x, t),
+                                       y_offset,
+                                       'white',
+                                       t==8,
+                                       layer));
 	}
-	
-	gPieceArray[17].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[16].draggable(true);
-	    });
-		
-		gPieceArray[16].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[15].draggable(true);
-	    });
-		
-		gPieceArray[15].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[14].draggable(true);
-	    });
-		
-		gPieceArray[14].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[13].draggable(true);
-	    });
-		
-		gPieceArray[13].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[12].draggable(true);
-	    });
-		
-		gPieceArray[12].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[11].draggable(true);
-	    });
-		
-		gPieceArray[11].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[10].draggable(true);
-	    });
-		
-		gPieceArray[10].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[9].draggable(true);
-	    });
-		
-		gPieceArray[9].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[8].draggable(true);
-	    });
-		
-		gPieceArray[8].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[7].draggable(true);
-	    });
-		
-		gPieceArray[7].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[6].draggable(true);
-	    });
-		
-		gPieceArray[6].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[5].draggable(true);
-	    });
-		
-		gPieceArray[5].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[4].draggable(true);
-	    });
-		
-		gPieceArray[4].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[3].draggable(true);
-	    });
-		
-		gPieceArray[3].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[2].draggable(true);
-	    });
-		
-		gPieceArray[2].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[1].draggable(true);
-	    });
-		
-		gPieceArray[1].on('dragend', function() {
-		this.draggable(false);
-		gPieceArray[0].draggable(true);
-	    });
+
+    //set order of pieces for first phase of play
+    for(var i = 17; i > 0; i--) {
+		gPieceArray[i].set_next(gPieceArray[i - 1]);
+    }
 }

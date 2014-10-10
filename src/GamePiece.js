@@ -1,42 +1,31 @@
 /*
-** This class will serve as the game pieces, the pieces that the user (and eventually the AI) will move to play the game
-**
+This class will serve as the game pieces, the pieces that the user (and eventually the AI) will move to play the game
 */
 
+function GamePiece(x, y, fill, draggable, layer){
+	this.circle = new Kinetic.Circle({x: x,
+                                      y: y,
+                                      radius: 20,
+                                      fill: fill,
+                                      stroke: 'black',
+                                      strokeWidth: 2,
+                                      draggable: draggable});
+    this.circle.next = false;
 
-function GamePiece(xPos, yPos, radius, fill, stroke, strokeWidth, draggable, layer){
-
-	function writeMessage(message) {
-        text.text(message);
-        layer.draw();
-    }
-	
-	var text = new Kinetic.Text({
-        x: 200,
-        y: 250,
-        fontFamily: 'Calibri',
-        fontSize: 24,
-        text: '',
-        fill: 'black'
-      });
-
-	var game_piece = new Kinetic.Circle({
-		x: xPos,
-		y: yPos,
-		radius: radius,
-		fill: fill,
-		stroke: stroke,
-		strokeWidth: strokeWidth,
-		draggable: draggable
-	});
-	
-	game_piece.on('dragstart', function() {
-        writeMessage('dragstart');
+    this.circle.on('dragend', function() {
+            this.draggable(false);
+            if(this.next) {
+                this.next.draggable(true);
+            }
     });
-	game_piece.on('dragend', function() {
-        writeMessage('dragend');
-    });
-	
-	layer.add(text);
-	layer.add(game_piece);
+
+    layer.add(this.circle);
+}
+
+GamePiece.prototype.set_next = function(next) {
+    this.circle.next = next;
+}
+
+GamePiece.prototype.draggable = function(boolean_value) {
+    this.circle.draggable(boolean_value);
 }
