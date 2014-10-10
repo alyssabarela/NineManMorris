@@ -45,33 +45,9 @@ function GameBoard(xLoc, yLoc, box_lengths){
 	
 GameBoard.prototype.drawBoxes = function(game_board) {
     for(var box_length in this.box_lengths) {
-        console.log(box_length);
-
         var box_side_length = this.box_lengths[box_length];
         var box_xy_offset = (this.box_lengths["biggest_side"] - box_side_length)/2;
 
-        console.log("xy offset = " + box_xy_offset);
-
-        var box = new Kinetic.Rect({
-            x: box_xy_offset,
-            y: box_xy_offset,
-            width: box_side_length,
-            height: box_side_length,
-            fill: 'white',
-            stroke: 'black',
-            strokeWidth: 4
-        });
-    }
-
-
-	//The outer for-loop draws each box and the the vertical and
-	//horizontal lines.
-	for(var i = 0; i < this.number_of_boxes; i++) {
-		box_xy_offset = i * 50;
-		var box_side_length = this.sideLength - (i * 100);
-
-        //This object is created in each iteration of the for-loop
-        //and is made successively smaller.
         var box = new Kinetic.Rect({
             x: box_xy_offset,
             y: box_xy_offset,
@@ -82,16 +58,13 @@ GameBoard.prototype.drawBoxes = function(game_board) {
             strokeWidth: 4
         });
 
-        //This if statement checks to see if the second box has
-        //been drawn. If it has then the horizontal and vertical
-        //lines are drawn.
-        if(i == 2) {
+        if(box_length == "smallest_side") {
             this.drawLines(game_board);
         }
         game_board.add(box);
 
         this.drawSpaces(game_board, box_xy_offset, box_side_length);
-	}
+    }
 }
 
 GameBoard.prototype.drawLines = function(game_board) {
