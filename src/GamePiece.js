@@ -3,6 +3,8 @@ This class will serve as the game pieces, the pieces that the user (and eventual
 */
 
 function GamePiece(x, y, fill, draggable, layer){
+    this.previous = {x: x, y: y};
+
 	this.circle = new Kinetic.Circle({x: x,
                                       y: y,
                                       radius: 20,
@@ -13,10 +15,10 @@ function GamePiece(x, y, fill, draggable, layer){
     this.circle.next = false;
 
     this.circle.on('dragend', function() {
-            this.draggable(false);
-            if(this.next) {
-                this.next.draggable(true);
-            }
+        this.draggable(false);
+        if(this.next) {
+            this.next.draggable(true);
+        }
     });
 
     layer.add(this.circle);

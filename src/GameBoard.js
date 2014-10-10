@@ -1,47 +1,49 @@
-function GameBoard(xLoc, yLoc, box_lengths) {
-	this.x = xLoc;
-	this.y = yLoc;
-    this.box_lengths = box_lengths;
-	this.sideLength = box_lengths.biggest_side;
+/*
+The game board is built out of KinetcJS primitives, namely:
+3 successively smaller boxes, each on top of the other
+1 horizontal line crossing the middle of the board, covered
+by the smallest box.
+1 vertical line crossing the middle of the board, covered
+by the smallest box.
+24 game_spaces on the corners and midpoints of the sides of each box.
+
+None of these primitives are draggable
+*/
+
+function GameBoard(x, y, box_lengths) {
+	this.x = x;
+	this.y = y;
     this.number_of_boxes = 3;
+    this.box_lengths     = box_lengths;
+	this.sideLength      = box_lengths.biggest_side;
 
-	var gamePieceArray = new Array();
-	/*
-	The game board is built out of KinetcJS primitives, namely:
-	3 successively smaller boxes, each on top of the other
-	1 horizontal line crossing the middle of the board, covered
-	by the smallest box.
-	1 vertical line crossing the middle of the board, covered
-	by the smallest box.
-	24 game_spaces on the corners and midpoints of the sides of each box.
-
-	None of these primitives are draggable
-	*/
+	this.gamePieceArray  = new Array();
+	this.gameSpaceArray  = new Array();
 	
-	var stageContainer = new Kinetic.Stage({
+	this.stageContainer = new Kinetic.Stage({
 		container: 'container',
 		width: 500,
 		height: 600
 	});
 		
-	var game_board = new Kinetic.Group({
+	this.game_board = new Kinetic.Group({
 		x: this.x,
 		y: this.y
 	});
 	
-	var gameBoardLayer = new Kinetic.Layer();
+	this.gameBoardLayer = new Kinetic.Layer();
 	
-	this.drawBoxes(game_board);
+	this.drawBoxes();
 	
-	gameBoardLayer.add(game_board);
+	this.gameBoardLayer.add(this.game_board);
 	
-	this.drawGamePieces(gameBoardLayer, gamePieceArray);
+	this.drawGamePieces();
 	
-	stageContainer.add(gameBoardLayer);
+	this.stageContainer.add(this.gameBoardLayer);
 
 }
 	
-GameBoard.prototype.drawBoxes = function(game_board) {
+GameBoard.prototype.drawBoxes = function() {
     for(var box_length in this.box_lengths) {
         var box_side_length = this.box_lengths[box_length];
         var box_xy_offset = (this.box_lengths["biggest_side"] - box_side_length)/2;
@@ -57,15 +59,16 @@ GameBoard.prototype.drawBoxes = function(game_board) {
         });
 
         if(box_length == "smallest_side") {
-            this.drawLines(game_board);
+            this.drawLines(this.game_board);
         }
-        game_board.add(box);
 
-        this.drawSpaces(game_board, box_xy_offset, box_side_length);
+        this.game_board.add(box);
+
+        this.drawSpaces(box_xy_offset, box_side_length);
     }
 }
 
-GameBoard.prototype.drawLines = function(game_board) {
+GameBoard.prototype.drawLines = function() {
 	var  vertical_line = new Kinetic.Line({
 		points: [this.sideLength/2, 0, this.sideLength/2, this.sideLength],
 		stroke: 'black',
@@ -78,11 +81,11 @@ GameBoard.prototype.drawLines = function(game_board) {
 		strokeWidth: 4
 	});
 
-	game_board.add(horizontal_line);
-	game_board.add(vertical_line);
+	this.game_board.add(horizontal_line);
+	this.game_board.add(vertical_line);
 }
 
-GameBoard.prototype.drawSpaces = function(game_board, box_xy_offset, box_side_length) {
+GameBoard.prototype.drawSpaces = function(box_xy_offset, box_side_length) {
     number_of_rows_cols = 3;
     center_game_space   = {x:1, y:1};
     game_space_radius   = 10;
@@ -94,24 +97,23 @@ GameBoard.prototype.drawSpaces = function(game_board, box_xy_offset, box_side_le
 		return box_xy_offset + x_or_y_position * space_between_rows_cols;
 	}
 
-	//This for-loop draws the 24 game_spaces
+	//Draw the 24 game_spaces
     //There is no center game space, so none is drawn
 	for(var x_position = 0; x_position < number_of_rows_cols; x_position++) {
 		for(var y_position = 0; y_position < number_of_rows_cols; y_position++) {
 			if(x_position != center_game_space.x || y_position != center_game_space.y) {
-		        game_board.add(
-                    new Kinetic.Circle(
-                        {x:      get_game_space_coordinate(x_position),
-                         y:      get_game_space_coordinate(y_position),
-                         radius: game_space_radius,
-                         fill:   'black'}));
+                    new GameSpace(
+                        {x:         get_game_space_coordinate(x_position),
+                         y:         get_game_space_coordinate(y_position),
+                         radius:    game_space_radius,
+                         gameBoard: this.game_board});
 			}
 		}
 	}
 
 }
 
-GameBoard.prototype.drawGamePieces = function(layer, gPieceArray) {
+GameBoard.prototype.drawGamePieces = function() {
     number_of_player_pieces = 9;
     y_offset = this.y - 50;
     game_piece_offset = 15;
@@ -126,21 +128,21 @@ GameBoard.prototype.drawGamePieces = function(layer, gPieceArray) {
 
 	//create all game pieces	
 	for(var t = 0; t < number_of_player_pieces; t++) {
-		gPieceArray.push(new GamePiece(red_position(this.x, this.sideLength, t),
-                                       y_offset,
-                                       'red',
-                                       false,
-                                       layer));
+		this.gamePieceArray.push(new GamePiece(red_position(this.x, this.sideLength, t),
+                                               y_offset,
+                                               'red',
+                                               false,
+                                               this.gameBoardLayer));
 
-		gPieceArray.push(new GamePiece(white_position(this.x, t),
-                                       y_offset,
-                                       'white',
-                                       t==8,
-                                       layer));
+		this.gamePieceArray.push(new GamePiece(white_position(this.x, t),
+                                               y_offset,
+                                               'white',
+                                               t==8,
+                                               this.gameBoardLayer));
 	}
 
     //set order of pieces for first phase of play
     for(var i = 17; i > 0; i--) {
-		gPieceArray[i].set_next(gPieceArray[i - 1]);
+		this.gamePieceArray[i].set_next(this.gamePieceArray[i - 1]);
     }
 }
