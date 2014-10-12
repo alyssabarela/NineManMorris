@@ -2,8 +2,7 @@
 This class will serve as the game pieces, the pieces that the user (and eventually the AI) will move to play the game
 */
 
-function GamePiece(x, y, fill, draggable, layer){
-    this.previous = {x: x, y: y};
+function GamePiece(x, y, fill, draggable, layer, sArray){
 
 	this.circle = new Kinetic.Circle({x: x,
                                       y: y,
@@ -12,13 +11,40 @@ function GamePiece(x, y, fill, draggable, layer){
                                       stroke: 'black',
                                       strokeWidth: 2,
                                       draggable: draggable});
+									  
+	this.circle.previous = {x: x, y: y};								  
+									  
     this.circle.next = false;
 
     this.circle.on('dragend', function() {
-        this.draggable(false);
-        if(this.next) {
-            this.next.draggable(true);
-        }
+	
+        var moved = 0;
+		
+		for (var i = 0; i < sArray.length; i++) {
+		
+			if (this.intersects({x:sArray[i].circle.getAbsolutePosition().x, y:sArray[i].circle.getAbsolutePosition().y}))  {
+				if(!sArray[i].occupied){
+					this.x(sArray[i].circle.getAbsolutePosition().x);
+					this.y(sArray[i].circle.getAbsolutePosition().y);
+					this.draggable(false);
+					if(this.next) {
+						this.next.draggable(true);
+					}
+					//need to change this to the GamePiece object instead of a boolean value so that the game space object knows which piece is occupying it, but had trouble getting it to work
+					sArray[i].occupied = true;
+					moved = 1;
+				}
+				
+			}
+			
+		}
+		
+		if(moved == 0){
+			this.x(this.previous.x);
+			this.y(this.previous.y);
+		}
+			
+		layer.draw();
     });
 
     layer.add(this.circle);
