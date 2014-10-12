@@ -102,11 +102,11 @@ GameBoard.prototype.drawSpaces = function(box_xy_offset, box_side_length) {
 	for(var x_position = 0; x_position < number_of_rows_cols; x_position++) {
 		for(var y_position = 0; y_position < number_of_rows_cols; y_position++) {
 			if(x_position != center_game_space.x || y_position != center_game_space.y) {
-                    new GameSpace(
+                    this.gameSpaceArray.push(new GameSpace(
                         {x:         get_game_space_coordinate(x_position),
                          y:         get_game_space_coordinate(y_position),
                          radius:    game_space_radius,
-                         gameBoard: this.game_board});
+                         gameBoard: this.game_board}));
 			}
 		}
 	}
@@ -132,13 +132,15 @@ GameBoard.prototype.drawGamePieces = function() {
                                                y_offset,
                                                'red',
                                                false,
-                                               this.gameBoardLayer));
+                                               this.gameBoardLayer,
+											   this.gameSpaceArray));
 
 		this.gamePieceArray.push(new GamePiece(white_position(this.x, t),
                                                y_offset,
                                                'white',
                                                t==8,
-                                               this.gameBoardLayer));
+                                               this.gameBoardLayer,
+											   this.gameSpaceArray));
 	}
 
     //set order of pieces for first phase of play
