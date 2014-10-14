@@ -2,7 +2,7 @@
 This class will serve as the game pieces, the pieces that the user (and eventually the AI) will move to play the game
 */
 
-function GamePiece(x, y, fill, draggable, layer, sArray){
+function GamePiece(x, y, fill, draggable, layer, sArray, moved, gameBoard){
 
 	this.circle = new Kinetic.Circle({x: x,
                                       y: y,
@@ -18,7 +18,7 @@ function GamePiece(x, y, fill, draggable, layer, sArray){
 
     this.circle.on('dragend', function() {
 	
-        var moved = 0;
+        this.moved = 0;
 		
 		for (var i = 0; i < sArray.length; i++) {
 		
@@ -31,23 +31,26 @@ function GamePiece(x, y, fill, draggable, layer, sArray){
 						this.next.draggable(true);
 					}
 					//need to change this to the GamePiece object instead of a boolean value so that the game space object knows which piece is occupying it, but had trouble getting it to work
-					sArray[i].occupied = true;
-					moved = 1;
+					sArray[i].occupied = fill;
+					this.moved = 1;
 				}
-				
+				    			
+
 			}
 			
 		}
 		
-		if(moved == 0){
+		if(this.moved == 0){
 			this.x(this.previous.x);
 			this.y(this.previous.y);
 		}
 			
 		layer.draw();
+		gameBoard.checkSpaces();
     });
 
     layer.add(this.circle);
+
 }
 
 GamePiece.prototype.set_next = function(next) {

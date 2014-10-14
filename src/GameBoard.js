@@ -133,18 +133,60 @@ GameBoard.prototype.drawGamePieces = function() {
                                                'red',
                                                false,
                                                this.gameBoardLayer,
-											   this.gameSpaceArray));
+											   this.gameSpaceArray,
+											   0, this));
 
 		this.gamePieceArray.push(new GamePiece(white_position(this.x, t),
                                                y_offset,
                                                'white',
                                                t==8,
                                                this.gameBoardLayer,
-											   this.gameSpaceArray));
+											   this.gameSpaceArray,
+											   0, this));
 	}
 
     //set order of pieces for first phase of play
     for(var i = 17; i > 0; i--) {
 		this.gamePieceArray[i].set_next(this.gamePieceArray[i - 1]);
     }
+}
+GameBoard.prototype.checkSpaces = function(){
+	var mill = [];
+	mill[0] = [0, 3, 5];
+	mill[1] = [8, 11, 13];
+	mill[2] =[16, 19, 21];
+	mill[3] = [18, 20, 23];
+	mill[4] = [10, 12, 15];
+	mill[5] = [2, 4, 7];
+	mill[6] = [0, 1, 2];
+	mill[7] = [8, 9, 10];
+	mill[8] = [16, 17, 18];
+	mill[9] = [21, 22, 23];
+	mill[10] = [13, 14, 15];
+	mill[11] = [5, 6, 7];
+	mill[12] = [3, 11, 19];
+	mill[13] = [20, 12, 4];
+	mill[14] = [1, 9, 17];
+	mill[15] = [22, 14, 7];
+
+	for(var i = 0; i < this.gameSpaceArray.length; i++){
+		if(this.gameSpaceArray[i].occupied){
+			for(var m = 0; m < mill.length; m++){
+				var thisMill = mill[m];
+				if(this.gameSpaceArray[i].occupied === this.gameSpaceArray[thisMill[0]].occupied
+				&& this.gameSpaceArray[i].occupied === this.gameSpaceArray[thisMill[1]].occupied
+				&& this.gameSpaceArray[i].occupied === this.gameSpaceArray[thisMill[2]].occupied){
+					alert("yay");
+				break;
+			}
+			}//end m
+
+		}//end if
+	}//end for
+
+
+}//end checkSpaces
+
+GameBoard.prototype.hasWinner = function(){
+	return false;
 }
