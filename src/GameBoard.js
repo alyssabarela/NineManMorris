@@ -184,9 +184,18 @@ GameBoard.prototype.checkSpaces = function(){
 		if(thisMill[3] !== false && thisMill[4] === false){
 			//alert(thisMill[3]);
 			thisMill[4] = true;
+			//get gamepiece on spaces in mill
+			for(var i = 0; i< this.gamePieceArray.length; i++){
+				console.log(this.gamePieceArray[i]);
+				if(this.gamePieceArray[i].space === thisMill[0] || this.gamePieceArray[i].space === thisMill[1] || this.gamePieceArray[i].space === thisMill[2]){
+					this.gamePieceArray[i].setInMill();
+					alert("true");
+				}
+			}
+			//need to set each gamepiece that is within this mill to removable false;
 			//this is where the user should be able to remove an opponents piece (one that is NOT in a mill!)
 			alert(thisMill[3] + " - you may now remove one of the opponents pieces!");
-			removePiece();
+			this.removePiece();
 
 		}
 	}//end for
@@ -194,6 +203,7 @@ GameBoard.prototype.checkSpaces = function(){
 }//end checkSpaces
 
 GameBoard.prototype.removePiece = function(){
+	
 	//check if where user clicks intersects with a current game piece
 	//if so, check if that piece resides in a mill
 	//if not, go ahead and delete that piece completely
