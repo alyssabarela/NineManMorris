@@ -152,38 +152,34 @@ GameBoard.prototype.drawGamePieces = function() {
 }
 GameBoard.prototype.checkSpaces = function(){
 	var mill = [];
-	mill[0] = [0, 3, 5];
-	mill[1] = [8, 11, 13];
-	mill[2] =[16, 19, 21];
-	mill[3] = [18, 20, 23];
-	mill[4] = [10, 12, 15];
-	mill[5] = [2, 4, 7];
-	mill[6] = [0, 1, 2];
-	mill[7] = [8, 9, 10];
-	mill[8] = [16, 17, 18];
-	mill[9] = [21, 22, 23];
-	mill[10] = [13, 14, 15];
-	mill[11] = [5, 6, 7];
-	mill[12] = [3, 11, 19];
-	mill[13] = [20, 12, 4];
-	mill[14] = [1, 9, 17];
-	mill[15] = [22, 14, 7];
+	mill[0] = [0, 3, 5, false];
+	mill[1] = [8, 11, 13, false];
+	mill[2] =[16, 19, 21, false];
+	mill[3] = [18, 20, 23, false];
+	mill[4] = [10, 12, 15, false];
+	mill[5] = [2, 4, 7, false];
+	mill[6] = [0, 1, 2, false];
+	mill[7] = [8, 9, 10, false];
+	mill[8] = [16, 17, 18, false];
+	mill[9] = [21, 22, 23, false];
+	mill[10] = [13, 14, 15, false];
+	mill[11] = [5, 6, 7, false];
+	mill[12] = [3, 11, 19, false];
+	mill[13] = [20, 12, 4, false];
+	mill[14] = [1, 9, 17, false];
+	mill[15] = [22, 14, 7, false];
 
-	for(var i = 0; i < this.gameSpaceArray.length; i++){
-		if(this.gameSpaceArray[i].occupied){
-			for(var m = 0; m < mill.length; m++){
-				var thisMill = mill[m];
-				if(this.gameSpaceArray[i].occupied === this.gameSpaceArray[thisMill[0]].occupied
-				&& this.gameSpaceArray[i].occupied === this.gameSpaceArray[thisMill[1]].occupied
-				&& this.gameSpaceArray[i].occupied === this.gameSpaceArray[thisMill[2]].occupied){
-					alert("yay");
-				break;
-			}
-			}//end m
-
-		}//end if
+	for(var m = 0; m < mill.length; m++){
+		var thisMill = mill[m];
+		if(thisMill[3] === false 
+			&& this.gameSpaceArray[thisMill[0]].occupied === this.gameSpaceArray[thisMill[1]].occupied
+			&& this.gameSpaceArray[thisMill[0]].occupied === this.gameSpaceArray[thisMill[2]].occupied){
+				thisMill[3] = this.gameSpaceArray[thisMill[0]].occupied;
+		}// end of if
+		if(thisMill[3] !== false){
+			//alert(thisMill[3]);
+		}
 	}//end for
-
 
 }//end checkSpaces
 
