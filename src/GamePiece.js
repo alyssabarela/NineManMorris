@@ -19,13 +19,13 @@ function GamePiece(x, y, fill, draggable, layer, sArray, moved, gameBoard){
     this.circle.next = false;
 
     this.circle.gameBoard = this.gameBoard;
-
+	var space = 0;
+	var removable = false;
+	var thisObj = this;
     this.circle.on('dragend', function() {
-	
-	
     
         this.moved = 0;
-        this.removable = false;
+        
 		
 		if(this.gameBoard.in_phase_1()){
 		
@@ -42,9 +42,9 @@ function GamePiece(x, y, fill, draggable, layer, sArray, moved, gameBoard){
 						//need to change this to the GamePiece object instead of a boolean value so that the game space object knows which piece is occupying it, but had trouble getting it to work
 						sArray[i].occupied = fill;
 						this.moved = 1;
-						this.removable = true;
-						this.space = i;
-
+						removable = true;
+						space = i;
+						
 					}
 									
 
@@ -72,7 +72,9 @@ function GamePiece(x, y, fill, draggable, layer, sArray, moved, gameBoard){
 		}
         
         
-
+console.log("setting space to ", space);
+thisObj.space = space;
+thisObj.removable = removable;
         console.log(this.gameBoard.in_phase_2());
     });
     
@@ -80,20 +82,24 @@ function GamePiece(x, y, fill, draggable, layer, sArray, moved, gameBoard){
     layer.add(this.circle);
     //Commented out this code because whenever a piece moves
     //it is destroyed.
-    /*
+    //that doesnt happen to me in chrome; what are you using - alyssa
+    //alternatively we could add a trash can or big X to drag the removed pieces to?
+
+    
     this.circle.on('click', function(){
-           if(this.removable === true){
+        if(thisObj.removable === true){
            if(this.moved === 1){
-        alert("attempting to remove");
+        console.log("attempting to remove");
         //is it in a mill?  if not go ahead
 
         this.destroy();
-        sArray[this.space].occupied = false;
+        console.log(thisObj);
+        sArray[space].occupied = false;
         layer.draw();
         }
     }
     });
-    */
+    
 
 }
 
@@ -110,9 +116,11 @@ GamePiece.prototype.draggable = function(boolean_value) {
 }
 
 GamePiece.prototype.setInMill = function(){
-    this.removable = false;    
+    this.removable = false;   
 }
-
+GamePiece.prototype.setSpace = function(space_value){
+    this.space = space_value;    
+}
 GamePiece.prototype.moved = function() {
     return this.circle.moved;
 }

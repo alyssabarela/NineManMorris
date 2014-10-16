@@ -176,20 +176,21 @@ GameBoard.prototype.checkSpaces = function(){
 
     for(var m = 0; m < this.mill.length; m++){
         var thisMill = this.mill[m];
-        if(thisMill[3] === false 
+        if(thisMill[3] === false //this mill is not fully occupied
             && this.gameSpaceArray[thisMill[0]].occupied === this.gameSpaceArray[thisMill[1]].occupied
             && this.gameSpaceArray[thisMill[0]].occupied === this.gameSpaceArray[thisMill[2]].occupied){
                 thisMill[3] = this.gameSpaceArray[thisMill[0]].occupied;
         }// end of if
         if(thisMill[3] !== false && thisMill[4] === false){
             //alert(thisMill[3]);
-            thisMill[4] = true;
+            console.log("occupied but not recognized");
+            thisMill[4] = true;  //set as recognized
             //get gamepiece on spaces in mill
             for(var i = 0; i< this.gamePieceArray.length; i++){
-                console.log(this.gamePieceArray[i]);
+                
                 if(this.gamePieceArray[i].space === thisMill[0] || this.gamePieceArray[i].space === thisMill[1] || this.gamePieceArray[i].space === thisMill[2]){
                     this.gamePieceArray[i].setInMill();
-                    alert("true");
+                    console.log("game piece is in mill", this.gamePieceArray[i]);
                 }
             }
             //need to set each gamepiece that is within this mill to removable false;
