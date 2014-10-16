@@ -21,40 +21,57 @@ function GamePiece(x, y, fill, draggable, layer, sArray, moved, gameBoard){
     this.circle.gameBoard = this.gameBoard;
 
     this.circle.on('dragend', function() {
+	
+	
     
         this.moved = 0;
         this.removable = false;
-        
-        for (var i = 0; i < sArray.length; i++) {
-        
-            if (this.intersects({x:sArray[i].circle.getAbsolutePosition().x, y:sArray[i].circle.getAbsolutePosition().y}))  {
-                if(!sArray[i].occupied){
-                    this.x(sArray[i].circle.getAbsolutePosition().x);
-                    this.y(sArray[i].circle.getAbsolutePosition().y);
-                    this.draggable(false);
-                    if(this.next) {
-                        this.next.draggable(true);
-                    }
-                    //need to change this to the GamePiece object instead of a boolean value so that the game space object knows which piece is occupying it, but had trouble getting it to work
-                    sArray[i].occupied = fill;
-                    this.moved = 1;
-                    this.removable = true;
-                    this.space = i;
+		
+		if(this.gameBoard.in_phase_1()){
+		
+			for (var i = 0; i < sArray.length; i++) {
+			
+				if (this.intersects({x:sArray[i].circle.getAbsolutePosition().x, y:sArray[i].circle.getAbsolutePosition().y}))  {
+					if(!sArray[i].occupied){
+						this.x(sArray[i].circle.getAbsolutePosition().x);
+						this.y(sArray[i].circle.getAbsolutePosition().y);
+						this.draggable(false);
+						if(this.next) {
+							this.next.draggable(true);
+						}
+						//need to change this to the GamePiece object instead of a boolean value so that the game space object knows which piece is occupying it, but had trouble getting it to work
+						sArray[i].occupied = fill;
+						this.moved = 1;
+						this.removable = true;
+						this.space = i;
 
-                }
-                                
+					}
+									
 
-            }
-            
-        }
+				}
+				
+			}
+			
+			if(this.moved == 0){
+				this.x(this.previous.x);
+				this.y(this.previous.y);
+			}
+				
+			layer.draw();
+			gameBoard.checkSpaces();
+			
+			if(this.gameBoard.in_phase_2()){
+				this.gameBoard.setTurn("White");
+			}
+		}
+		else if(this.gameBoard.in_phase_2()){
+			console.log("We're in phase 2");
+		}
+		else if(this.gameBoard.in_phase_3()){
+			console.log("We're in phase 3");
+		}
         
-        if(this.moved == 0){
-            this.x(this.previous.x);
-            this.y(this.previous.y);
-        }
-            
-        layer.draw();
-        gameBoard.checkSpaces();
+        
 
         console.log(this.gameBoard.in_phase_2());
     });
@@ -78,6 +95,10 @@ function GamePiece(x, y, fill, draggable, layer, sArray, moved, gameBoard){
     });
     */
 
+}
+
+GamePiece.prototype.setDraggable = function(draggable){
+	this.circle.draggable(draggable);
 }
 
 GamePiece.prototype.set_next = function(next) {
