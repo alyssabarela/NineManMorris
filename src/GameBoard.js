@@ -215,9 +215,43 @@ GameBoard.prototype.hasWinner = function(){
     return false;
 }
 
+GameBoard.prototype.setTurn = function(player){
+
+	
+
+	if(player == "Red"){
+	
+	}
+	else if(player == "White"){
+		
+	}
+	else{
+		alert("Invalid player color: " + player);
+	}
+	
+	for(var i = 0; i < this.gamePieceArray.length; i++){
+	
+		if(i%2 == 1){
+			this.gamePieceArray[i].setDraggable(true);
+		}
+		else{
+			this.gamePieceArray[i].setDraggable(false);
+		}
+	
+	}
+}
+
+GameBoard.prototype.in_phase_1 = function() {
+    return !this.in_phase_2() && !this.in_phase_3();
+}
+
 GameBoard.prototype.in_phase_2 = function() {
     for(var i = 0; i < this.gamePieceArray.length; i++) {
         if(!this.gamePieceArray[i].moved()) return false;
     }
     return true;
+}
+
+GameBoard.prototype.in_phase_3 = function() {
+    return false;
 }
