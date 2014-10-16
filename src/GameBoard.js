@@ -57,7 +57,7 @@ function GameBoard(x, y, box_lengths) {
     this.mill[12] = [3, 11, 19, false, false];
     this.mill[13] = [20, 12, 4, false, false];
     this.mill[14] = [1, 9, 17, false, false];
-    this.mill[15] = [22, 14, 7, false, false];
+    this.mill[15] = [22, 14, 6, false, false];
 
 }
     
