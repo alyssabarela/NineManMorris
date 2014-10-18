@@ -86,7 +86,8 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
         
         layer.draw();
         thisObj.gameBoard.check_for_mills();
-        console.log("setting space to ", space);
+        //commented out so it's easier to see other console.logs
+        //console.log("setting space to ", space);
         thisObj.space = space;
         thisObj.removable = removable;
     });
@@ -94,16 +95,13 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
     layer.add(this.circle);
     
     this.circle.on('click', function(){
-        if(thisObj.removable === true){
-            if(this.moved === 1){
-                console.log("attempting to remove");
-                //is it in a mill?  if not go ahead
-
-                this.destroy();
-                thisObj.space_array[thisObj.space].occupied = false;
-                layer.draw();
-                thisObj.gameBoard.set_all_unremoveable();
-            }
+        console.log(thisObj.removeable);
+        if(thisObj.removeable) {
+            this.destroy();
+            thisObj.gameBoard.unrecognize_if_was_mill(thisObj.space);
+            thisObj.space_array[thisObj.space].occupied = false;
+            layer.draw();
+            thisObj.gameBoard.set_all_unremoveable();
         }
     });
     

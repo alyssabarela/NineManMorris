@@ -185,23 +185,51 @@ GameBoard.prototype.check_for_mills = function() {
                 player_with_mill = game_board.gameSpaceArray[mill.space_indexes[0]].occupied;
                 alert(player_with_mill + " can remove their opponent's piece!");
                 if(player_with_mill == "white") {
-                    gameBoard.removePiece("red");
+                    gameBoard.set_pieces_removeable("red");
                 } else if(player_with_mill == "red") {
-                    gameBoard.removePiece("white");
+                    gameBoard.set_pieces_removeable("white");
                 } else {
                     console.error("can't remove piece player " +
                                   player_with_mill +
                                   " isn't recognized.");
                 }
             }
-        } else {
-            mill.recognized = false;
         }
     });
 }
 
-GameBoard.prototype.removePiece = function(color){
-    console.log("remove " + color);
+GameBoard.prototype.unrecognize_if_was_mill = function(empty_space) {
+    game_board = this;
+    this.mills.forEach(function(mill) {
+        mill.space_indexes.forEach(function(space) {
+            console.log(space);
+            console.log(empty_space);
+            console.log(empty_space == space);
+        });
+    });
+}
+
+GameBoard.prototype.set_pieces_removeable = function(color){
+	if(color == "red"){
+        mod_val = 0;
+	} else if(color == "white"){
+        mod_val = 1;
+	} else{
+		console.error("Invalid player color: " + player);
+        return;
+	}
+	
+	for(var i = 0; i < this.gamePieceArray.length; i++){
+        if(this.gamePieceArray[i].on_board() && i%2 == mod_val) {
+            this.gamePieceArray[i].removeable = true;
+        }
+	}
+}
+
+GameBoard.prototype.set_all_unremoveable = function() {
+	for(var i = 0; i < this.gamePieceArray.length; i++){
+        this.gamePieceArray[i].removeable = false;
+	}
 }
 
 GameBoard.prototype.hasWinner = function(){
@@ -250,7 +278,4 @@ GameBoard.prototype.in_phase_2 = function() {
 
 GameBoard.prototype.in_phase_3 = function() {
     return false;
-}
-
-GameBoard.prototype.set_all_unremoveable = function() {
 }
