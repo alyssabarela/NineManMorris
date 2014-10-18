@@ -6,5 +6,4 @@ function GameSpace(config){
     this.occupied = false;
     this.spaceNumber = config.spaceNumber;
     config.gameBoard.add(this.circle);
-
 }

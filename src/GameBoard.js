@@ -216,23 +216,26 @@ GameBoard.prototype.hasWinner = function(){
     return false;
 }
 
-GameBoard.prototype.setTurn = function(player){
+GameBoard.prototype.whos_turn_is_it = function() {
+    return this.player_whose_turn_it_is;
+}
 
-	
-
-	if(player == "Red"){
-	
+GameBoard.prototype.setTurn = function(player_whose_turn_it_is){
+    this.player_whose_turn_it_is = player_whose_turn_it_is
+	if(player_whose_turn_it_is == "Red"){
+        mod_val = 0;
 	}
-	else if(player == "White"){
-		
+	else if(player_whose_turn_it_is == "White"){
+        mod_val = 1;
 	}
 	else{
 		alert("Invalid player color: " + player);
+        return;
 	}
 	
 	for(var i = 0; i < this.gamePieceArray.length; i++){
 	
-		if(i%2 == 1){
+		if(i%2 == mod_val){
 			this.gamePieceArray[i].setDraggable(true);
 		}
 		else{
@@ -248,7 +251,7 @@ GameBoard.prototype.in_phase_1 = function() {
 
 GameBoard.prototype.in_phase_2 = function() {
     for(var i = 0; i < this.gamePieceArray.length; i++) {
-        if(!this.gamePieceArray[i].moved()) return false;
+        if(!this.gamePieceArray[i].on_board()) return false;
     }
     return true;
 }
