@@ -27,6 +27,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
     this.circle.on('dragend', function() {
         this.moved = 0;
 
+        new_space = null;
 		if(this.gameBoard.in_phase_1()) {
 			for (var i = 0; i < space_array.length; i++) {
 			
@@ -42,9 +43,10 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
 						//need to change this to the GamePiece object instead of a boolean value
                         //so that the game space object knows which piece is occupying it,
                         //but had trouble getting it to work
+                        new_space = space_array[i];
 						space_array[i].occupied = fill;
 						this.moved = 1;
-						removable = true;
+						removable = false;
 						space = i;
 						
 					}
@@ -55,24 +57,24 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
 			}
 			
 			if(this.moved == 0){
-				this.x(this.previous.x);
-				this.y(this.previous.y);
+                thisObj.reset_to_previous_position();
 			} else {
-				this.previous.x = this.getAbsolutePosition().x;
-				this.previous.y = this.getAbsolutePosition().x;
+                thisObj.set_previous_position_to_this_one(new_space);
                 this.on_board = true;
             }
-				
 			
 			if(this.gameBoard.in_phase_2()){
 				this.gameBoard.setTurn("White");
 			}
         } else {
-            if(thisObj.is_on_legal_space()) {
-                thisObj.set_previous_position_to_this_one();
+            legal_space = thisObj.get_legal_space_I_am_on();
+            if(legal_space) {
+                thisObj.set_previous_position_to_this_one(legal_space);
                 if(this.gameBoard.whos_turn_is_it() == "White") {
+                    legal_space.occupied = "white";
                     this.gameBoard.setTurn("Red");
                 } else {
+                    legal_space.occupied = "red";
                     this.gameBoard.setTurn("White");
                 }
             } else {
@@ -81,7 +83,9 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
         }
         
         layer.draw();
-        gameBoard.checkSpaces();
+        //TODO figure out what I did to make any row of pieces be
+        //     recognized as a mill
+        //gameBoard.checkSpaces();
         console.log("setting space to ", space);
         thisObj.space = space;
         thisObj.removable = removable;
@@ -96,8 +100,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
                 //is it in a mill?  if not go ahead
 
                 this.destroy();
-                console.log(thisObj);
-                space_array[thisObj.space].occupied = false;
+                thisObj.space_array[thisObj.space].occupied = false;
                 layer.draw();
             }
         }
@@ -133,18 +136,25 @@ GamePiece.prototype.on_board = function() {
     return this.circle.on_board;
 }
 
-GamePiece.prototype.is_on_legal_space = function() {
+GamePiece.prototype.get_legal_space_I_am_on = function() {
     for (var i = 0; i < this.space_array.length; i++) {
         if(this.circle.intersects({x: this.space_array[i].circle.getAbsolutePosition().x,
                                    y: this.space_array[i].circle.getAbsolutePosition().y}) &&
                                    !this.space_array[i].occupied) {
-            return true;
+            return this.space_array[i];
         }
     }
     return false;
 }
 
-GamePiece.prototype.set_previous_position_to_this_one = function() {
+GamePiece.prototype.set_previous_position_to_this_one = function(new_current_space) {
+    if(this.current_space) {
+        this.current_space.occupied = false;
+    }
+    this.current_space = new_current_space;
+    this.current_space.occupied = true;
+    this.circle.x(this.current_space.circle.getAbsolutePosition().x);
+    this.circle.y(this.current_space.circle.getAbsolutePosition().y);
     this.circle.previous.x = this.circle.getAbsolutePosition().x;
     this.circle.previous.y = this.circle.getAbsolutePosition().y;
 }
