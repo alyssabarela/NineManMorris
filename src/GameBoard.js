@@ -40,25 +40,22 @@ function GameBoard(x, y, box_lengths) {
     this.drawGamePieces();
     
     this.stageContainer.add(this.gameBoardLayer);
-    this.mill = [];
-    //[spaceA, spaceB, spaceC, occupied, recognized]
-    this.mill[0] = [0, 3, 5, false, false];
-    this.mill[1] = [8, 11, 13, false, false];
-    this.mill[2] =[16, 19, 21, false, false];
-    this.mill[3] = [18, 20, 23, false, false];
-    this.mill[4] = [10, 12, 15, false, false];
-    this.mill[5] = [2, 4, 7, false, false];
-    this.mill[6] = [0, 1, 2, false, false];
-    this.mill[7] = [8, 9, 10, false, false];
-    this.mill[8] = [16, 17, 18, false, false];
-    this.mill[9] = [21, 22, 23, false, false];
-    this.mill[10] = [13, 14, 15, false, false];
-    this.mill[11] = [5, 6, 7, false, false];
-    this.mill[12] = [3, 11, 19, false, false];
-    this.mill[13] = [20, 12, 4, false, false];
-    this.mill[14] = [1, 9, 17, false, false];
-    this.mill[15] = [22, 14, 6, false, false];
-
+    this.mills = [{space_indexes: [ 0,  3,  5], recognized:false},
+                  {space_indexes: [ 8, 11,  5], recognized:false},
+                  {space_indexes: [16, 19, 21], recognized:false},
+                  {space_indexes: [18, 20, 23], recognized:false},
+                  {space_indexes: [10, 12, 15], recognized:false},
+                  {space_indexes: [ 2,  4,  7], recognized:false},
+                  {space_indexes: [ 0,  1,  2], recognized:false},
+                  {space_indexes: [ 8,  9, 10], recognized:false},
+                  {space_indexes: [16, 17, 18], recognized:false},
+                  {space_indexes: [21, 22, 23], recognized:false},
+                  {space_indexes: [13, 14, 15], recognized:false},
+                  {space_indexes: [ 5,  6,  7], recognized:false},
+                  {space_indexes: [ 3, 11, 19], recognized:false},
+                  {space_indexes: [20, 12,  4], recognized:false},
+                  {space_indexes: [ 1,  9, 17], recognized:false},
+                  {space_indexes: [22, 14,  6], recognized:false}];
 }
     
 GameBoard.prototype.drawBoxes = function() {
@@ -172,36 +169,28 @@ GameBoard.prototype.drawGamePieces = function() {
     }
 }
 
-GameBoard.prototype.checkSpaces = function(){
-
-    for(var m = 0; m < this.mill.length; m++){
-        var thisMill = this.mill[m];
-        if(thisMill[3] === false //this mill is not fully occupied
-            && this.gameSpaceArray[thisMill[0]].occupied === this.gameSpaceArray[thisMill[1]].occupied
-            && this.gameSpaceArray[thisMill[0]].occupied === this.gameSpaceArray[thisMill[2]].occupied){
-                thisMill[3] = this.gameSpaceArray[thisMill[0]].occupied;
-        }// end of if
-        if(thisMill[3] !== false && thisMill[4] === false){
-            //alert(thisMill[3]);
-            console.log("occupied but not recognized");
-            thisMill[4] = true;  //set as recognized
-            //get gamepiece on spaces in mill
-            for(var i = 0; i< this.gamePieceArray.length; i++){
-                
-                if(this.gamePieceArray[i].space === thisMill[0] || this.gamePieceArray[i].space === thisMill[1] || this.gamePieceArray[i].space === thisMill[2]){
-                    this.gamePieceArray[i].setInMill();
-                    console.log("game piece is in mill", this.gamePieceArray[i]);
-                }
+GameBoard.prototype.check_for_mills = function() {
+    game_board = this;
+    this.mills.forEach(function(mill) {
+        occupied = (game_board.gameSpaceArray[mill.space_indexes[0]].occupied != false &&
+                    game_board.gameSpaceArray[mill.space_indexes[1]].occupied != false &&
+                    game_board.gameSpaceArray[mill.space_indexes[2]].occupied != false);
+        is_mill = (occupied &&
+                  (game_board.gameSpaceArray[mill.space_indexes[0]].occupied ==
+                   game_board.gameSpaceArray[mill.space_indexes[1]].occupied) &&
+                  (game_board.gameSpaceArray[mill.space_indexes[1]].occupied ==
+                   game_board.gameSpaceArray[mill.space_indexes[2]].occupied))
+        if(is_mill) {
+            if(!mill.recognized) {
+                mill.recognized = true;
+                player_with_mill = game_board.gameSpaceArray[mill.space_indexes[0]].occupied;
+                alert(player_with_mill + " can remove their opponent's piece!");
             }
-            //need to set each gamepiece that is within this mill to removable false;
-            //this is where the user should be able to remove an opponents piece (one that is NOT in a mill!)
-            alert(thisMill[3] + " - you may now remove one of the opponents pieces!");
-            this.removePiece();
-
+        } else {
+            mill.recognized = false;
         }
-    }//end for
-
-}//end checkSpaces
+    });
+}
 
 GameBoard.prototype.removePiece = function(){
     

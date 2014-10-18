@@ -5,6 +5,7 @@ This class will serve as the game pieces, the pieces that the user (and eventual
 function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
 
     this.gameBoard = gameBoard;
+    this.color = fill;
 
     this.circle = new Kinetic.Circle({x: x,
                                       y: y,
@@ -59,7 +60,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
 			if(this.moved == 0){
                 thisObj.reset_to_previous_position();
 			} else {
-                thisObj.set_previous_position_to_this_one(new_space);
+                thisObj.set_previous_position_to_this_one(new_space, thisObj.color);
                 this.on_board = true;
             }
 			
@@ -69,11 +70,12 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
         } else {
             legal_space = thisObj.get_legal_space_I_am_on();
             if(legal_space) {
-                thisObj.set_previous_position_to_this_one(legal_space);
                 if(this.gameBoard.whos_turn_is_it() == "White") {
+                    thisObj.set_previous_position_to_this_one(legal_space, "white");
                     legal_space.occupied = "white";
                     this.gameBoard.setTurn("Red");
                 } else {
+                    thisObj.set_previous_position_to_this_one(legal_space, "red");
                     legal_space.occupied = "red";
                     this.gameBoard.setTurn("White");
                 }
@@ -85,7 +87,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
         layer.draw();
         //TODO figure out what I did to make any row of pieces be
         //     recognized as a mill
-        //gameBoard.checkSpaces();
+        thisObj.gameBoard.check_for_mills();
         console.log("setting space to ", space);
         thisObj.space = space;
         thisObj.removable = removable;
@@ -147,12 +149,12 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
     return false;
 }
 
-GamePiece.prototype.set_previous_position_to_this_one = function(new_current_space) {
+GamePiece.prototype.set_previous_position_to_this_one = function(new_current_space, color) {
     if(this.current_space) {
         this.current_space.occupied = false;
     }
     this.current_space = new_current_space;
-    this.current_space.occupied = true;
+    this.current_space.occupied = color;
     this.circle.x(this.current_space.circle.getAbsolutePosition().x);
     this.circle.y(this.current_space.circle.getAbsolutePosition().y);
     this.circle.previous.x = this.circle.getAbsolutePosition().x;
