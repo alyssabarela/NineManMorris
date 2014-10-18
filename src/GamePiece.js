@@ -85,8 +85,6 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
         }
         
         layer.draw();
-        //TODO figure out what I did to make any row of pieces be
-        //     recognized as a mill
         thisObj.gameBoard.check_for_mills();
         console.log("setting space to ", space);
         thisObj.space = space;
@@ -104,6 +102,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
                 this.destroy();
                 thisObj.space_array[thisObj.space].occupied = false;
                 layer.draw();
+                thisObj.gameBoard.set_all_unremoveable();
             }
         }
     });

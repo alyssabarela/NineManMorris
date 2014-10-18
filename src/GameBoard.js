@@ -9,7 +9,6 @@ by the smallest box.
 
 None of these primitives are draggable
 */
-
 function GameBoard(x, y, box_lengths) {
     this.x = x;
     this.y = y;
@@ -41,7 +40,7 @@ function GameBoard(x, y, box_lengths) {
     
     this.stageContainer.add(this.gameBoardLayer);
     this.mills = [{space_indexes: [ 0,  3,  5], recognized:false},
-                  {space_indexes: [ 8, 11,  5], recognized:false},
+                  {space_indexes: [ 8, 11, 13], recognized:false},
                   {space_indexes: [16, 19, 21], recognized:false},
                   {space_indexes: [18, 20, 23], recognized:false},
                   {space_indexes: [10, 12, 15], recognized:false},
@@ -185,6 +184,15 @@ GameBoard.prototype.check_for_mills = function() {
                 mill.recognized = true;
                 player_with_mill = game_board.gameSpaceArray[mill.space_indexes[0]].occupied;
                 alert(player_with_mill + " can remove their opponent's piece!");
+                if(player_with_mill == "white") {
+                    gameBoard.removePiece("red");
+                } else if(player_with_mill == "red") {
+                    gameBoard.removePiece("white");
+                } else {
+                    console.error("can't remove piece player " +
+                                  player_with_mill +
+                                  " isn't recognized.");
+                }
             }
         } else {
             mill.recognized = false;
@@ -192,13 +200,8 @@ GameBoard.prototype.check_for_mills = function() {
     });
 }
 
-GameBoard.prototype.removePiece = function(){
-    
-    //check if where user clicks intersects with a current game piece
-    //if so, check if that piece resides in a mill
-    //if not, go ahead and delete that piece completely
-    //if so, notify the user and tell them to select another piece
-    //if the user clicks somewhere outside of a gamepiece, do nothing
+GameBoard.prototype.removePiece = function(color){
+    console.log("remove " + color);
 }
 
 GameBoard.prototype.hasWinner = function(){
@@ -247,4 +250,7 @@ GameBoard.prototype.in_phase_2 = function() {
 
 GameBoard.prototype.in_phase_3 = function() {
     return false;
+}
+
+GameBoard.prototype.set_all_unremoveable = function() {
 }
