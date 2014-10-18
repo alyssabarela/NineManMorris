@@ -152,7 +152,74 @@ describe("Game piece is created", function() {
         expect(false).toEqual(this.gamePiece.removable);
     });
     
+    it("test the setSpace function", function() {
+      
+	this.gamePiece.setSpace(5);
+      
+        expect(5).toEqual(this.gamePiece.space);
+    });
     
+    it("test the moved function", function() {
+      
+        expect(0).toEqual(this.gamePiece.moved());
+    });
     
+    it("test the on_board function", function() {
+      
+        expect(false).toEqual(this.gamePiece.on_board());
+    });
+    
+});
+
+
+describe("Transitions from 1 to 2", function() {
   
+    beforeEach(function() {
+      
+	this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
+	
+	for (var i = 0; i < this.gameFactory.gamePieceArray.length; i++){
+      
+	  for(var j = 0; j < this.gameFactory.gameSpaceArray.length; j++){
+	    
+	      if(!this.gameFactory.gameSpaceArray[j].occupied){
+		  this.gameFactory.gamePieceArray[i].circle.x(this.gameFactory.gameSpaceArray[j].circle.getAbsolutePosition().x);
+		  this.gameFactory.gamePieceArray[i].circle.y(this.gameFactory.gameSpaceArray[j].circle.getAbsolutePosition().y);
+		  this.gameFactory.gamePieceArray[i].circle.draggable(true);
+		  this.gameFactory.gameSpaceArray[j].occupied = true;
+		  this.gameFactory.gamePieceArray[i].circle.on_board = true;
+		  this.gameFactory.gameBoardLayer.draw();
+		  break;
+	      }
+	    
+	  }
+	  
+	}
+
+    });
+    
+    it("test not in phase 1", function() {
+      
+	
+      
+         expect(false).toEqual(this.gameFactory.in_phase_1());
+    });
+    
+    it("test in phase 2", function() {
+      
+	
+	
+        expect(true).toEqual(this.gameFactory.in_phase_2());
+    });
+    
+    it("test not in phase 3", function() {
+      
+	
+      
+         expect(false).toEqual(this.gameFactory.in_phase_3());
+    });
+    
+    
+    
+      
 });
