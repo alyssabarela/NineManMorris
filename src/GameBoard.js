@@ -57,30 +57,30 @@ function GameBoard(x, y, box_lengths) {
                   {space_indexes: [22, 14,  6], recognized:false}];
 
     this.space_neighbors = new Array();
-    this.space_neighbors[ 0] = [     1,  3];
-    this.space_neighbors[ 1] = [ 0,  9,  2];
-    this.space_neighbors[ 2] = [     1,  4];
-    this.space_neighbors[ 3] = [ 0, 11,  5];
-    this.space_neighbors[ 4] = [ 2, 12,  7];
-    this.space_neighbors[ 5] = [     3,  6];
-    this.space_neighbors[ 6] = [ 5, 14,  7];
-    this.space_neighbors[ 7] = [     4,  6];
-    this.space_neighbors[ 8] = [     9, 11];
-    this.space_neighbors[ 9] = [ 8, 10, 17];
-    this.space_neighbors[10] = [     9, 12];
-    this.space_neighbors[11] = [ 8,  3, 13];
-    this.space_neighbors[12] = [     3,  6];
-    this.space_neighbors[13] = [     3,  6];
-    this.space_neighbors[14] = [     3,  6];
-    this.space_neighbors[15] = [     3,  6];
-    this.space_neighbors[16] = [     3,  6];
-    this.space_neighbors[17] = [     3,  6];
-    this.space_neighbors[18] = [     3,  6];
-    this.space_neighbors[19] = [     3,  6];
-    this.space_neighbors[20] = [     3,  6];
-    this.space_neighbors[21] = [     3,  6];
-    this.space_neighbors[22] = [     3,  6];
-    this.space_neighbors[23] = [     3,  6];
+    this.space_neighbors[ 0] = [         1,  3];
+    this.space_neighbors[ 1] = [     0,  9,  2];
+    this.space_neighbors[ 2] = [         1,  4];
+    this.space_neighbors[ 3] = [     0, 11,  5];
+    this.space_neighbors[ 4] = [     2, 12,  7];
+    this.space_neighbors[ 5] = [         3,  6];
+    this.space_neighbors[ 6] = [     5, 14,  7];
+    this.space_neighbors[ 7] = [         4,  6];
+    this.space_neighbors[ 8] = [         9, 11];
+    this.space_neighbors[ 9] = [ 1,  8, 10, 17];
+    this.space_neighbors[10] = [         9, 12];
+    this.space_neighbors[11] = [ 3,  8, 13, 19];
+    this.space_neighbors[12] = [ 4, 10, 15, 20];
+    this.space_neighbors[13] = [        11, 14];
+    this.space_neighbors[14] = [ 6, 13, 15, 22];
+    this.space_neighbors[15] = [        12, 14];
+    this.space_neighbors[16] = [        17, 19];
+    this.space_neighbors[17] = [     9, 16, 18];
+    this.space_neighbors[18] = [        17, 20];
+    this.space_neighbors[19] = [    11, 16, 21];
+    this.space_neighbors[20] = [    12, 18, 23];
+    this.space_neighbors[21] = [        19, 22];
+    this.space_neighbors[22] = [    14, 21, 23];
+    this.space_neighbors[23] = [        20, 22];
 }
     
 GameBoard.prototype.drawBoxes = function() {
