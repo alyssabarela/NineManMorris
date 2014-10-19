@@ -139,15 +139,15 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
         if(this.circle.intersects({x: this.space_array[i].circle.getAbsolutePosition().x,
                                    y: this.space_array[i].circle.getAbsolutePosition().y}) &&
                                    !this.space_array[i].occupied) {
-            console.log("old");
-            console.log(this.old_space.spaceNumber);
-            console.log("current_space");
-            console.log(this.current_space.spaceNumber);
-            console.log("space index");
-            console.log(i);
-            console.log("space");
-            console.log(this.space_array[i]);
-            return this.space_array[i];
+            if(!this.gameBoard.has_3_spaces_or_less(this.color)) {
+                if(this.gameBoard.neighbors(this.old_space.spaceNumber, i)) {
+                    return this.space_array[i];
+                } else {
+                    return false;
+                }
+            } else {
+                return this.space_array[i];
+            }
         }
     }
     return false;
@@ -156,9 +156,10 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
 GamePiece.prototype.set_previous_position_to_this_one = function(new_current_space, color) {
     if(this.current_space) {
         this.current_space.occupied = false;
-        this.old_space = current_space;
     }
+
     this.current_space = new_current_space;
+    this.old_space = this.current_space
     this.current_space.occupied = color;
     this.circle.x(this.current_space.circle.getAbsolutePosition().x);
     this.circle.y(this.current_space.circle.getAbsolutePosition().y);

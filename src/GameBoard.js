@@ -82,6 +82,15 @@ function GameBoard(x, y, box_lengths) {
     this.space_neighbors[22] = [    14, 21, 23];
     this.space_neighbors[23] = [        20, 22];
 }
+
+GameBoard.prototype.has_3_spaces_or_less = function(color) {
+    console.log(color);
+    return false;
+}
+
+GameBoard.prototype.neighbors = function(space_index1, space_index2) {
+    return this.space_neighbors[space_index1].indexOf(space_index2) > -1;
+}
     
 GameBoard.prototype.drawBoxes = function() {
     i = 0;
