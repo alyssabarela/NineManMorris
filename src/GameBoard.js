@@ -198,21 +198,44 @@ GameBoard.prototype.check_for_mills = function() {
     });
 }
 
-GameBoard.prototype.set_pieces_removeable = function(color){
-	if(color == "red"){
-        mod_val = 0;
-	} else if(color == "white"){
-        mod_val = 1;
-	} else{
-		console.error("Invalid player color: " + player);
-        return;
-	}
-	
-	for(var i = 0; i < this.gamePieceArray.length; i++){
-        if(this.gamePieceArray[i].on_board() && i%2 == mod_val) {
-            this.gamePieceArray[i].removeable = true;
+GameBoard.prototype.piece_is_in_mill = function(game_piece) {
+    in_mill = false;
+    this.mills.forEach(function(mill) {
+        if(mill.recognized && !in_mill) {
+            mill.space_indexes.forEach(function(piece_index) {
+                if(piece_index == game_piece.space) {
+                    in_mill = true;
+                }
+            });
         }
-	}
+    });
+    return in_mill;
+}
+
+GameBoard.prototype.get_removeable_pieces = function() {
+    pieces_in_mill = new Array();
+    pieces_not_in_mill = new Array();
+    game_board = this;
+
+    this.gamePieceArray.forEach(function(game_piece) {
+        if(!game_board.piece_is_in_mill(game_piece)) {
+            pieces_not_in_mill.push(game_piece);
+        }
+    });
+
+    if(pieces_not_in_mill.length > 0) {
+        return pieces_not_in_mill;
+    } else {
+        return this.gamePieceArray;
+    }
+}
+
+GameBoard.prototype.set_pieces_removeable = function(color) {
+    this.get_removeable_pieces().forEach(function(game_piece) {
+        if(game_piece.on_board() && game_piece.color == color) {
+            game_piece.removeable = true;
+        }
+    });
 }
 
 GameBoard.prototype.set_all_unremoveable = function() {
