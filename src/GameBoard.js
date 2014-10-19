@@ -84,7 +84,6 @@ function GameBoard(x, y, box_lengths) {
 }
 
 GameBoard.prototype.has_3_spaces_or_less = function(color) {
-    console.log(color);
     return false;
 }
 
