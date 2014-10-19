@@ -55,9 +55,36 @@ function GameBoard(x, y, box_lengths) {
                   {space_indexes: [20, 12,  4], recognized:false},
                   {space_indexes: [ 1,  9, 17], recognized:false},
                   {space_indexes: [22, 14,  6], recognized:false}];
+
+    this.space_neighbors = new Array();
+    this.space_neighbors[ 0] = [     1,  3];
+    this.space_neighbors[ 1] = [ 0,  9,  2];
+    this.space_neighbors[ 2] = [     1,  4];
+    this.space_neighbors[ 3] = [ 0, 11,  5];
+    this.space_neighbors[ 4] = [ 2, 12,  7];
+    this.space_neighbors[ 5] = [     3,  6];
+    this.space_neighbors[ 6] = [ 5, 14,  7];
+    this.space_neighbors[ 7] = [     4,  6];
+    this.space_neighbors[ 8] = [     9, 11];
+    this.space_neighbors[ 9] = [ 8, 10, 17];
+    this.space_neighbors[10] = [     9, 12];
+    this.space_neighbors[11] = [ 8,  3, 13];
+    this.space_neighbors[12] = [     3,  6];
+    this.space_neighbors[13] = [     3,  6];
+    this.space_neighbors[14] = [     3,  6];
+    this.space_neighbors[15] = [     3,  6];
+    this.space_neighbors[16] = [     3,  6];
+    this.space_neighbors[17] = [     3,  6];
+    this.space_neighbors[18] = [     3,  6];
+    this.space_neighbors[19] = [     3,  6];
+    this.space_neighbors[20] = [     3,  6];
+    this.space_neighbors[21] = [     3,  6];
+    this.space_neighbors[22] = [     3,  6];
+    this.space_neighbors[23] = [     3,  6];
 }
     
 GameBoard.prototype.drawBoxes = function() {
+    i = 0;
     for(var box_length in this.box_lengths) {
         var box_side_length = this.box_lengths[box_length];
         var box_xy_offset = (this.box_lengths["biggest_side"] - box_side_length)/2;
@@ -78,7 +105,8 @@ GameBoard.prototype.drawBoxes = function() {
 
         this.game_board.add(box);
 
-        this.drawSpaces(box_xy_offset, box_side_length);
+        this.drawSpaces(box_xy_offset, box_side_length, i);
+        i += 8;
     }
 }
 
@@ -99,7 +127,7 @@ GameBoard.prototype.drawLines = function() {
     this.game_board.add(vertical_line);
 }
 
-GameBoard.prototype.drawSpaces = function(box_xy_offset, box_side_length) {
+GameBoard.prototype.drawSpaces = function(box_xy_offset, box_side_length, i) {
     number_of_rows_cols = 3;
     center_game_space   = {x:1, y:1};
     game_space_radius   = 10;
@@ -113,7 +141,6 @@ GameBoard.prototype.drawSpaces = function(box_xy_offset, box_side_length) {
 
     //Draw the 24 game_spaces
     //There is no center game space, so none is drawn
-    var i = 0;
     for(var x_position = 0; x_position < number_of_rows_cols; x_position++) {
         for(var y_position = 0; y_position < number_of_rows_cols; y_position++) {
             if(x_position != center_game_space.x || y_position != center_game_space.y) {
@@ -122,9 +149,8 @@ GameBoard.prototype.drawSpaces = function(box_xy_offset, box_side_length) {
                          y:           get_game_space_coordinate(y_position),
                          radius:      game_space_radius,
                          gameBoard:   this.game_board,
-                         spaceNumber: i}));
+                         spaceNumber: i++}));
             }
-            i++;
         }
     }
 
