@@ -22,7 +22,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
     this.circle.next = false;
 
     this.circle.gameBoard = this.gameBoard;
-	var space = 0;
+	var space_index = 0;
 	var removable = false;
 	var thisObj = this;
     this.circle.on('dragend', function() {
@@ -95,7 +95,6 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
     layer.add(this.circle);
     
     this.circle.on('click', function(){
-        console.log(thisObj.removeable);
         if(thisObj.removeable) {
             this.destroy();
             thisObj.gameBoard.unrecognize_if_was_mill(thisObj.space);

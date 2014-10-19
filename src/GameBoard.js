@@ -118,11 +118,11 @@ GameBoard.prototype.drawSpaces = function(box_xy_offset, box_side_length) {
         for(var y_position = 0; y_position < number_of_rows_cols; y_position++) {
             if(x_position != center_game_space.x || y_position != center_game_space.y) {
                     this.gameSpaceArray.push(new GameSpace(
-                        {x:         get_game_space_coordinate(x_position),
-                         y:         get_game_space_coordinate(y_position),
-                         radius:    game_space_radius,
-                         gameBoard: this.game_board,
-                          spaceNumber: i}));
+                        {x:           get_game_space_coordinate(x_position),
+                         y:           get_game_space_coordinate(y_position),
+                         radius:      game_space_radius,
+                         gameBoard:   this.game_board,
+                         spaceNumber: i}));
             }
             i++;
         }
@@ -198,17 +198,6 @@ GameBoard.prototype.check_for_mills = function() {
     });
 }
 
-GameBoard.prototype.unrecognize_if_was_mill = function(empty_space) {
-    game_board = this;
-    this.mills.forEach(function(mill) {
-        mill.space_indexes.forEach(function(space) {
-            console.log(space);
-            console.log(empty_space);
-            console.log(empty_space == space);
-        });
-    });
-}
-
 GameBoard.prototype.set_pieces_removeable = function(color){
 	if(color == "red"){
         mod_val = 0;
@@ -230,6 +219,22 @@ GameBoard.prototype.set_all_unremoveable = function() {
 	for(var i = 0; i < this.gamePieceArray.length; i++){
         this.gamePieceArray[i].removeable = false;
 	}
+}
+
+GameBoard.prototype.unrecognize_if_was_mill = function(empty_game_space_index) {
+    game_board = this;
+    this.gameSpaceArray.forEach(function(game_space) {
+        empty_game_space = game_board.gameSpaceArray[empty_game_space_index];
+        if(game_space.circle == empty_game_space.circle) {
+            game_board.mills.forEach(function(mill) {
+                mill.space_indexes.forEach(function(space_index) {
+                    if(space_index == empty_game_space_index) {
+                        mill.recognized = false;
+                    }
+                });
+            });
+        }
+    });
 }
 
 GameBoard.prototype.hasWinner = function(){
