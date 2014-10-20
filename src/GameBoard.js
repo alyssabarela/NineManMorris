@@ -262,8 +262,6 @@ GameBoard.prototype.get_removeable_pieces = function(color) {
         }
     });
 
-    console.log(pieces_not_in_mill.length);
-
     if(pieces_not_in_mill.length > 0) {
         return pieces_not_in_mill;
     } else {
@@ -311,27 +309,14 @@ GameBoard.prototype.whos_turn_is_it = function() {
 
 GameBoard.prototype.setTurn = function(player_whose_turn_it_is){
     this.player_whose_turn_it_is = player_whose_turn_it_is
-	if(player_whose_turn_it_is == "Red"){
-        mod_val = 0;
-	}
-	else if(player_whose_turn_it_is == "White"){
-        mod_val = 1;
-	}
-	else{
-		alert("Invalid player color: " + player);
+	if(player_whose_turn_it_is != "red" && player_whose_turn_it_is != "white"){
+		alert("Invalid player color: " + player_whose_turn_it_is);
         return;
 	}
-	
-	for(var i = 0; i < this.gamePieceArray.length; i++){
-	
-		if(i%2 == mod_val){
-			this.gamePieceArray[i].setDraggable(true);
-		}
-		else{
-			this.gamePieceArray[i].setDraggable(false);
-		}
-	
-	}
+
+    this.gamePieceArray.forEach(function(game_piece) {
+        game_piece.setDraggable(game_piece.color == player_whose_turn_it_is);
+    });
 }
 
 GameBoard.prototype.in_phase_1 = function() {
