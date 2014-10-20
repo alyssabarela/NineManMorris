@@ -100,6 +100,11 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
         if(thisObj.removeable) {
             thisObj.gameBoard.decrementar.decrement(thisObj.color);
             thisObj.current_space.occupied = false;
+
+            game_piece_array = thisObj.gameBoard.gamePieceArray;
+            game_piece_index = game_piece_array.indexOf(thisObj);
+            game_piece_array.splice(game_piece_index, 1);
+
             this.destroy();
             thisObj.gameBoard.unrecognize_if_was_mill(thisObj.space);
             thisObj.space_array[thisObj.space].occupied = false;

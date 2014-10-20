@@ -257,7 +257,7 @@ GameBoard.prototype.get_removeable_pieces = function(color) {
     this.gamePieceArray.forEach(function(game_piece) {
         if(!game_board.piece_is_in_mill(game_piece) &&
             game_piece.color == color               &&
-            game_piece.on_board) {
+            game_piece.on_board()) {
             pieces_not_in_mill.push(game_piece);
         }
     });
