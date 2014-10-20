@@ -98,6 +98,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
     
     this.circle.on('click', function(){
         if(thisObj.removeable) {
+            thisObj.gameBoard.decrementar.decrement(thisObj.color);
             this.destroy();
             thisObj.gameBoard.unrecognize_if_was_mill(thisObj.space);
             thisObj.space_array[thisObj.space].occupied = false;

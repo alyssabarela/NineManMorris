@@ -2,11 +2,11 @@
 function Decremantar(){
 	var white = 9;
 	var red = 9;
-	Decremantar.prototype.decrement = function(String){
-		if(String == "white"){
+	Decremantar.prototype.decrement = function(string){
+		if(string == "white"){
 			white --;
 		}
-		else if(String == "red"){
+		else if(string == "red"){
 			red --;
 		}
 		if(red == 0){
@@ -16,11 +16,14 @@ function Decremantar(){
 			alert("red wins!")
 		}
 	}
-	Decremantar.prototype.hasThreeOrLess = function(String){
-		if(white <= 3 || red <= 3){
-			return true;
-		}
-			return false;
+	Decremantar.prototype.hasThreeOrLess = function(string){
+        if(string == "white") {
+            return white <= 3;
+        } else if(string == "red") {
+            return red <= 3;
+        } else {
+            console.error("Decremantar.hasThreeOrLess, string != \"white\" or \"red\"");
+        }
 	}
 }
 
