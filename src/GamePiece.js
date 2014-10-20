@@ -159,6 +159,7 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
 GamePiece.prototype.set_previous_position_to_this_one = function(new_current_space, color) {
     if(this.current_space) {
         this.current_space.occupied = false;
+        this.gameBoard.unrecognize_if_was_mill(this.current_space.spaceNumber);
     }
 
     this.current_space = new_current_space;
