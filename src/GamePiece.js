@@ -143,7 +143,6 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
         if(this.circle.intersects({x: this.space_array[i].circle.getAbsolutePosition().x,
                                    y: this.space_array[i].circle.getAbsolutePosition().y}) &&
                                    !this.space_array[i].occupied) {
-            console.log("hello!");
             if(!this.gameBoard.has_3_spaces_or_less(this.color)) {
                 if(this.gameBoard.neighbors(this.old_space.spaceNumber, i)) {
                     return this.space_array[i];

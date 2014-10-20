@@ -249,16 +249,20 @@ GameBoard.prototype.piece_is_in_mill = function(game_piece) {
     return in_mill;
 }
 
-GameBoard.prototype.get_removeable_pieces = function() {
+GameBoard.prototype.get_removeable_pieces = function(color) {
     pieces_in_mill = new Array();
     pieces_not_in_mill = new Array();
     game_board = this;
 
     this.gamePieceArray.forEach(function(game_piece) {
-        if(!game_board.piece_is_in_mill(game_piece)) {
+        if(!game_board.piece_is_in_mill(game_piece) &&
+            game_piece.color == color               &&
+            game_piece.on_board) {
             pieces_not_in_mill.push(game_piece);
         }
     });
+
+    console.log(pieces_not_in_mill.length);
 
     if(pieces_not_in_mill.length > 0) {
         return pieces_not_in_mill;
@@ -268,7 +272,7 @@ GameBoard.prototype.get_removeable_pieces = function() {
 }
 
 GameBoard.prototype.set_pieces_removeable = function(color) {
-    this.get_removeable_pieces().forEach(function(game_piece) {
+    this.get_removeable_pieces(color).forEach(function(game_piece) {
         if(game_piece.on_board() && game_piece.color == color) {
             game_piece.removeable = true;
         }
