@@ -202,6 +202,7 @@ GameBoard.prototype.drawGamePieces = function() {
     }
 }
 
+
 GameBoard.prototype.check_for_mills = function() {
     game_board = this;
     this.mills.forEach(function(mill) {
