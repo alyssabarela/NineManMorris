@@ -19,22 +19,3 @@ describe("Decremantar", function() {
         expect(decremantar.hasThreeOrLess("white")).toEqual(true);
     });
 });
-
-describe("GameBoard", function() {
-    it("Checks if a player has 3 or less pieces", function() {
-    });
-
-    it("Checks to see if two pieces are neighbors", function() {
-    });
-
-    it("Checks to see if a piece is in a mill", function() {
-    });
-});
-
-describe("GamePiece", function() {
-    it("Can set itself draggable", function() {
-    });
-
-    it("Knows what space it's in", function() {
-    });
-});
