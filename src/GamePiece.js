@@ -21,7 +21,8 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
                                       
     this.circle.next = false;
 
-
+    this.circle.moved = 0;
+    this.circle.on_board = false;
 
     this.circle.gameBoard = this.gameBoard;
 	var space_index = 0;
