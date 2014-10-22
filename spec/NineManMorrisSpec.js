@@ -224,8 +224,60 @@ describe("Transitions from 1 to 2", function() {
       
 });
 
+describe("Transitions from 2 to 3", function() {
+  
+    beforeEach(function() {
+      
+	this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
+	
+	for (var i = 0; i < 6; i++){
+      
+	  for(var j = 0; j < this.gameFactory.gameSpaceArray.length; j++){
+	    
+	      if(!this.gameFactory.gameSpaceArray[j].occupied){
+		  this.gameFactory.gamePieceArray[i].circle.x(this.gameFactory.gameSpaceArray[j].circle.getAbsolutePosition().x);
+		  this.gameFactory.gamePieceArray[i].circle.y(this.gameFactory.gameSpaceArray[j].circle.getAbsolutePosition().y);
+		  this.gameFactory.gamePieceArray[i].circle.draggable(true);
+		  this.gameFactory.gameSpaceArray[j].occupied = true;
+		  this.gameFactory.gamePieceArray[i].circle.on_board = true;
+		  this.gameFactory.gameBoardLayer.draw();
+		  break;
+	      }
+	    
+	  }
+	  
+	}
 
-describe("Decremantar", function() {
+    });
+    
+    it("test not in phase 1", function() {
+      
+	
+      
+         expect(true).toEqual(this.gameFactory.in_phase_1());
+    });
+    
+    it("test not in phase 2", function() {
+      
+	
+	
+        expect(false).toEqual(this.gameFactory.in_phase_2());
+    });
+    
+    it("test in phase 3", function() {
+      
+	
+      
+         expect(false).toEqual(this.gameFactory.in_phase_3());
+    });
+    
+    
+    
+      
+});
+
+
+describe("Decrementer", function() {
     it("Keeps track of how many pieces are on the board", function() {
         decremantar = new Decremantar();
         decremantar.decrement("white");
