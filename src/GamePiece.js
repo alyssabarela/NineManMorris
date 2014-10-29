@@ -49,6 +49,10 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
                         //but had trouble getting it to work
                         new_space = space_array[i];
 						space_array[i].occupied = fill;
+                        if(fill == 'white')
+                            this.gameBoard.updateMessage("red's turn")
+                        if(fill == 'red')
+                            this.gameBoard.updateMessage("white's turn")
 						this.moved = 1;
 						removable = false;
 						space = i;
@@ -69,6 +73,8 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
 			
 			if(this.gameBoard.in_phase_2()){
 				this.gameBoard.setTurn("white");
+                this.gameBoard.updateMessage("white's turn");
+
 			}
         } else {
             legal_space = thisObj.get_legal_space_I_am_on();
@@ -77,10 +83,12 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
                     thisObj.set_previous_position_to_this_one(legal_space, "white");
                     legal_space.occupied = "white";
                     this.gameBoard.setTurn("red");
+                    this.gameBoard.updateMessage("red's turn");
                 } else {
                     thisObj.set_previous_position_to_this_one(legal_space, "red");
                     legal_space.occupied = "red";
                     this.gameBoard.setTurn("white");
+                    this.gameBoard.updateMessage("white's turn");
                 }
             } else {
                 thisObj.reset_to_previous_position();
@@ -99,7 +107,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
     
     this.circle.on('click', function(){
         if(thisObj.removeable) {
-            thisObj.gameBoard.decrementar.decrement(thisObj.color);
+            thisObj.gameBoard.updateMessage(thisObj.gameBoard.decrementar.decrement(thisObj.color));
             thisObj.current_space.occupied = false;
 
             game_piece_array = thisObj.gameBoard.gamePieceArray;

@@ -10,11 +10,12 @@ function Decremantar() {
         }
 
         if(this.red < 3) {
-            alert("white wins!")
+            return "white wins!"
         }
         else if(this.white < 3) {
-            alert("red wins!")
+            return "red wins!"
         }
+        return string + "'s turn!"
     }
 
     Decremantar.prototype.hasThreeOrLess = function(string) {

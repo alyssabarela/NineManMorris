@@ -220,7 +220,7 @@ GameBoard.prototype.check_for_mills = function() {
             if(!mill.recognized) {
                 mill.recognized = true;
                 player_with_mill = game_board.gameSpaceArray[mill.space_indexes[0]].occupied;
-                alert(player_with_mill + " can remove their opponent's piece!");
+                gameBoard.updateMessage(player_with_mill + " can remove their opponent's piece!");
                 if(player_with_mill == "white") {
                     gameBoard.set_pieces_removeable("red");
                 } else if(player_with_mill == "red") {
@@ -310,7 +310,7 @@ GameBoard.prototype.whos_turn_is_it = function() {
 GameBoard.prototype.setTurn = function(player_whose_turn_it_is){
     this.player_whose_turn_it_is = player_whose_turn_it_is
 	if(player_whose_turn_it_is != "red" && player_whose_turn_it_is != "white"){
-		alert("Invalid player color: " + player_whose_turn_it_is);
+		this.updateMessage("Invalid player color: " + player_whose_turn_it_is);
         return;
 	}
 
@@ -332,4 +332,7 @@ GameBoard.prototype.in_phase_2 = function() {
 
 GameBoard.prototype.in_phase_3 = function() {
     return false;
+}
+GameBoard.prototype.updateMessage = function (newMessage){
+    $('#message').text(newMessage);
 }
