@@ -19,7 +19,7 @@ function GameBoard(x, y, box_lengths) {
     this.gamePieceArray  = new Array();
     this.gameSpaceArray  = new Array();
 
-    this.decrementor = new Decrementor();
+    this.decrementer = new Decrementer();
     
     this.stageContainer = new Kinetic.Stage({
         container: 'container',
@@ -86,7 +86,7 @@ function GameBoard(x, y, box_lengths) {
 }
 
 GameBoard.prototype.has_3_spaces_or_less = function(color) {
-    return this.decrementor.hasThreeOrLess(color);
+    return this.decrementer.hasThreeOrLess(color);
 }
 
 GameBoard.prototype.neighbors = function(space_index1, space_index2) {

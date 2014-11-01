@@ -1,8 +1,8 @@
-function Decrementor() {
+function Decrementer() {
     this.white = 9;
     this.red = 9;
 
-    Decrementor.prototype.decrement = function(string) {
+    Decrementer.prototype.decrement = function(string) {
         if(string == "white") {
             this.white--;
         } else if(string == "red") {
@@ -18,7 +18,7 @@ function Decrementor() {
         return string + "'s turn!"
     }
 
-    Decrementor.prototype.hasThreeOrLess = function(string) {
+    Decrementer.prototype.hasThreeOrLess = function(string) {
         if(string == "white") {
             return this.white <= 3;
         } else if(string == "red") {
