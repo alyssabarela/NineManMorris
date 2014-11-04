@@ -2,31 +2,71 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="nmmStyles.css">
+    <link rel="stylesheet" type="text/css" href="../lib/jquery-ui.css">
     <script src="../lib/kinetic-v5.0.2.min.js"></script>
     <script src="../lib/jquery-2.1.1.js"></script>
+    <script src="../lib/jquery-ui.js"></script>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-<meta content="utf-8" http-equiv="encoding">
+    <meta content="utf-8" http-equiv="encoding">
     <title>The Dino-Riders: Nine Men's Morris</title>
 </head>
 <body>
-    <script>
-    function supports_canvas() {
-        return !!document.createElement('canvas').getContext;
-    }
-    if(!supports_canvas()) {
-        alert("I'm sorry, it appears your current browser " +
-              "doesn't support canvas objects, please try another browser!");
-    }
-    </script>
+
     <div id="message">Welcome to Nine Man Morris! <br/>To start the game, move a white piece onto the board.</div>
-    <div id="container"></div>
-    <script defer="defer" src="Decrementer.js"></script>
-    <script defer="defer" src="GameBoard.js"></script>
-    <script defer="defer" src="GamePiece.js"></script>
-    <script defer="defer" src="GameSpace.js"></script>
-    <script defer="defer" src="NineManMorris.js"></script>
-</body>
-</html>
+    <div id="dialog" title="How to Play" style="display: none;">
+        <h3>Nine Man Morris Rules</h3>
+        <p>The board consists of a grid with twenty-four intersections or points. Each player has nine pieces, or "men", usually coloured black and white. Players try to form 'mills'— three of their own men lined horizontally or vertically—allowing a player to remove an opponent's man from the game. A player wins by reducing the opponent to two pieces (where he could no longer form mills and thus be unable to win), or by leaving him without a legal move.</p>
+        <ul>
+            The game proceeds in three phases:
+            <li>placing men on vacant points</li>
+            <li>moving men to adjacent points</li>
+            <li>moving men to any vacant point when a player has been reduced to three men</li>
+        </ul>
+        <h4>Phase one: placing pieces</h4>
+        <p>Nine Men's Morris starts on an empty board.
+            The game begins with an empty board. The players determine who plays first, then take turns placing their men one per play on empty points. If a player is able to place three of his pieces in a straight line, vertically or horizontally, he has formed a mill and may remove one of his opponent's pieces from the board and the game. Any piece can be chosen for the removal, but a piece not in an opponent's mill must be selected, if possible.</p>
+            <h4>Phase two: moving pieces</h4>
+            <p>Players continue to alternate moves, this time moving a man to an adjacent point. A piece may not "jump" another piece. Players continue to try to form mills and remove their opponent's pieces in the same manner as in phase one. A player may "break" a mill by moving one of his pieces out of an existing mill, then moving the piece back to form the same mill a second time (or any number of times), each time removing one of his opponent's men. The act of removing an opponent's man is sometimes called "pounding" the opponent. When one player has been reduced to three men, phase three begins.</p>
+            <h4>Phase three: "flying"</h4>
+            <p>When a player is reduced to three pieces, there is no longer a limitation of moving to only adjacent points: The player's men may "fly", "hop", or "jump" from any point to any vacant point.</p>
+            <p>Some rules sources say this is the way the game is played, some treat it as a variation, and some don't mention it at all. A 19th-century games manual calls this the "truly rustic mode of playing the game". Flying was introduced to compensate when the weaker side is one man away from losing the game.</p>
+        </div>
+        <input type="button" id="button" value="How To Play">
+        <input type="checkbox" name="ai" id="ai">
+        <label for="ai">AI?</label>
+        <div id="container"></div>
+        <input type="button" id="newGame" value="New Game">
+        <script defer="defer" src="Decrementer.js"></script>
+        <script defer="defer" src="GameBoard.js"></script>
+        <script defer="defer" src="GamePiece.js"></script>
+        <script defer="defer" src="GameSpace.js"></script>
+        <script defer="defer" src="NineManMorris.js"></script>
+        <script>
+            $(function() {
+                $("#newGame").on("click", function(){
+                    location.reload();
+                });
+                $("#button").on("click", function() {
+                    $("#dialog").dialog({
+                        modal: true,
+                        height: 300,
+                        width: 400
+                    });
+                });
+            });
+            $("#ai").on("click", function(){
+                // alert($("#ai").value)
+            })
+            function supports_canvas() {
+                return !!document.createElement('canvas').getContext;
+            }
+            if(!supports_canvas()) {
+                alert("I'm sorry, it appears your current browser " +
+                  "doesn't support canvas objects, please try another browser!");
+            }
+        </script>   
+    </body>
+    </html>
 
 
 
