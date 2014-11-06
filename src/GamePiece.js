@@ -2,8 +2,8 @@
 This class will serve as the game pieces, the pieces that the user (and eventually the AI) will move to play the game
 */
 
-function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
-
+function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config){
+    this.index = config.piece_index;
     this.gameBoard = gameBoard;
     this.color = fill;
 
@@ -107,18 +107,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, moved, gameBoard){
     
     this.circle.on('click', function(){
         if(thisObj.removeable) {
-            thisObj.gameBoard.updateMessage(thisObj.gameBoard.decrementer.decrement(thisObj.color));
-            thisObj.current_space.occupied = false;
-
-            game_piece_array = thisObj.gameBoard.gamePieceArray;
-            game_piece_index = game_piece_array.indexOf(thisObj);
-            game_piece_array.splice(game_piece_index, 1);
-
-            this.destroy();
-            thisObj.gameBoard.unrecognize_if_was_mill(thisObj.space);
-            thisObj.space_array[thisObj.space].occupied = false;
-            layer.draw();
-            thisObj.gameBoard.set_all_unremoveable();
+            thisObj.gameBoard.remove_piece(thisObj);
         }
     });
     

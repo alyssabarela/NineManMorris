@@ -179,7 +179,8 @@ GameBoard.prototype.drawGamePieces = function() {
         return x + game_piece_offset * t;
     }
 
-    //create all game pieces    
+    //create all game pieces
+    var piece_index = 0;
     for(var t = 0; t < number_of_player_pieces; t++) {
         this.gamePieceArray.push(new GamePiece(red_position(this.x, this.sideLength, t),
                                                y_offset,
@@ -187,7 +188,8 @@ GameBoard.prototype.drawGamePieces = function() {
                                                false,
                                                this.gameBoardLayer,
                                                this.gameSpaceArray,
-                                               0, this));
+                                               this,
+                                               {index: piece_index++}));
 
         this.gamePieceArray.push(new GamePiece(white_position(this.x, t),
                                                y_offset,
@@ -195,7 +197,8 @@ GameBoard.prototype.drawGamePieces = function() {
                                                t==8,
                                                this.gameBoardLayer,
                                                this.gameSpaceArray,
-                                               0, this));
+                                               this,
+                                               {index: piece_index++}));
     }
 
     //set order of pieces for first phase of play
@@ -222,9 +225,9 @@ GameBoard.prototype.check_for_mills = function() {
                 player_with_mill = game_board.gameSpaceArray[mill.space_indexes[0]].occupied;
                 gameBoard.updateMessage(player_with_mill + " can remove their opponent's piece!");
                 if(player_with_mill == "white") {
-                    gameBoard.set_pieces_removeable("red");
+                    gameBoard.set_pieces_removeable("red", 1);
                 } else if(player_with_mill == "red") {
-                    gameBoard.set_pieces_removeable("white");
+                    gameBoard.set_pieces_removeable("white", 1);
                 } else {
                     console.error("can't remove piece player " +
                                   player_with_mill +
@@ -269,7 +272,8 @@ GameBoard.prototype.get_removeable_pieces = function(color) {
     }
 }
 
-GameBoard.prototype.set_pieces_removeable = function(color) {
+GameBoard.prototype.set_pieces_removeable = function(color, number_of_pieces_to_remove) {
+    this.number_of_pieces_to_remove = number_of_pieces_to_remove;
     this.get_removeable_pieces(color).forEach(function(game_piece) {
         if(game_piece.on_board() && game_piece.color == color) {
             game_piece.removeable = true;
@@ -333,6 +337,25 @@ GameBoard.prototype.in_phase_2 = function() {
 GameBoard.prototype.in_phase_3 = function() {
     return false;
 }
+
 GameBoard.prototype.updateMessage = function (newMessage){
     $('#message').text(newMessage);
+}
+
+GameBoard.prototype.remove_piece = function(game_piece) {
+    this.updateMessage(this.decrementer.decrement(game_piece.color));
+    game_piece.current_space.occupied = false;
+
+    game_piece_array = this.gamePieceArray;
+    game_piece_index = game_piece.index;
+    game_piece_array.splice(game_piece_index, 1);
+
+    game_piece.circle.destroy();
+    this.unrecognize_if_was_mill(game_piece.space);
+    this.gameSpaceArray[game_piece.space].occupied = false;
+    this.gameBoardLayer.draw();
+    this.number_of_pieces_to_remove--;
+    if(this.number_of_pieces_to_remove <= 0) {
+        this.set_all_unremoveable();
+    }
 }
