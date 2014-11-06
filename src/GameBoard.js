@@ -210,6 +210,9 @@ GameBoard.prototype.drawGamePieces = function() {
 
 GameBoard.prototype.check_for_mills = function() {
     game_board = this;
+    var new_mill_count = 0;
+    var player_with_mill = "";
+
     this.mills.forEach(function(mill) {
         occupied = (game_board.gameSpaceArray[mill.space_indexes[0]].occupied != false &&
                     game_board.gameSpaceArray[mill.space_indexes[1]].occupied != false &&
@@ -221,21 +224,23 @@ GameBoard.prototype.check_for_mills = function() {
                    game_board.gameSpaceArray[mill.space_indexes[2]].occupied))
         if(is_mill) {
             if(!mill.recognized) {
+                new_mill_count++;
                 mill.recognized = true;
                 player_with_mill = game_board.gameSpaceArray[mill.space_indexes[0]].occupied;
-                gameBoard.updateMessage(player_with_mill + " can remove their opponent's piece!");
-                if(player_with_mill == "white") {
-                    gameBoard.set_pieces_removeable("red", 1);
-                } else if(player_with_mill == "red") {
-                    gameBoard.set_pieces_removeable("white", 1);
-                } else {
-                    console.error("can't remove piece player " +
-                                  player_with_mill +
-                                  " isn't recognized.");
-                }
             }
         }
     });
+
+    if(new_mill_count > 0) {
+        if(player_with_mill == "white") {
+            gameBoard.set_pieces_removeable("red", new_mill_count);
+        } else if(player_with_mill == "red") {
+            gameBoard.set_pieces_removeable("white", new_mill_count);
+        } else {
+            console.error("can't remove piece player " + player_with_mill + " isn't recognized.");
+        }
+        gameBoard.updateMessage(player_with_mill + " can remove their opponent's piece!");
+    }
 }
 
 GameBoard.prototype.piece_is_in_mill = function(game_piece) {
