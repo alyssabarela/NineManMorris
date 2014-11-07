@@ -353,22 +353,22 @@ GameBoard.prototype.updateMessage = function (newMessage){
 GameBoard.prototype.remove_piece = function(game_piece) {
     opposite_color = {"red":"white", "white":"red"};
 
-    this.decrementer.decrement(game_piece.color);
-    game_piece.current_space.occupied = false;
-
-    game_piece_array = this.gamePieceArray;
-    game_piece_index = game_piece.index;
-    game_piece_array.splice(game_piece_index, 1);
-
     game_piece.circle.destroy();
+
+    this.decrementer.decrement(game_piece.color);
+    this.gamePieceArray.splice(game_piece.index, 1);
     this.unrecognize_if_was_mill(game_piece.space);
     this.gameSpaceArray[game_piece.space].occupied = false;
-    this.gameBoardLayer.draw();
+
+    this.set_all_unremoveable();
+
     this.number_of_pieces_to_remove--;
     if(this.number_of_pieces_to_remove <= 0) {
-        this.set_all_unremoveable();
         this.updateMessage(game_piece.color + "'s turn");
     } else {
+        this.set_pieces_removeable(game_piece.color, this.number_of_pieces_to_remove);
         this.updateMessage(opposite_color[game_piece.color] + " can remove another piece!");
     }
+
+    this.gameBoardLayer.draw();
 }
