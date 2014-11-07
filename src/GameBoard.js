@@ -372,3 +372,7 @@ GameBoard.prototype.remove_piece = function(game_piece) {
 
     this.gameBoardLayer.draw();
 }
+
+GameBoard.prototype.toggle_ai = function() {
+    console.log("TODO toggle ai");
+}
