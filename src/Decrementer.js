@@ -15,7 +15,6 @@ function Decrementer() {
         else if(this.white < 3) {
             return "red wins!"
         }
-        return string + "'s turn!"
     }
 
     Decrementer.prototype.hasThreeOrLess = function(string) {

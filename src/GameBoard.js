@@ -189,7 +189,7 @@ GameBoard.prototype.drawGamePieces = function() {
                                                this.gameBoardLayer,
                                                this.gameSpaceArray,
                                                this,
-                                               {index: piece_index++}));
+                                               {piece_index: piece_index++}));
 
         this.gamePieceArray.push(new GamePiece(white_position(this.x, t),
                                                y_offset,
@@ -198,7 +198,7 @@ GameBoard.prototype.drawGamePieces = function() {
                                                this.gameBoardLayer,
                                                this.gameSpaceArray,
                                                this,
-                                               {index: piece_index++}));
+                                               {piece_index: piece_index++}));
     }
 
     //set order of pieces for first phase of play
@@ -333,10 +333,13 @@ GameBoard.prototype.in_phase_1 = function() {
 }
 
 GameBoard.prototype.in_phase_2 = function() {
-    for(var i = 0; i < this.gamePieceArray.length; i++) {
-        if(!this.gamePieceArray[i].on_board()) return false;
-    }
-    return true;
+    phase_2 = true;
+    count = 0;
+    this.gamePieceArray.forEach(function(game_piece) {
+        count++;
+        if(!game_piece.on_board()) phase_2 = false;
+    });
+    return phase_2;
 }
 
 GameBoard.prototype.in_phase_3 = function() {
@@ -348,7 +351,9 @@ GameBoard.prototype.updateMessage = function (newMessage){
 }
 
 GameBoard.prototype.remove_piece = function(game_piece) {
-    this.updateMessage(this.decrementer.decrement(game_piece.color));
+    opposite_color = {"red":"white", "white":"red"};
+
+    this.decrementer.decrement(game_piece.color);
     game_piece.current_space.occupied = false;
 
     game_piece_array = this.gamePieceArray;
@@ -362,5 +367,8 @@ GameBoard.prototype.remove_piece = function(game_piece) {
     this.number_of_pieces_to_remove--;
     if(this.number_of_pieces_to_remove <= 0) {
         this.set_all_unremoveable();
+        this.updateMessage(game_piece.color + "'s turn");
+    } else {
+        this.updateMessage(opposite_color[game_piece.color] + " can remove another piece!");
     }
 }

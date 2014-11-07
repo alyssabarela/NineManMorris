@@ -97,8 +97,6 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
         
         layer.draw();
         thisObj.gameBoard.check_for_mills();
-        //commented out so it's easier to see other console.logs
-        //console.log("setting space to ", space);
         thisObj.space = space;
         thisObj.removable = removable;
     });
