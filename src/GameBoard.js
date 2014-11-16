@@ -356,7 +356,7 @@ GameBoard.prototype.remove_piece = function(game_piece) {
     game_piece.circle.destroy();
 
     this.decrementer.decrement(game_piece.color);
-    this.gamePieceArray.splice(game_piece.index, 1);
+    this.gamePieceArray.splice(this.gamePieceArray.indexOf(game_piece), 1);
     this.unrecognize_if_was_mill(game_piece.space);
     this.gameSpaceArray[game_piece.space].occupied = false;
 

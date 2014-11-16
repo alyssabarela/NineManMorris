@@ -104,12 +104,11 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
     layer.add(this.circle);
     
     this.circle.on('click', function(){
+        console.log(thisObj.index);
         if(thisObj.removeable) {
             thisObj.gameBoard.remove_piece(thisObj);
         }
     });
-    
-
 }
 
 GamePiece.prototype.setDraggable = function(draggable){
