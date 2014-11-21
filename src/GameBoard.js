@@ -350,7 +350,6 @@ GameBoard.prototype.updateMessage = function (newMessage){
     $('#message').text(newMessage);
 }
 
-//fixed bug
 GameBoard.prototype.remove_piece = function(game_piece) {
     opposite_color = {"red":"white", "white":"red"};
 
