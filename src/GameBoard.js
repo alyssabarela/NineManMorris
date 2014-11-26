@@ -20,7 +20,7 @@ function GameBoard(x, y, box_lengths) {
     this.gameSpaceArray  = new Array();
 
     this.decrementer = new Decrementer();
-    
+    this.ai = new ArtificialIntelligence(this);
     this.stageContainer = new Kinetic.Stage({
         container: 'container',
         width: 500,
@@ -83,6 +83,12 @@ function GameBoard(x, y, box_lengths) {
     this.space_neighbors[21] = [        19, 22];
     this.space_neighbors[22] = [    14, 21, 23];
     this.space_neighbors[23] = [        20, 22];
+
+    var gameBoard = this;
+    $('#myform :checkbox').click(function() {
+        gameBoard.toggle_ai();
+    });
+
 }
 
 GameBoard.prototype.has_3_spaces_or_less = function(color) {
@@ -434,5 +440,5 @@ GameBoard.prototype.remove_piece = function(game_piece) {
 }
 
 GameBoard.prototype.toggle_ai = function() {
-    console.log("TODO toggle ai");
+    this.ai.toggle_active();
 }

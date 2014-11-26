@@ -32,11 +32,14 @@
             <p>Some rules sources say this is the way the game is played, some treat it as a variation, and some don't mention it at all. A 19th-century games manual calls this the "truly rustic mode of playing the game". Flying was introduced to compensate when the weaker side is one man away from losing the game.</p>
         </div>
         <input type="button" id="button" value="How To Play">
+        <form id="myform">
         <input type="checkbox" name="ai" id="ai">
         <label for="ai">AI?</label>
+        </form>
         <div id="container"></div>
         <input type="button" id="newGame" value="New Game">
         <script defer="defer" src="Decrementer.js"></script>
+        <script defer="defer" src="ArtificialIntelligence.js"></script>
         <script defer="defer" src="GameBoard.js"></script>
         <script defer="defer" src="GamePiece.js"></script>
         <script defer="defer" src="GameSpace.js"></script>
@@ -54,9 +57,6 @@
                     });
                 });
             });
-            $("#ai").on("click", function(){
-                // alert($("#ai").value)
-            })
             function supports_canvas() {
                 return !!document.createElement('canvas').getContext;
             }
