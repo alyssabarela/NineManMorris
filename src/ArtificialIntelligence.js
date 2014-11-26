@@ -20,16 +20,16 @@ function ArtificialIntelligence(gameBoard) {
             var chosen_pieces_space_number = gameBoard.gamePieceArray[chosen_piece].space;
             var chosen_pieces_neighbors = gameBoard.space_neighbors[chosen_pieces_space_number]
             //get available spaces to move 
-            for neighbor in chosen_pieces_neighbors{
-                if(neighbor.occupied === false){
-                    move_AI_on_space(chosen_piece, neighbor)
-                    returnVal = true
-                }
-                else{
-                    returnVal = false
-                }
-            }
-            return returnVal
+            // for neighbor in chosen_pieces_neighbors{
+            //     if(neighbor.occupied === false){
+            //         move_AI_on_space(chosen_piece, neighbor)
+            //         returnVal = true
+            //     }
+            //     else{
+            //         returnVal = false
+            //     }
+            // }
+            // return returnVal
             //probably a better way to do this, but need to check if all neighbors are taken!! if so we need to move to another piece and try again
             
         }
