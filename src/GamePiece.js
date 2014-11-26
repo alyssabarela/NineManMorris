@@ -23,7 +23,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
 
     this.circle.moved = 0;
     this.circle.on_board = false;
-
+    this.turn = "";
     this.circle.gameBoard = this.gameBoard;
 	var space_index = 0;
 	var removable = false;
@@ -49,10 +49,14 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
                         //but had trouble getting it to work
                         new_space = space_array[i];
 						space_array[i].occupied = fill;
-                        if(fill == 'white')
-                            this.gameBoard.updateMessage("red's turn")
-                        if(fill == 'red')
-                            this.gameBoard.updateMessage("white's turn")
+                        if(fill == 'white'){
+                            this.turn = "red";
+                            this.gameBoard.update_status("red's turn")
+                        }
+                        if(fill == 'red'){
+                            this.turn = "white";
+                            this.gameBoard.update_status("white's turn")
+                        }
 						this.moved = 1;
 						removable = false;
 						space = i;
@@ -72,8 +76,8 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
             }
 			
 			if(this.gameBoard.in_phase_2()){
-				this.gameBoard.setTurn("white");
-                this.gameBoard.updateMessage("white's turn");
+				this.turn = "white";
+                this.gameBoard.update_status("white's turn");
 
 			}
         } else {
@@ -82,13 +86,13 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
                 if(this.gameBoard.whos_turn_is_it() == "white") {
                     thisObj.set_previous_position_to_this_one(legal_space, "white");
                     legal_space.occupied = "white";
-                    this.gameBoard.setTurn("red");
-                    this.gameBoard.updateMessage("red's turn");
+                    this.turn = "red";
+                    this.gameBoard.update_status("red's turn");
                 } else {
                     thisObj.set_previous_position_to_this_one(legal_space, "red");
                     legal_space.occupied = "red";
-                    this.gameBoard.setTurn("white");
-                    this.gameBoard.updateMessage("white's turn");
+                    this.turn = "white";
+                    this.gameBoard.update_status("white's turn");
                 }
             } else {
                 thisObj.reset_to_previous_position();
@@ -99,6 +103,9 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
         thisObj.gameBoard.check_for_mills();
         thisObj.space = space;
         thisObj.removable = removable;
+        thisObj.gameBoard.check_for_blocked_state();
+        this.gameBoard.setTurn(this.turn);
+        
     });
 
     layer.add(this.circle);
