@@ -81,18 +81,21 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
 
 			}
         } else {
+            //TODO make this hash part of GameBoard and replace all instances with that one.
+            opposite = {"white":"red", "red":"white"};
             legal_space = thisObj.get_legal_space_I_am_on();
-            if(legal_space) {
+            if(legal_space && this.gameBoard.whos_turn_is_it().match("^white$|^red$")) {
                 if(this.gameBoard.whos_turn_is_it() == "white") {
                     thisObj.set_previous_position_to_this_one(legal_space, "white");
-                    legal_space.occupied = "white";
-                    this.turn = "red";
-                    this.gameBoard.update_status("red's turn");
+
+                    legal_space.set_occupied(thisObj);
+                    this.gameBoard.setTurn(opposite["white"]);
+                    this.gameBoard.updateMessage(opposite["white"] + "'s turn");
                 } else {
                     thisObj.set_previous_position_to_this_one(legal_space, "red");
-                    legal_space.occupied = "red";
-                    this.turn = "white";
-                    this.gameBoard.update_status("white's turn");
+                    legal_space.set_occupied(thisObj);
+                    this.gameBoard.setTurn(opposite["red"]);
+                    this.gameBoard.updateMessage(opposite["red"] + "'s turn");
                 }
             } else {
                 thisObj.reset_to_previous_position();
@@ -111,7 +114,6 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
     layer.add(this.circle);
     
     this.circle.on('click', function(){
-        console.log(thisObj.index);
         if(thisObj.removeable) {
             thisObj.gameBoard.remove_piece(thisObj);
         }
@@ -182,4 +184,8 @@ GamePiece.prototype.set_previous_position_to_this_one = function(new_current_spa
 GamePiece.prototype.reset_to_previous_position = function() {
     this.circle.x(this.circle.previous.x);
     this.circle.y(this.circle.previous.y);
+}
+
+GamePiece.prototype.get_color = function() {
+    return this.color;
 }
