@@ -10,10 +10,11 @@ function Decrementer() {
         }
 
         if(this.red < 3) {
-            return "white wins!"
-        }
-        else if(this.white < 3) {
-            return "red wins!"
+            return "white";
+        } else if(this.white < 3) {
+            return "red";
+        } else {
+            return false;
         }
     }
 

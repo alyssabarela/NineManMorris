@@ -20,7 +20,7 @@ function GameBoard(x, y, box_lengths) {
     this.gameSpaceArray  = new Array();
 
     this.decrementer = new Decrementer();
-    
+    this.ai = new ArtificialIntelligence(this);
     this.stageContainer = new Kinetic.Stage({
         container: 'container',
         width: 500,
@@ -83,6 +83,12 @@ function GameBoard(x, y, box_lengths) {
     this.space_neighbors[21] = [        19, 22];
     this.space_neighbors[22] = [    14, 21, 23];
     this.space_neighbors[23] = [        20, 22];
+
+    var gameBoard = this;
+    $('#myform :checkbox').click(function() {
+        gameBoard.toggle_ai();
+    });
+
 }
 
 GameBoard.prototype.has_3_spaces_or_less = function(color) {
@@ -208,6 +214,63 @@ GameBoard.prototype.drawGamePieces = function() {
     }
 }
 
+GameBoard.prototype.check_for_blocked_state = function(){
+    console.log("checking for blocked state");
+    //for each piece, get space they are on
+    //are any of their neighbors free
+    //if yes return false
+    //if no continue to next piece
+    var returnVal = true;
+    game_board = this;
+    var in_phase_2 = game_board.in_phase_2();
+    var player = game_board.whos_turn_is_it();
+    if(in_phase_2){
+    this.gamePieceArray.forEach(function(piece){
+        if(returnVal){
+            
+            console.log("turn: " + player);
+            if(piece.color != player){
+                var space = piece.current_space;
+                var spacenumber = space.spaceNumber;
+                console.log("space number: " + spacenumber);
+                var neighbors = game_board.space_neighbors[spacenumber];
+                for(var i = 0; i< neighbors.length; i++){
+                    var neighbor = neighbors[i];
+                    console.log("neighbor space number: " + neighbor);
+                    var occupied = game_board.gameSpaceArray[neighbor].occupied;
+                    console.log("occupied by: " + occupied);
+                    if(occupied === false)
+                        returnVal = false;
+            }
+        }
+        else
+            return;
+    }
+    else{
+        return;
+    }
+    });
+}
+else{
+    returnVal = false;
+}
+if(returnVal)
+game_board.set_win_message_for_blocked_state();
+return returnVal;
+}
+
+GameBoard.prototype.set_win_message_for_blocked_state = function(){
+    game_board = this;
+                var winner = game_board.whos_turn_is_it();
+                var loser = "";
+                if(winner === "white"){
+                    loser = "red";
+                }
+                else{
+                    loser = "white";
+                }
+                game_board.update_status(loser + " is blocked, " + winner + " wins!");
+}
 
 GameBoard.prototype.check_for_mills = function() {
     game_board = this;
@@ -230,6 +293,7 @@ GameBoard.prototype.check_for_mills = function() {
                 player_with_mill = game_board.gameSpaceArray[mill.space_indexes[0]].occupied;
             }
         }
+        
     });
 
     if(new_mill_count > 0) {
@@ -240,7 +304,8 @@ GameBoard.prototype.check_for_mills = function() {
         } else {
             console.error("can't remove piece player " + player_with_mill + " isn't recognized.");
         }
-        gameBoard.updateMessage(player_with_mill + " can remove their opponent's piece!");
+        gameBoard.update_status(player_with_mill + " can remove their opponent's piece!");
+        
     }
 }
 
@@ -318,9 +383,10 @@ GameBoard.prototype.whos_turn_is_it = function() {
 }
 
 GameBoard.prototype.setTurn = function(player_whose_turn_it_is){
+    console.log("setting turn to " + player_whose_turn_it_is);
     this.player_whose_turn_it_is = player_whose_turn_it_is
 	if(player_whose_turn_it_is != "red" && player_whose_turn_it_is != "white"){
-		this.updateMessage("Invalid player color: " + player_whose_turn_it_is);
+		this.update_status("Invalid player color: " + player_whose_turn_it_is);
         return;
 	}
 
@@ -373,16 +439,19 @@ GameBoard.prototype.in_phase_3 = function() {
     return false;
 }
 
-GameBoard.prototype.updateMessage = function (newMessage){
+GameBoard.prototype.update_status = function (newMessage){
     $('#message').text(newMessage);
 }
 
 GameBoard.prototype.remove_piece = function(game_piece) {
-    opposite_color = {"red":"white", "white":"red"};
 
     game_piece.circle.destroy();
 
-    this.decrementer.decrement(game_piece.color);
+    winner = this.decrementer.decrement(game_piece.color);
+    if(winner) {
+        this.update_status(winner + " wins!");
+    }
+
     this.gamePieceArray.splice(this.gamePieceArray.indexOf(game_piece), 1);
     this.unrecognize_if_was_mill(game_piece.space);
     this.gameSpaceArray[game_piece.space].occupied = false;
@@ -391,15 +460,20 @@ GameBoard.prototype.remove_piece = function(game_piece) {
 
     this.number_of_pieces_to_remove--;
     if(this.number_of_pieces_to_remove <= 0) {
-        this.updateMessage(game_piece.color + "'s turn");
+        this.update_status(game_piece.color + "'s turn");
     } else {
         this.set_pieces_removeable(game_piece.color, this.number_of_pieces_to_remove);
-        this.updateMessage(opposite_color[game_piece.color] + " can remove another piece!");
+        this.update_status(opposite_color(game_piece.color) + " can remove another piece!");
     }
 
     this.gameBoardLayer.draw();
 }
 
 GameBoard.prototype.toggle_ai = function() {
-    console.log("TODO toggle ai");
+    this.ai.toggle_active();
+}
+
+GameBoard.prototype.opposite_color = function(color) {
+    opposite_color = {"red":"white", "white":"red"};
+    return opposite_color[color];
 }
