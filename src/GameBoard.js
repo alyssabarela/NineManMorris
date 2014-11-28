@@ -89,7 +89,8 @@ GameBoard.prototype.has_3_spaces_or_less = function(color) {
     return this.decrementer.hasThreeOrLess(color);
 }
 
-GameBoard.prototype.neighbors = function(space_index1, space_index2) {
+GameBoard.prototype.neighbors = function(space_index1, space_index2) {  //space_index1 moving from, space_index2 where i' moving too
+
     return this.space_neighbors[space_index1].indexOf(space_index2) > -1;
 }
     
@@ -326,6 +327,32 @@ GameBoard.prototype.setTurn = function(player_whose_turn_it_is){
     this.gamePieceArray.forEach(function(game_piece) {
         game_piece.setDraggable(game_piece.color == player_whose_turn_it_is);
     });
+}
+
+GameBoard.prototype.get_available_spaces = function() {
+       this.availableSpaceArray  = new Array();
+    if(this.in_phase_1() || this.in_phase_3()){
+        for(var i = 0; i < this.gameSpaceArray.length; i++){
+            if(this.gameSpaceArray[i].occupied == false){
+                this.availableSpaceArray.push(i);
+            }
+        }
+        return this.availableSpaceArray.toString();
+    }
+    for(var j = 0; j < 24; j++){
+        if(this.gameSpaceArray[j].occupied == "red"){
+            var arrayToCheckNeighbors = this.space_neighbors[j]
+            for(var k = 0; k < arrayToCheckNeighbors.length; k++){
+                //checks if a piece is red then needs to check the neighbors if it can move
+                if(this.gameSpaceArray[arrayToCheckNeighbors[k]].occupied ==  false){
+
+                    this.availableSpaceArray.push(arrayToCheckNeighbors[k]);
+                }
+            }
+
+        }
+    }      
+   return this.availableSpaceArray.toString();  
 }
 
 GameBoard.prototype.in_phase_1 = function() {

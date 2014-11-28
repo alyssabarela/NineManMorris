@@ -48,6 +48,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
                         //so that the game space object knows which piece is occupying it,
                         //but had trouble getting it to work
                         new_space = space_array[i];
+
 						space_array[i].occupied = fill;
                         if(fill == 'white')
                             this.gameBoard.updateMessage("red's turn")
@@ -96,7 +97,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
                 thisObj.reset_to_previous_position();
             }
         }
-        
+
         layer.draw();
         thisObj.gameBoard.check_for_mills();
         thisObj.space = space;
@@ -146,6 +147,7 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
                                    !this.space_array[i].occupied) {
             if(!this.gameBoard.has_3_spaces_or_less(this.color)) {
                 if(this.gameBoard.neighbors(this.old_space.spaceNumber, i)) {
+
                     return this.space_array[i];
                 } else {
                     return false;
@@ -159,6 +161,8 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
 }
 
 GamePiece.prototype.set_previous_position_to_this_one = function(new_current_space, color) {
+
+        window.alert("this is in avaiblae spaces :" + this.gameBoard.get_available_spaces());
     if(this.current_space) {
         this.current_space.occupied = false;
         this.gameBoard.unrecognize_if_was_mill(this.current_space.spaceNumber);
