@@ -10,7 +10,7 @@ function ArtificialIntelligence(gameBoard) {
         if(in_phase_1){
            var available_spaces = gameBoard.get_available_spaces();
            var chosen_space = this.choose_random_index(available_spaces);
-           gameBoard.place_AI_on_space(game_piece, chosen_space);
+           gameBoard.move_AI_on_space(game_piece, chosen_space);
         }
         else if(in_phase_2){
             //choose random piece
@@ -20,23 +20,23 @@ function ArtificialIntelligence(gameBoard) {
             var chosen_pieces_space_number = gameBoard.gamePieceArray[chosen_piece].space;
             var chosen_pieces_neighbors = gameBoard.space_neighbors[chosen_pieces_space_number]
             //get available spaces to move 
-            // for neighbor in chosen_pieces_neighbors{
-            //     if(neighbor.occupied === false){
-            //         move_AI_on_space(chosen_piece, neighbor)
-            //         returnVal = true
-            //     }
-            //     else{
-            //         returnVal = false
-            //     }
-            // }
-            // return returnVal
+            chosen_pieces_neighbors.forEach(function(neighbor){
+                if(neighbor.occupied === false){
+                    move_AI_on_space(chosen_piece, neighbor)
+                    returnVal = true
+                }
+                else{
+                    returnVal = false
+                }
+            });
+            return returnVal
             //probably a better way to do this, but need to check if all neighbors are taken!! if so we need to move to another piece and try again
-            
+
         }
         else if(in_phase_3){
             var available_spaces = gameBoard.get_available_spaces();
-           var chosen_space = this.choose_random_index(available_spaces);
-           gameBoard.move_AI_on_space(game_piece, chosen_space);
+            var chosen_space = this.choose_random_index(available_spaces);
+            gameBoard.move_AI_on_space(game_piece, chosen_space);
         }
         else{
             gameBoard.update_status("something went wrong...")
@@ -62,6 +62,8 @@ function ArtificialIntelligence(gameBoard) {
         console.log("attempting to remove piece with index " + index_to_remove);
     }
     ArtificialIntelligence.prototype.choose_random_index = function(index_array) {
+        if(!index_array)
+            return
         var length = index_array.length;
         var random = Math.floor(Math.random() * length);
         return index_array[random];

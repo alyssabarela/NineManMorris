@@ -441,6 +441,28 @@ GameBoard.prototype.in_phase_3 = function() {
 
 GameBoard.prototype.update_status = function (newMessage){
     $('#message').text(newMessage);
+    active = this.ai.is_active();
+    if(active){
+        var status_type = this.get_status_type(message);
+        if(status_type === 0){
+            this.ai.your_turn();
+        }
+        else if(status_type === 1){
+            this.ai.remove_opponents_piece();
+        }
+        else{
+            console.log("uh oh...");
+        }
+    }
+}
+
+GameBoard.prototype.get_status_type = function(message){
+    var status = 0;
+    if(message === "red's turn")
+        status = 0;
+    else if(message === "red can remove their opponent's piece!")
+        status = 1;
+    return status;
 }
 
 GameBoard.prototype.remove_piece = function(game_piece) {
@@ -476,4 +498,15 @@ GameBoard.prototype.toggle_ai = function() {
 GameBoard.prototype.opposite_color = function(color) {
     opposite_color = {"red":"white", "white":"red"};
     return opposite_color[color];
+}
+GameBoard.prototype.get_available_spaces = function(){
+
+}
+
+GameBoard.prototype.move_AI_on_space = function(piece_index, space_index){
+
+}
+
+GameBoard.prototype.get_available_ai_pieces = function(){
+    
 }
