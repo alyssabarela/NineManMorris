@@ -167,6 +167,8 @@ GamePiece.prototype.set_previous_position_to_this_one = function(new_current_spa
 
     if(this.old_space) {
         this.old_space.occupied = false;
+        old_space_index = this.gameBoard.gameSpaceArray.indexOf(this.old_space);
+        this.gameBoard.unrecognize_if_was_mill(old_space_index);
     }
 
     this.current_space = new_current_space;
@@ -176,6 +178,7 @@ GamePiece.prototype.set_previous_position_to_this_one = function(new_current_spa
     this.circle.y(this.current_space.circle.getAbsolutePosition().y);
     this.circle.previous.x = this.circle.getAbsolutePosition().x;
     this.circle.previous.y = this.circle.getAbsolutePosition().y;
+    this.space = this.gameBoard.gamePieceArray.indexOf(this.current_space);
 }
 
 GamePiece.prototype.reset_to_previous_position = function() {

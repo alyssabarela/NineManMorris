@@ -305,10 +305,11 @@ GameBoard.prototype.check_for_mills = function() {
 
 GameBoard.prototype.piece_is_in_mill = function(game_piece) {
     in_mill = false;
+    game_space_array = this.gameSpaceArray;
     this.mills.forEach(function(mill) {
         if(mill.recognized && !in_mill) {
-            mill.space_indexes.forEach(function(piece_index) {
-                if(piece_index == game_piece.space) {
+            mill.space_indexes.forEach(function(space_index) {
+                if(space_index == game_space_array.indexOf(game_piece.current_space)) {
                     in_mill = true;
                 }
             });
@@ -335,7 +336,7 @@ GameBoard.prototype.get_removeable_pieces = function(color) {
     if(pieces_not_in_mill.length > 0) {
         return pieces_not_in_mill;
     } else {
-        return pieces_not_in_mill;
+        return pieces_in_mill;
     }
 }
 
@@ -391,7 +392,7 @@ GameBoard.prototype.setTurn = function(player_whose_turn_it_is){
 }
 
 GameBoard.prototype.get_available_spaces = function() {
-       this.availableSpaceArray  = new Array();
+    this.availableSpaceArray  = new Array();
     if(this.in_phase_1() || this.in_phase_3()){
         for(var i = 0; i < this.gameSpaceArray.length; i++){
             if(this.gameSpaceArray[i].occupied == false){
