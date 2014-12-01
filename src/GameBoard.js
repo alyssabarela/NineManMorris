@@ -215,7 +215,6 @@ GameBoard.prototype.drawGamePieces = function() {
 }
 
 GameBoard.prototype.check_for_blocked_state = function(){
-    console.log("checking for blocked state");
     //for each piece, get space they are on
     //are any of their neighbors free
     //if yes return false
@@ -227,18 +226,13 @@ GameBoard.prototype.check_for_blocked_state = function(){
     if(in_phase_2){
     this.gamePieceArray.forEach(function(piece){
         if(returnVal){
-            
-            console.log("turn: " + player);
             if(piece.color != player){
                 var space = piece.current_space;
                 var spacenumber = space.spaceNumber;
-                console.log("space number: " + spacenumber);
                 var neighbors = game_board.space_neighbors[spacenumber];
                 for(var i = 0; i< neighbors.length; i++){
                     var neighbor = neighbors[i];
-                    console.log("neighbor space number: " + neighbor);
                     var occupied = game_board.gameSpaceArray[neighbor].occupied;
-                    console.log("occupied by: " + occupied);
                     if(occupied === false)
                         returnVal = false;
             }
@@ -329,17 +323,19 @@ GameBoard.prototype.get_removeable_pieces = function(color) {
     game_board = this;
 
     this.gamePieceArray.forEach(function(game_piece) {
-        if(!game_board.piece_is_in_mill(game_piece) &&
-            game_piece.color == color               &&
-            game_piece.on_board()) {
-            pieces_not_in_mill.push(game_piece);
+        if(game_piece.color == color) {
+            if(!game_board.piece_is_in_mill(game_piece) && game_piece.on_board()) {
+                pieces_not_in_mill.push(game_piece);
+            } else {
+                pieces_in_mill.push(game_piece);
+            }
         }
     });
 
     if(pieces_not_in_mill.length > 0) {
         return pieces_not_in_mill;
     } else {
-        return this.gamePieceArray;
+        return pieces_not_in_mill;
     }
 }
 
@@ -383,7 +379,6 @@ GameBoard.prototype.whos_turn_is_it = function() {
 }
 
 GameBoard.prototype.setTurn = function(player_whose_turn_it_is){
-    console.log("setting turn to " + player_whose_turn_it_is);
     this.player_whose_turn_it_is = player_whose_turn_it_is
 	if(player_whose_turn_it_is != "red" && player_whose_turn_it_is != "white"){
 		this.update_status("Invalid player color: " + player_whose_turn_it_is);
@@ -451,7 +446,7 @@ GameBoard.prototype.update_status = function (newMessage){
             this.ai.remove_opponents_piece();
         }
         else{
-            console.log("uh oh...");
+            console.error("Cannot properly update message");
         }
     }
 }
@@ -485,7 +480,7 @@ GameBoard.prototype.remove_piece = function(game_piece) {
         this.update_status(game_piece.color + "'s turn");
     } else {
         this.set_pieces_removeable(game_piece.color, this.number_of_pieces_to_remove);
-        this.update_status(opposite_color(game_piece.color) + " can remove another piece!");
+        this.update_status(this.opposite_color(game_piece.color) + " can remove another piece!");
     }
 
     this.gameBoardLayer.draw();

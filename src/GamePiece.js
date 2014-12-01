@@ -83,19 +83,12 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
 			}
         } else {
             legal_space = thisObj.get_legal_space_I_am_on();
-            if(legal_space && this.gameBoard.whos_turn_is_it().match("^white$|^red$")) {
-                if(this.gameBoard.whos_turn_is_it() == "white") {
-                    thisObj.set_previous_position_to_this_one(legal_space, "white");
-
-                    legal_space.set_occupied(thisObj);
-                    this.gameBoard.setTurn(this.gameBoard.opposite_color("white"));
-                    this.gameBoard.update_status(this.gameBoard.opposite_color("white") + "'s turn");
-                } else {
-                    thisObj.set_previous_position_to_this_one(legal_space, "red");
-                    legal_space.set_occupied(thisObj);
-                    this.gameBoard.setTurn(this.gameBoard.opposite_color("red"));
-                    this.gameBoard.update_status(this.gameBoard.opposite_color("red") + "'s turn");
-                }
+            player = this.gameBoard.whos_turn_is_it();
+            if(legal_space && player.match("^white$|^red$")) {
+                thisObj.set_previous_position_to_this_one(legal_space, player);
+                legal_space.set_occupied(thisObj);
+                this.gameBoard.setTurn(this.gameBoard.opposite_color(player));
+                this.gameBoard.update_status(this.gameBoard.opposite_color(player) + "'s turn");
             } else {
                 thisObj.reset_to_previous_position();
             }
@@ -167,11 +160,13 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
 }
 
 GamePiece.prototype.set_previous_position_to_this_one = function(new_current_space, color) {
-
-        window.alert("this is in avaiblae spaces :" + this.gameBoard.get_available_spaces());
     if(this.current_space) {
         this.current_space.occupied = false;
         this.gameBoard.unrecognize_if_was_mill(this.current_space.spaceNumber);
+    }
+
+    if(this.old_space) {
+        this.old_space.occupied = false;
     }
 
     this.current_space = new_current_space;
