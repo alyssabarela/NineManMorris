@@ -495,9 +495,6 @@ GameBoard.prototype.opposite_color = function(color) {
     opposite_color = {"red":"white", "white":"red"};
     return opposite_color[color];
 }
-GameBoard.prototype.get_available_spaces = function(){
-
-}
 
 GameBoard.prototype.move_AI_on_space = function(piece_index, space_index){
 
@@ -507,11 +504,14 @@ GameBoard.prototype.get_available_ai_pieces = function(){
     
 }
 
-GameBoard.prototype.get_next_unplaced_piece = function(color, index) {
+GameBoard.prototype.get_next_unplaced_piece = function() {
     next_piece = false;
     this.gamePieceArray.forEach(function(game_piece) {
-        if(game_piece.moved() == 0) {
+        var moved = game_piece.moved();
+        // console.log(game_piece.moved());
+        if(moved === 0) {
             next_piece = game_piece;
+            console.log(next_piece);
         }
     });
     return next_piece;
@@ -522,6 +522,7 @@ GameBoard.prototype.place_piece = function(color, index) {
        index >= 0 && index <= 23    &&
        !this.gameSpaceArray[index].occupied) {
         piece_to_place = this.get_next_unplaced_piece();
+    console.log(piece_to_place);
         if(piece_to_place && piece_to_place.get_color() == color) {
             game_space_circle = this.gameSpaceArray[index].circle;
             piece_to_place.circle.x(game_space_circle.x() + this.x);
