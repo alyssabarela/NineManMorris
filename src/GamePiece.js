@@ -142,16 +142,18 @@ GamePiece.prototype.confirm_move = function() {
                     space_array[i].occupied = fill;
                     if(fill == 'white'){
                         circle.turn = "red";
-                        circle.gameBoard.update_status("red's turn")
+                        circle.gameBoard.update_status("red's turn");
                     }
                     if(fill == 'red'){
                         circle.turn = "white";
-                        circle.gameBoard.update_status("white's turn")
+                        circle.gameBoard.update_status("white's turn");
                     }
                     circle.moved = 1;
                     removable = false;
                     var space = i;
                 }
+            } else {
+                circle.gameBoard.update_status(fill + "'s turn");
             }
         }
         
@@ -169,6 +171,7 @@ GamePiece.prototype.confirm_move = function() {
             circle.gameBoard.update_status("white's turn");
 
         }
+        circle.gameBoard.setTurn(circle.turn);
     } else {
         legal_space = thisObj.get_legal_space_I_am_on();
         player = circle.gameBoard.whos_turn_is_it();
@@ -178,6 +181,7 @@ GamePiece.prototype.confirm_move = function() {
             circle.gameBoard.update_status(circle.gameBoard.opposite_color(player) + "'s turn");
             thisObj.current_space = legal_space;
             return_value = true;
+            circle.gameBoard.setTurn(circle.turn);
         } else {
             thisObj.reset_to_previous_position();
         }
@@ -188,7 +192,6 @@ GamePiece.prototype.confirm_move = function() {
     thisObj.space = space;
     thisObj.removable = removable;
     thisObj.gameBoard.check_for_blocked_state();
-    circle.gameBoard.setTurn(circle.turn);
     
     return return_value;
 }
