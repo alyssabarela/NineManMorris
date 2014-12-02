@@ -3,6 +3,7 @@ This class will serve as the game pieces, the pieces that the user (and eventual
 */
 
 function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config){
+    this.current_space = false;
     this.index = config.piece_index;
     this.gameBoard = gameBoard;
     this.color = fill;
@@ -25,83 +26,10 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
     this.circle.on_board = false;
     this.turn = "";
     this.circle.gameBoard = this.gameBoard;
-	var space_index = 0;
 	var removable = false;
 	var thisObj = this;
-    this.circle.on('dragend', function() {
-        this.moved = 0;
-
-        new_space = null;
-		if(this.gameBoard.in_phase_1()) {
-			for (var i = 0; i < space_array.length; i++) {
-			
-				if (this.intersects({x:space_array[i].circle.getAbsolutePosition().x,
-                                     y:space_array[i].circle.getAbsolutePosition().y}))  {
-					if(!space_array[i].occupied){
-						this.x(space_array[i].circle.getAbsolutePosition().x);
-						this.y(space_array[i].circle.getAbsolutePosition().y);
-						this.draggable(false);
-						if(this.next) {
-							this.next.draggable(true);
-						}
-						//need to change this to the GamePiece object instead of a boolean value
-                        //so that the game space object knows which piece is occupying it,
-                        //but had trouble getting it to work
-                        new_space = space_array[i];
-
-						space_array[i].occupied = fill;
-                        if(fill == 'white'){
-                            this.turn = "red";
-                            this.gameBoard.update_status("red's turn")
-                        }
-                        if(fill == 'red'){
-                            this.turn = "white";
-                            this.gameBoard.update_status("white's turn")
-                        }
-						this.moved = 1;
-						removable = false;
-						space = i;
-						
-					}
-									
-
-				}
-				
-			}
-			
-			if(this.moved == 0){
-                thisObj.reset_to_previous_position();
-			} else {
-                thisObj.set_previous_position_to_this_one(new_space, thisObj.color);
-                this.on_board = true;
-            }
-			
-			if(this.gameBoard.in_phase_2()){
-				this.turn = "white";
-                this.gameBoard.update_status("white's turn");
-
-			}
-        } else {
-            legal_space = thisObj.get_legal_space_I_am_on();
-            player = this.gameBoard.whos_turn_is_it();
-            if(legal_space && player.match("^white$|^red$")) {
-                thisObj.set_previous_position_to_this_one(legal_space, player);
-                legal_space.set_occupied(thisObj);
-                this.gameBoard.setTurn(this.gameBoard.opposite_color(player));
-                this.gameBoard.update_status(this.gameBoard.opposite_color(player) + "'s turn");
-            } else {
-                thisObj.reset_to_previous_position();
-            }
-        }
-
-        layer.draw();
-        thisObj.gameBoard.check_for_mills();
-        thisObj.space = space;
-        thisObj.removable = removable;
-        thisObj.gameBoard.check_for_blocked_state();
-        this.gameBoard.setTurn(this.turn);
-        
-    });
+    var space_array = this.space_array;
+    this.circle.on('dragend', function() {thisObj.confirm_move();});
 
     layer.add(this.circle);
     
@@ -188,4 +116,93 @@ GamePiece.prototype.reset_to_previous_position = function() {
 
 GamePiece.prototype.get_color = function() {
     return this.color;
+}
+
+GamePiece.prototype.confirm_move = function() {
+    return_value = false;
+    thisObj = this;
+    space_array = thisObj.gameBoard.gameSpaceArray;
+    layer = thisObj.gameBoard.gameBoardLayer;
+    circle = thisObj.circle;
+    fill = thisObj.color;
+    removable = false;
+    circle.moved = 0;
+
+    new_space = null;
+    if(circle.gameBoard.in_phase_1()) {
+        for (var i = 0; i < space_array.length; i++) {
+        
+            if (circle.intersects({x:space_array[i].circle.getAbsolutePosition().x,
+                                 y:space_array[i].circle.getAbsolutePosition().y}))  {
+                if(!space_array[i].occupied){
+                    circle.x(space_array[i].circle.getAbsolutePosition().x);
+                    circle.y(space_array[i].circle.getAbsolutePosition().y);
+                    circle.draggable(false);
+                    if(circle.next) {
+                        circle.next.draggable(true);
+                    }
+                    //need to change this to the GamePiece object instead of a boolean value
+                    //so that the game space object knows which piece is occupying it,
+                    //but had trouble getting it to work
+                    new_space = space_array[i];
+
+                    space_array[i].occupied = fill;
+                    if(fill == 'white'){
+                        circle.turn = "red";
+                        circle.gameBoard.update_status("red's turn")
+                    }
+                    if(fill == 'red'){
+                        circle.turn = "white";
+                        circle.gameBoard.update_status("white's turn")
+                    }
+                    circle.moved = 1;
+                    removable = false;
+                    space = i;
+                    
+                }
+                                
+
+            }
+            
+        }
+        
+        if(circle.moved == 0){
+            thisObj.reset_to_previous_position();
+        } else {
+            thisObj.set_previous_position_to_this_one(new_space, thisObj.color);
+            circle.on_board = true;
+            return_value = true;
+        }
+        
+        if(circle.gameBoard.in_phase_2()){
+            circle.turn = "white";
+            circle.gameBoard.update_status("white's turn");
+
+        }
+    } else {
+        legal_space = thisObj.get_legal_space_I_am_on();
+        player = circle.gameBoard.whos_turn_is_it();
+        if(legal_space && player.match("^white$|^red$")) {
+            thisObj.set_previous_position_to_this_one(legal_space, player);
+            legal_space.set_occupied(thisObj);
+            circle.gameBoard.setTurn(circle.gameBoard.opposite_color(player));
+            circle.gameBoard.update_status(circle.gameBoard.opposite_color(player) + "'s turn");
+            return_value = true;
+        } else {
+            thisObj.reset_to_previous_position();
+        }
+    }
+
+    layer.draw();
+    thisObj.gameBoard.check_for_mills();
+    thisObj.space = space;
+    thisObj.removable = removable;
+    thisObj.gameBoard.check_for_blocked_state();
+    circle.gameBoard.setTurn(circle.turn);
+    
+    return return_value;
+}
+
+GamePiece.prototype.get_space = function() {
+    return this.current_space;
 }
