@@ -466,9 +466,6 @@ GameBoard.prototype.remove_piece = function(game_piece) {
     game_piece.circle.destroy();
 
     winner = this.decrementer.decrement(game_piece.color);
-    if(winner) {
-        this.update_status(winner + " wins!");
-    }
 
     this.gamePieceArray.splice(this.gamePieceArray.indexOf(game_piece), 1);
     this.unrecognize_if_was_mill(game_piece.space);
@@ -477,7 +474,10 @@ GameBoard.prototype.remove_piece = function(game_piece) {
     this.set_all_unremoveable();
 
     this.number_of_pieces_to_remove--;
-    if(this.number_of_pieces_to_remove <= 0) {
+
+    if(winner) {
+        this.update_status(winner + " wins!");
+    } else if(this.number_of_pieces_to_remove <= 0) {
         this.update_status(game_piece.color + "'s turn");
     } else {
         this.set_pieces_removeable(game_piece.color, this.number_of_pieces_to_remove);
