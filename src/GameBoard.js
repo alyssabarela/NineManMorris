@@ -292,14 +292,13 @@ GameBoard.prototype.check_for_mills = function() {
 
     if(new_mill_count > 0) {
         if(player_with_mill == "white") {
-            gameBoard.set_pieces_removeable("red", new_mill_count);
+            game_board.set_pieces_removable("red", new_mill_count);
         } else if(player_with_mill == "red") {
-            gameBoard.set_pieces_removeable("white", new_mill_count);
+            game_board.set_pieces_removable("white", new_mill_count);
         } else {
             console.error("can't remove piece player " + player_with_mill + " isn't recognized.");
         }
-        gameBoard.update_status(player_with_mill + " can remove their opponent's piece!");
-        
+        game_board.update_status(player_with_mill + " can remove their opponent's piece!");
     }
 }
 
@@ -318,7 +317,7 @@ GameBoard.prototype.piece_is_in_mill = function(game_piece) {
     return in_mill;
 }
 
-GameBoard.prototype.get_removeable_pieces = function(color) {
+GameBoard.prototype.get_removable_pieces = function(color) {
     pieces_in_mill = new Array();
     pieces_not_in_mill = new Array();
     game_board = this;
@@ -340,18 +339,18 @@ GameBoard.prototype.get_removeable_pieces = function(color) {
     }
 }
 
-GameBoard.prototype.set_pieces_removeable = function(color, number_of_pieces_to_remove) {
+GameBoard.prototype.set_pieces_removable = function(color, number_of_pieces_to_remove) {
     this.number_of_pieces_to_remove = number_of_pieces_to_remove;
-    this.get_removeable_pieces(color).forEach(function(game_piece) {
+    this.get_removable_pieces(color).forEach(function(game_piece) {
         if(game_piece.on_board() && game_piece.color == color) {
-            game_piece.removeable = true;
+            game_piece.removable = true;
         }
     });
 }
 
-GameBoard.prototype.set_all_unremoveable = function() {
+GameBoard.prototype.set_all_unremovable = function() {
 	for(var i = 0; i < this.gamePieceArray.length; i++){
-        this.gamePieceArray[i].removeable = false;
+        this.gamePieceArray[i].removable = false;
 	}
 }
 
@@ -461,17 +460,26 @@ GameBoard.prototype.get_status_type = function(message){
     return status;
 }
 
-GameBoard.prototype.remove_piece = function(game_piece) {
+GameBoard.prototype.remove_piece = function(game_piece_or_space_index) {
+    if(typeof(game_piece_or_space_index) == "number") {
+        game_piece = this.get_piece_on(game_piece_or_space_index);
+    } else {
+        game_piece = game_piece_or_space_index;
+    }
+
+    if(!game_piece.removable) {
+        return false;
+    }
 
     game_piece.circle.destroy();
 
     winner = this.decrementer.decrement(game_piece.color);
 
+    game_piece.get_space().occupied = false;
     this.gamePieceArray.splice(this.gamePieceArray.indexOf(game_piece), 1);
-    this.unrecognize_if_was_mill(game_piece.space);
-    this.gameSpaceArray[game_piece.space].occupied = false;
+    this.unrecognize_if_was_mill(game_piece.get_space().spaceNumber);
 
-    this.set_all_unremoveable();
+    this.set_all_unremovable();
 
     this.number_of_pieces_to_remove--;
 
@@ -480,11 +488,13 @@ GameBoard.prototype.remove_piece = function(game_piece) {
     } else if(this.number_of_pieces_to_remove <= 0) {
         this.update_status(game_piece.color + "'s turn");
     } else {
-        this.set_pieces_removeable(game_piece.color, this.number_of_pieces_to_remove);
+        this.set_pieces_removable(game_piece.color, this.number_of_pieces_to_remove);
         this.update_status(this.opposite_color(game_piece.color) + " can remove another piece!");
     }
 
     this.gameBoardLayer.draw();
+
+    return true;
 }
 
 GameBoard.prototype.toggle_ai = function() {
@@ -508,10 +518,8 @@ GameBoard.prototype.get_next_unplaced_piece = function() {
     next_piece = false;
     this.gamePieceArray.forEach(function(game_piece) {
         var moved = game_piece.moved();
-        // console.log(game_piece.moved());
         if(moved === 0) {
             next_piece = game_piece;
-            console.log(next_piece);
         }
     });
     return next_piece;
@@ -522,7 +530,6 @@ GameBoard.prototype.place_piece = function(color, index) {
        index >= 0 && index <= 23    &&
        !this.gameSpaceArray[index].occupied) {
         piece_to_place = this.get_next_unplaced_piece();
-    console.log(piece_to_place);
         if(piece_to_place && piece_to_place.get_color() == color) {
             game_space_circle = this.gameSpaceArray[index].circle;
             piece_to_place.circle.x(game_space_circle.x() + this.x);

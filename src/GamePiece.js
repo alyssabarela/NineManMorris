@@ -33,11 +33,7 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
 
     layer.add(this.circle);
     
-    this.circle.on('click', function(){
-        if(thisObj.removeable) {
-            thisObj.gameBoard.remove_piece(thisObj);
-        }
-    });
+    this.circle.on('click', function(){ thisObj.gameBoard.remove_piece(thisObj); });
 }
 
 GamePiece.prototype.setDraggable = function(draggable){
@@ -141,9 +137,6 @@ GamePiece.prototype.confirm_move = function() {
                     if(circle.next) {
                         circle.next.draggable(true);
                     }
-                    //need to change this to the GamePiece object instead of a boolean value
-                    //so that the game space object knows which piece is occupying it,
-                    //but had trouble getting it to work
                     new_space = space_array[i];
 
                     space_array[i].occupied = fill;
@@ -158,17 +151,14 @@ GamePiece.prototype.confirm_move = function() {
                     circle.moved = 1;
                     removable = false;
                     var space = i;
-                    
                 }
-                                
-
             }
-            
         }
         
         if(circle.moved == 0){
             thisObj.reset_to_previous_position();
         } else {
+            thisObj.current_space = new_space;
             thisObj.set_previous_position_to_this_one(new_space, thisObj.color);
             circle.on_board = true;
             return_value = true;
@@ -185,9 +175,8 @@ GamePiece.prototype.confirm_move = function() {
         if(legal_space && player.match("^white$|^red$")) {
             thisObj.set_previous_position_to_this_one(legal_space, player);
             legal_space.set_occupied(thisObj);
-            // console.log(circle.gameBoard.opposite_color(player));
-            // circle.gameBoard.setTurn(circle.gameBoard.opposite_color(player));
             circle.gameBoard.update_status(circle.gameBoard.opposite_color(player) + "'s turn");
+            thisObj.current_space = legal_space;
             return_value = true;
         } else {
             thisObj.reset_to_previous_position();
@@ -199,7 +188,6 @@ GamePiece.prototype.confirm_move = function() {
     thisObj.space = space;
     thisObj.removable = removable;
     thisObj.gameBoard.check_for_blocked_state();
-    console.log(circle.turn);
     circle.gameBoard.setTurn(circle.turn);
     
     return return_value;
