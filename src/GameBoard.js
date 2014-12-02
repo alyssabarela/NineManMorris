@@ -548,3 +548,22 @@ GameBoard.prototype.get_piece_on = function(index) {
     });
     return found_game_piece;
 }
+
+GameBoard.prototype.move_piece = function(starting_space_index, ending_space_index) {
+    within_range = function(index) { return index >= 0 && index <= 23; }
+    if(!(within_range(starting_space_index) && within_range(ending_space_index))) {
+        return false;
+    }
+
+    space_to_move_to = this.gameSpaceArray[ending_space_index];
+    piece_to_move = this.get_piece_on(starting_space_index);
+
+    if(!space_to_move_to.occupied && piece_to_move) {
+        game_space_circle = space_to_move_to.circle;
+        piece_to_move.circle.x(game_space_circle.x() + this.x);
+        piece_to_move.circle.y(game_space_circle.y() + this.y);
+        moved = piece_to_move.confirm_move();
+        this.gameBoardLayer.draw();
+        return moved;
+    }
+}
