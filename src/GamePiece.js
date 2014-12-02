@@ -157,7 +157,7 @@ GamePiece.prototype.confirm_move = function() {
                     }
                     circle.moved = 1;
                     removable = false;
-                    space = i;
+                    var space = i;
                     
                 }
                                 
@@ -185,7 +185,8 @@ GamePiece.prototype.confirm_move = function() {
         if(legal_space && player.match("^white$|^red$")) {
             thisObj.set_previous_position_to_this_one(legal_space, player);
             legal_space.set_occupied(thisObj);
-            circle.gameBoard.setTurn(circle.gameBoard.opposite_color(player));
+            // console.log(circle.gameBoard.opposite_color(player));
+            // circle.gameBoard.setTurn(circle.gameBoard.opposite_color(player));
             circle.gameBoard.update_status(circle.gameBoard.opposite_color(player) + "'s turn");
             return_value = true;
         } else {
@@ -198,6 +199,7 @@ GamePiece.prototype.confirm_move = function() {
     thisObj.space = space;
     thisObj.removable = removable;
     thisObj.gameBoard.check_for_blocked_state();
+    console.log(circle.turn);
     circle.gameBoard.setTurn(circle.turn);
     
     return return_value;

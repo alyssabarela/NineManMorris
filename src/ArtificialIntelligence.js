@@ -10,7 +10,7 @@ function ArtificialIntelligence(gameBoard) {
         if(in_phase_1){
            var available_spaces = gameBoard.get_available_spaces();
            var chosen_space = this.choose_random_index(available_spaces);
-           gameBoard.move_AI_on_space(game_piece, chosen_space);
+           gameBoard.place_piece("red", chosen_space);
         }
         else if(in_phase_2){
             //choose random piece
@@ -53,6 +53,7 @@ function ArtificialIntelligence(gameBoard) {
             this.active = false;
         else if(active === false)
             this.active = true;
+        console.log("ai.active is now " + this.active);
     }
     ArtificialIntelligence.prototype.remove_opponents_piece = function() {
         //ai is always red
