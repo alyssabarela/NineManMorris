@@ -159,11 +159,14 @@ GamePiece.prototype.confirm_move = function() {
         
         if(circle.moved == 0){
             thisObj.reset_to_previous_position();
+            circle.gameBoard.update_status(fill + "'s turn");
+            circle.turn = fill;
         } else {
             thisObj.current_space = new_space;
             thisObj.set_previous_position_to_this_one(new_space, thisObj.color);
             circle.on_board = true;
             return_value = true;
+            circle.gameBoard.update_status(circle.gameBoard.opposite_color(fill) + "'s turn");
         }
         
         if(circle.gameBoard.in_phase_2()){
