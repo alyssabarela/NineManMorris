@@ -398,7 +398,7 @@ GameBoard.prototype.get_available_spaces = function() {
                 this.availableSpaceArray.push(i);
             }
         }
-        return this.availableSpaceArray.toString();
+        return this.availableSpaceArray;
     }
     for(var j = 0; j < 24; j++){
         if(this.gameSpaceArray[j].occupied == "red"){
@@ -413,7 +413,7 @@ GameBoard.prototype.get_available_spaces = function() {
 
         }
     }      
-   return this.availableSpaceArray.toString();  
+   return this.availableSpaceArray;  
 }
 
 GameBoard.prototype.in_phase_1 = function() {
