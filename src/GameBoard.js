@@ -442,7 +442,7 @@ GameBoard.prototype.update_status = function(new_message) {
         if(new_message == "red's turn") {
             this.ai.your_turn();
         } else if(new_message == "red can remove their opponent's piece!") {
-            //this.ai.remove_opponents_piece();
+            this.ai.remove_opponents_piece();
         }
     }
 }
@@ -570,4 +570,12 @@ GameBoard.prototype.move_piece = function(starting_space_index, ending_space_ind
         this.gameBoardLayer.draw();
         return moved;
     }
+}
+
+GameBoard.prototype.ai_is_active = function() {
+    return this.ai.is_active();
+}
+
+GameBoard.prototype.its_ais_turn = function() {
+    this.ai.your_turn();
 }

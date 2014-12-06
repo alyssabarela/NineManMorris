@@ -33,7 +33,13 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
 
     layer.add(this.circle);
     
-    this.circle.on('click', function(){ thisObj.gameBoard.remove_piece(thisObj); });
+    this.circle.on('click', function() {
+        thisObj.gameBoard.remove_piece(thisObj);
+        
+        if(thisObj.get_color() == "red" && thisObj.gameBoard.ai_is_active()) {
+            thisObj.gameBoard.its_ais_turn();
+        }
+    });
 }
 
 GamePiece.prototype.setDraggable = function(draggable){
@@ -194,7 +200,7 @@ GamePiece.prototype.confirm_move = function() {
     this.space = space;
     this.removable = removable;
     this.gameBoard.check_for_blocked_state();
-    
+
     return return_value;
 }
 
