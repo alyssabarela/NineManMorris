@@ -300,6 +300,9 @@ GameBoard.prototype.check_for_mills = function() {
             console.error("can't remove piece player " + player_with_mill + " isn't recognized.");
         }
         game_board.update_status(player_with_mill + " can remove their opponent's piece!");
+        return true;
+    } else {
+        return false;
     }
 }
 

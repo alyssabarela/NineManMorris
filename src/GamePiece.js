@@ -129,6 +129,7 @@ GamePiece.prototype.confirm_move = function() {
     removable = false;
     circle.moved = 0;
     new_space = null;
+    status_update = "error, status not properly updated in game_piece.confirm_move()";
 
     if(circle.gameBoard.in_phase_1()) {
         for (var i = 0; i < space_array.length; i++) {
@@ -160,20 +161,19 @@ GamePiece.prototype.confirm_move = function() {
         
         if(circle.moved == 0){
             this.reset_to_previous_position();
-            circle.gameBoard.update_status(fill + "'s turn");
+            status_update = fill + "'s turn";
             circle.turn = fill;
         } else {
             this.current_space = new_space;
             this.set_previous_position_to_this_one(new_space, this.color);
             circle.on_board = true;
             return_value = true;
-            circle.gameBoard.update_status(circle.gameBoard.opposite_color(fill) + "'s turn");
+            status_update = circle.gameBoard.opposite_color(fill) + "'s turn";
         }
         
         if(circle.gameBoard.in_phase_2()){
             circle.turn = "white";
-            circle.gameBoard.update_status("white's turn");
-
+            status_update = "white's turn";
         }
         circle.gameBoard.setTurn(circle.turn);
     } else {
@@ -182,7 +182,7 @@ GamePiece.prototype.confirm_move = function() {
         if(legal_space && player.match("^white$|^red$")) {
             this.set_previous_position_to_this_one(legal_space, player);
             legal_space.set_occupied(this);
-            circle.gameBoard.update_status(circle.gameBoard.opposite_color(player) + "'s turn");
+            status_update = circle.gameBoard.opposite_color(player) + "'s turn";
             this.current_space = legal_space;
             return_value = true;
             circle.gameBoard.setTurn(circle.turn);
@@ -192,7 +192,9 @@ GamePiece.prototype.confirm_move = function() {
     }
 
     layer.draw();
-    this.gameBoard.check_for_mills();
+    if(!this.gameBoard.check_for_mills()) {
+        circle.gameBoard.update_status(status_update);
+    }
     this.space = space;
     this.removable = removable;
     this.gameBoard.check_for_blocked_state();
