@@ -116,15 +116,14 @@ GamePiece.prototype.get_color = function() {
 
 GamePiece.prototype.confirm_move = function() {
     return_value = false;
-    thisObj = this;
-    space_array = thisObj.gameBoard.gameSpaceArray;
-    layer = thisObj.gameBoard.gameBoardLayer;
-    circle = thisObj.circle;
-    fill = thisObj.color;
+    space_array = this.gameBoard.gameSpaceArray;
+    layer = this.gameBoard.gameBoardLayer;
+    circle = this.circle;
+    fill = this.color;
     removable = false;
     circle.moved = 0;
-
     new_space = null;
+
     if(circle.gameBoard.in_phase_1()) {
         for (var i = 0; i < space_array.length; i++) {
         
@@ -158,12 +157,12 @@ GamePiece.prototype.confirm_move = function() {
         }
         
         if(circle.moved == 0){
-            thisObj.reset_to_previous_position();
+            this.reset_to_previous_position();
             circle.gameBoard.update_status(fill + "'s turn");
             circle.turn = fill;
         } else {
-            thisObj.current_space = new_space;
-            thisObj.set_previous_position_to_this_one(new_space, thisObj.color);
+            this.current_space = new_space;
+            this.set_previous_position_to_this_one(new_space, this.color);
             circle.on_board = true;
             return_value = true;
             circle.gameBoard.update_status(circle.gameBoard.opposite_color(fill) + "'s turn");
@@ -176,25 +175,25 @@ GamePiece.prototype.confirm_move = function() {
         }
         circle.gameBoard.setTurn(circle.turn);
     } else {
-        legal_space = thisObj.get_legal_space_I_am_on();
+        legal_space = this.get_legal_space_I_am_on();
         player = circle.gameBoard.whos_turn_is_it();
         if(legal_space && player.match("^white$|^red$")) {
-            thisObj.set_previous_position_to_this_one(legal_space, player);
-            legal_space.set_occupied(thisObj);
+            this.set_previous_position_to_this_one(legal_space, player);
+            legal_space.set_occupied(this);
             circle.gameBoard.update_status(circle.gameBoard.opposite_color(player) + "'s turn");
-            thisObj.current_space = legal_space;
+            this.current_space = legal_space;
             return_value = true;
             circle.gameBoard.setTurn(circle.turn);
         } else {
-            thisObj.reset_to_previous_position();
+            this.reset_to_previous_position();
         }
     }
 
     layer.draw();
-    thisObj.gameBoard.check_for_mills();
-    thisObj.space = space;
-    thisObj.removable = removable;
-    thisObj.gameBoard.check_for_blocked_state();
+    this.gameBoard.check_for_mills();
+    this.space = space;
+    this.removable = removable;
+    this.gameBoard.check_for_blocked_state();
     
     return return_value;
 }

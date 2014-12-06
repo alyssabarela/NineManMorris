@@ -53,12 +53,11 @@ function ArtificialIntelligence(gameBoard) {
             this.active = false;
         else if(active === false)
             this.active = true;
-        console.log("ai.active is now " + this.active);
     }
     ArtificialIntelligence.prototype.remove_opponents_piece = function() {
         //ai is always red
-        var removeable_pieces = this.gameBoard.get_removeable_pieces("white");
-        var index_to_remove = this.choose_random_index(removeable_pieces);
+        var removable_pieces = this.gameBoard.get_removable_pieces("white");
+        var index_to_remove = this.choose_random_index(removable_pieces);
     }
     ArtificialIntelligence.prototype.choose_random_index = function(index_array) {
         if(!index_array)

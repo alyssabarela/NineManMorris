@@ -89,6 +89,7 @@ function GameBoard(x, y, box_lengths) {
         gameBoard.toggle_ai();
     });
 
+    this.old_message = "";
 }
 
 GameBoard.prototype.has_3_spaces_or_less = function(color) {
@@ -434,19 +435,14 @@ GameBoard.prototype.in_phase_3 = function() {
     return false;
 }
 
-GameBoard.prototype.update_status = function (newMessage){
-    $('#message').text(newMessage);
-    active = this.ai.is_active();
-    if(active){
-        var status_type = this.get_status_type(message);
-        if(status_type === 0){
+GameBoard.prototype.update_status = function(new_message) {
+    $('#message').text(new_message);
+    if(this.ai.is_active() && new_message != this.old_message) {
+        this.old_message = new_message;
+        if(new_message == "red's turn") {
             this.ai.your_turn();
-        }
-        else if(status_type === 1){
-            this.ai.remove_opponents_piece();
-        }
-        else{
-            console.error("Cannot properly update message");
+        } else if(new_message == "red can remove their opponent's piece!") {
+            //this.ai.remove_opponents_piece();
         }
     }
 }
