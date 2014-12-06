@@ -147,18 +147,14 @@ GamePiece.prototype.confirm_move = function() {
                     space_array[i].occupied = fill;
                     if(fill == 'white'){
                         circle.turn = "red";
-                        circle.gameBoard.update_status("red's turn");
                     }
                     if(fill == 'red'){
                         circle.turn = "white";
-                        circle.gameBoard.update_status("white's turn");
                     }
                     circle.moved = 1;
                     removable = false;
                     var space = i;
                 }
-            } else {
-                circle.gameBoard.update_status(fill + "'s turn");
             }
         }
         

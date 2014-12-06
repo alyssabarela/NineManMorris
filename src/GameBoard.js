@@ -440,6 +440,7 @@ GameBoard.prototype.update_status = function(new_message) {
     if(this.ai.is_active() && new_message != this.old_message) {
         this.old_message = new_message;
         if(new_message == "red's turn") {
+            console.log("red's turn");
             this.ai.your_turn();
         } else if(new_message == "red can remove their opponent's piece!") {
             this.ai.remove_opponents_piece();
