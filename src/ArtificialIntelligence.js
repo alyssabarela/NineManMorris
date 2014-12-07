@@ -12,26 +12,29 @@ function ArtificialIntelligence(gameBoard) {
            var chosen_space = this.choose_random_array_element(available_spaces);
            gameBoard.place_piece("red", chosen_space);
         }
-        else if(in_phase_2){
-            //choose random piece
-            var available_pieces = gameBoard.get_available_ai_pieces();
-            var chosen_piece = this.choose_random_array_element(available_pieces);
-            var available_spaces = gameBoard.get_available_spaces();
-            var chosen_pieces_space_number = gameBoard.gamePieceArray[chosen_piece].space;
-            var chosen_pieces_neighbors = gameBoard.space_neighbors[chosen_pieces_space_number]
-            //get available spaces to move 
-            chosen_pieces_neighbors.forEach(function(neighbor){
-                if(neighbor.occupied === false){
-                    move_AI_on_space(chosen_piece, neighbor)
-                    returnVal = true
-                }
-                else{
-                    returnVal = false
-                }
-            });
-            return returnVal
-            //probably a better way to do this, but need to check if all neighbors are taken!! if so we need to move to another piece and try again
+        else if(in_phase_2) {
+            possible_moves = new Array();
 
+            gameBoard.get_available_ai_pieces().forEach(function(piece) {
+                neighbors = gameBoard.space_neighbors[piece.get_space().spaceNumber];
+                empty_neighbors = new Array();
+
+                neighbors.forEach(function(neighbor) {
+                    if(!neighbor.occupied) {
+                        possible_moves.push({old_space_index: piece.get_space().spaceNumber,
+                                             new_space_index: neighbor.spaceNumber});
+                    }
+                });
+            });
+
+            there_are = function(array) { return array.length > 0; }
+
+            if(there_are(possible_moves)) {
+                chosen_move = this.choose_random_array_element(possible_moves);
+                gameBoard.move_piece(chosen_move.old_space_index, chosen_move.new_space_index);
+            } else {
+                console.error("Ai in blocked state but not detected where it ought to be.");
+            }
         }
         else if(in_phase_3){
             var available_spaces = gameBoard.get_available_spaces();

@@ -505,12 +505,14 @@ GameBoard.prototype.opposite_color = function(color) {
     return opposite_color[color];
 }
 
-GameBoard.prototype.move_AI_on_space = function(piece_index, space_index){
-
-}
-
 GameBoard.prototype.get_available_ai_pieces = function(){
-    
+    ai_pieces = new Array();
+    this.gamePieceArray.forEach(function(piece) {
+        if(piece.get_color() == "red") {
+            ai_pieces.push(piece);
+        }
+    });
+    return ai_pieces;
 }
 
 GameBoard.prototype.get_next_unplaced_piece = function() {
