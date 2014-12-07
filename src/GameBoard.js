@@ -506,10 +506,10 @@ GameBoard.prototype.opposite_color = function(color) {
 }
 
 GameBoard.prototype.get_available_ai_pieces = function(){
-    var ai_pieces = new Array();
-    this.gamePieceArray.forEach(function(game_piece){
-        if(game_piece.color.match("^red$")){
-            ai_pieces.push(game_piece);
+    ai_pieces = new Array();
+    this.gamePieceArray.forEach(function(piece) {
+        if(piece.get_color() == "red") {
+            ai_pieces.push(piece);
         }
     });
     return ai_pieces;
