@@ -9,13 +9,13 @@ function ArtificialIntelligence(gameBoard) {
         //if in phase 1, place piece randomly
         if(in_phase_1){
            var available_spaces = gameBoard.get_available_spaces();
-           var chosen_space = this.choose_random_index(available_spaces);
+           var chosen_space = this.choose_random_array_element(available_spaces);
            gameBoard.place_piece("red", chosen_space);
         }
         else if(in_phase_2){
             //choose random piece
             var available_pieces = gameBoard.get_available_ai_pieces();
-            var chosen_piece = this.choose_random_index(available_pieces);
+            var chosen_piece = this.choose_random_array_element(available_pieces);
             var available_spaces = gameBoard.get_available_spaces();
             var chosen_pieces_space_number = gameBoard.gamePieceArray[chosen_piece].space;
             var chosen_pieces_neighbors = gameBoard.space_neighbors[chosen_pieces_space_number]
@@ -35,7 +35,7 @@ function ArtificialIntelligence(gameBoard) {
         }
         else if(in_phase_3){
             var available_spaces = gameBoard.get_available_spaces();
-            var chosen_space = this.choose_random_index(available_spaces);
+            var chosen_space = this.choose_random_array_element(available_spaces);
             gameBoard.move_AI_on_space(game_piece, chosen_space);
         }
         else{
@@ -54,16 +54,24 @@ function ArtificialIntelligence(gameBoard) {
         else if(active === false)
             this.active = true;
     }
+
     ArtificialIntelligence.prototype.remove_opponents_piece = function() {
         //ai is always red
         var removable_pieces = this.gameBoard.get_removable_pieces("white");
-        var index_to_remove = this.choose_random_index(removable_pieces);
+        var piece = this.choose_random_array_element(removable_pieces);
+        setTimeout(function() {
+            this.gameBoard.remove_piece(piece);
+            setTimeout(function() {
+                this.gameBoard.update_status("white's turn");
+            }, 2000);
+        }, 2000);
     }
-    ArtificialIntelligence.prototype.choose_random_index = function(index_array) {
-        if(!index_array)
-            return
-        var length = index_array.length;
+
+    ArtificialIntelligence.prototype.choose_random_array_element = function(array) {
+        if(!array)
+            return;
+        var length = array.length;
         var random = Math.floor(Math.random() * length);
-        return index_array[random];
+        return array[random];
     }
 
