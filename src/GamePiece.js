@@ -76,9 +76,9 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
                                    !this.space_array[i].occupied) {
             if(!this.gameBoard.has_3_spaces_or_less(this.color)) {
                 if(this.gameBoard.neighbors(this.old_space.spaceNumber, i)) {
-
                     return this.space_array[i];
                 } else {
+                    console.log("failing");
                     return false;
                 }
             } else {

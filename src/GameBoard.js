@@ -97,7 +97,13 @@ GameBoard.prototype.has_3_spaces_or_less = function(color) {
 }
 
 GameBoard.prototype.neighbors = function(space_index1, space_index2) {  //space_index1 moving from, space_index2 where i' moving too
-
+console.log("checking for neighbors: " + space_index1 + " " + space_index2);
+var starting_spaces_neighbors = this.space_neighbors[space_index1];
+starting_spaces_neighbors.forEach(function(neighbor){
+    if(neighbor == space_index2){
+        return true
+    }
+});
     return this.space_neighbors[space_index1].indexOf(space_index2) > -1;
 }
     
@@ -560,14 +566,19 @@ GameBoard.prototype.get_piece_on = function(index) {
 
 GameBoard.prototype.move_piece = function(starting_space_index, ending_space_index) {
     console.log("in move piece");
+    console.log(starting_space_index);
+    console.log(ending_space_index);
     within_range = function(index) { return index >= 0 && index <= 23; }
     if(!(within_range(starting_space_index) && within_range(ending_space_index))) {
+        
+        console.log("not within range...");
         return false;
     }
 
     space_to_move_to = this.gameSpaceArray[ending_space_index];
     piece_to_move = this.get_piece_on(starting_space_index);
-
+    console.log(space_to_move_to);
+    console.log(piece_to_move);
     if(!space_to_move_to.occupied && piece_to_move) {
         game_space_circle = space_to_move_to.circle;
         piece_to_move.circle.x(game_space_circle.x() + this.x);

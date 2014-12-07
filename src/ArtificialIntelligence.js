@@ -14,23 +14,31 @@ function ArtificialIntelligence(gameBoard) {
         }
         else if(in_phase_2) {
             possible_moves = new Array();
-
             gameBoard.get_available_ai_pieces().forEach(function(piece) {
+                console.log(piece);
                 neighbors = gameBoard.space_neighbors[piece.get_space().spaceNumber];
-                empty_neighbors = new Array();
 
+            for(var n = 0; n < neighbors.length; n++){
+                something = neighbors[n];
+                neighbor = gameBoard.gameSpaceArray[something];
+                neighbors[n] = neighbor;
+            }
+            console.log(neighbors);
                 neighbors.forEach(function(neighbor) {
-                    if(!neighbor.occupied) {
-                        possible_moves.push({old_space_index: piece.get_space().spaceNumber,
-                                             new_space_index: neighbor.spaceNumber});
+                    if(!(neighbor.occupied)) {
+                        old = piece.get_space().spaceNumber;
+                        new_index = neighbor.spaceNumber;
+                        possible_moves.push({old_space_index: old,
+                                             new_space_index: new_index});
                     }
                 });
             });
 
             there_are = function(array) { return array.length > 0; }
-
+            console.log(possible_moves);
             if(there_are(possible_moves)) {
                 chosen_move = this.choose_random_array_element(possible_moves);
+                console.log(chosen_move);
                 gameBoard.move_piece(chosen_move.old_space_index, chosen_move.new_space_index);
             } else {
                 console.error("Ai in blocked state but not detected where it ought to be.");
