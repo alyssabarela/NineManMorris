@@ -17,12 +17,18 @@ function ArtificialIntelligence(gameBoard) {
             var available_pieces = gameBoard.get_available_ai_pieces();
             var chosen_piece = this.choose_random_array_element(available_pieces);
             var available_spaces = gameBoard.get_available_spaces();
-            var chosen_pieces_space_number = gameBoard.gamePieceArray[chosen_piece].space;
+            var chosen_pieces_space_number = chosen_piece.current_space.spaceNumber;
             var chosen_pieces_neighbors = gameBoard.space_neighbors[chosen_pieces_space_number]
             //get available spaces to move 
+            for(var n = 0; n < chosen_pieces_neighbors.length; n++){
+                neighbor = gameBoard.gameSpaceArray[n];
+                chosen_pieces_neighbors[n] = neighbor;
+            }
+
             chosen_pieces_neighbors.forEach(function(neighbor){
                 if(neighbor.occupied === false){
-                    move_AI_on_space(chosen_piece, neighbor)
+                    console.log("should move piece");
+                    gameBoard.move_piece(chosen_pieces_space_number, neighbor.spaceNumber);
                     returnVal = true
                 }
                 else{

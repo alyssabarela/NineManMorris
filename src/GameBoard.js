@@ -505,12 +505,14 @@ GameBoard.prototype.opposite_color = function(color) {
     return opposite_color[color];
 }
 
-GameBoard.prototype.move_AI_on_space = function(piece_index, space_index){
-
-}
-
 GameBoard.prototype.get_available_ai_pieces = function(){
-    
+    var ai_pieces = new Array();
+    this.gamePieceArray.forEach(function(game_piece){
+        if(game_piece.color.match("^red$")){
+            ai_pieces.push(game_piece);
+        }
+    });
+    return ai_pieces;
 }
 
 GameBoard.prototype.get_next_unplaced_piece = function() {
@@ -557,6 +559,7 @@ GameBoard.prototype.get_piece_on = function(index) {
 }
 
 GameBoard.prototype.move_piece = function(starting_space_index, ending_space_index) {
+    console.log("in move piece");
     within_range = function(index) { return index >= 0 && index <= 23; }
     if(!(within_range(starting_space_index) && within_range(ending_space_index))) {
         return false;
