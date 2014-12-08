@@ -75,10 +75,12 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
                                    y: this.space_array[i].circle.getAbsolutePosition().y}) &&
                                    !this.space_array[i].occupied) {
             if(!this.gameBoard.has_3_spaces_or_less(this.color)) {
-                if(this.gameBoard.neighbors(this.old_space.spaceNumber, i)) {
+                var are_we_neighbors = this.gameBoard.neighbors(this.old_space.spaceNumber, i);
+                console.log(are_we_neighbors);
+                if(are_we_neighbors) {
                     return this.space_array[i];
                 } else {
-                    console.log("failing");
+                    console.log("failing with " + this.old_space.spaceNumber + " and " + i);
                     return false;
                 }
             } else {
@@ -177,6 +179,7 @@ GamePiece.prototype.confirm_move = function() {
         }
         circle.gameBoard.setTurn(circle.turn);
     } else {
+        console.log("is this where I am failing?");
         legal_space = this.get_legal_space_I_am_on();
         player = circle.gameBoard.whos_turn_is_it();
         if(legal_space && player.match("^white$|^red$")) {

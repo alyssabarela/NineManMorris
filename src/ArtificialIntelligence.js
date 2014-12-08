@@ -20,8 +20,14 @@ function ArtificialIntelligence(gameBoard) {
 
             for(var n = 0; n < neighbors.length; n++){
                 something = neighbors[n];
+                if(something.spaceNumber){
+                neighbor = gameBoard.gameSpaceArray[something.spaceNumber];
+                neighbors[n] = neighbor;
+                }
+                else{
                 neighbor = gameBoard.gameSpaceArray[something];
                 neighbors[n] = neighbor;
+            }
             }
             console.log(neighbors);
                 neighbors.forEach(function(neighbor) {

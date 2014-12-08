@@ -59,7 +59,7 @@ function GameBoard(x, y, box_lengths) {
                   {space_indexes: [22, 14,  6], recognized:false}];
 
     this.space_neighbors = new Array();
-    this.space_neighbors[ 0] = [         1,  3];
+    this.space_neighbors[ 0] = [         1,  3];  
     this.space_neighbors[ 1] = [     0,  9,  2];
     this.space_neighbors[ 2] = [         1,  4];
     this.space_neighbors[ 3] = [     0, 11,  5];
@@ -97,14 +97,20 @@ GameBoard.prototype.has_3_spaces_or_less = function(color) {
 }
 
 GameBoard.prototype.neighbors = function(space_index1, space_index2) {  //space_index1 moving from, space_index2 where i' moving too
-console.log("checking for neighbors: " + space_index1 + " " + space_index2);
 var starting_spaces_neighbors = this.space_neighbors[space_index1];
+var something = false;
 starting_spaces_neighbors.forEach(function(neighbor){
-    if(neighbor == space_index2){
-        return true
+    if(neighbor.spaceNumber && neighbor.spaceNumber == space_index2){
+        something = true;
+        return;
+    }
+    else if(neighbor == space_index2){
+        console.log("yes we are neighbors");
+        something = true;
+        return;
     }
 });
-    return this.space_neighbors[space_index1].indexOf(space_index2) > -1;
+return something;
 }
     
 GameBoard.prototype.drawBoxes = function() {
@@ -239,7 +245,13 @@ GameBoard.prototype.check_for_blocked_state = function(){
                 var neighbors = game_board.space_neighbors[spacenumber];
                 for(var i = 0; i< neighbors.length; i++){
                     var neighbor = neighbors[i];
+                    console.log(neighbor);
+                    if(neighbor.spaceNumber){
+                    var occupied = game_board.gameSpaceArray[neighbor.spaceNumber].occupied;
+                    }
+                    else{
                     var occupied = game_board.gameSpaceArray[neighbor].occupied;
+                    }
                     if(occupied === false)
                         returnVal = false;
             }
