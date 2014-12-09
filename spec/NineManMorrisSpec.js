@@ -24,6 +24,7 @@ describe("Game is created", function() {
 	expect(true).toEqual(this.gameFactory.in_phase_1());
     });
     
+    
     it("does not start in phase 2 at game start", function(){
 	expect(false).toEqual(this.gameFactory.in_phase_2());
     });
