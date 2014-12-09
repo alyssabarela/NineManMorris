@@ -40,6 +40,10 @@ describe("Game is created", function() {
 	expect(24).toEqual(this.gameFactory.gameSpaceArray.length);
     });
     
+    it("checks if ai is active", function(){
+	expect(false).toEqual(this.gameFactory.ai_is_active());
+    });
+    
     it("creates a stage", function() {
       
        //this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
