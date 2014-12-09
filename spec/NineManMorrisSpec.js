@@ -302,3 +302,18 @@ describe("Decrementer", function() {
         expect(decrementer.hasThreeOrLess("white")).toEqual(true);
     });
 });
+
+describe("Play a 2 player game", function() {
+  
+    beforeEach(function() {
+	this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
+    });
+    
+    
+    it("move first white piece to top left", function() {
+	this.gameFactory.place_piece("white", 0);
+      
+         expect(true).toEqual(true);
+    });
+    
+});
