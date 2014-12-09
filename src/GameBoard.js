@@ -100,12 +100,11 @@ GameBoard.prototype.neighbors = function(space_index1, space_index2) {  //space_
 var starting_spaces_neighbors = this.space_neighbors[space_index1];
 var something = false;
 starting_spaces_neighbors.forEach(function(neighbor){
-    if(neighbor.spaceNumber && neighbor.spaceNumber == space_index2){
+    if(neighbor && neighbor.spaceNumber && neighbor.spaceNumber == space_index2){
         something = true;
         return;
     }
     else if(neighbor == space_index2){
-        console.log("yes we are neighbors");
         something = true;
         return;
     }
@@ -245,7 +244,6 @@ GameBoard.prototype.check_for_blocked_state = function(){
                 var neighbors = game_board.space_neighbors[spacenumber];
                 for(var i = 0; i< neighbors.length; i++){
                     var neighbor = neighbors[i];
-                    console.log(neighbor);
                     if(neighbor.spaceNumber){
                     var occupied = game_board.gameSpaceArray[neighbor.spaceNumber].occupied;
                     }
@@ -578,8 +576,6 @@ GameBoard.prototype.get_piece_on = function(index) {
 
 GameBoard.prototype.move_piece = function(starting_space_index, ending_space_index) {
     console.log("in move piece");
-    console.log(starting_space_index);
-    console.log(ending_space_index);
     within_range = function(index) { return index >= 0 && index <= 23; }
     if(!(within_range(starting_space_index) && within_range(ending_space_index))) {
         
@@ -596,6 +592,7 @@ GameBoard.prototype.move_piece = function(starting_space_index, ending_space_ind
         piece_to_move.circle.x(game_space_circle.x() + this.x);
         piece_to_move.circle.y(game_space_circle.y() + this.y);
         moved = piece_to_move.confirm_move();
+        console.log(moved);
         this.gameBoardLayer.draw();
         return moved;
     }

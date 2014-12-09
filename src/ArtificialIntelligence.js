@@ -20,9 +20,8 @@ function ArtificialIntelligence(gameBoard) {
 
             for(var n = 0; n < neighbors.length; n++){
                 something = neighbors[n];
-                if(something.spaceNumber){
-                neighbor = gameBoard.gameSpaceArray[something.spaceNumber];
-                neighbors[n] = neighbor;
+                if(something && something.spaceNumber){
+                break;
                 }
                 else{
                 neighbor = gameBoard.gameSpaceArray[something];
@@ -31,7 +30,7 @@ function ArtificialIntelligence(gameBoard) {
             }
             console.log(neighbors);
                 neighbors.forEach(function(neighbor) {
-                    if(!(neighbor.occupied)) {
+                    if(neighbor && !(neighbor.occupied)) {
                         old = piece.get_space().spaceNumber;
                         new_index = neighbor.spaceNumber;
                         possible_moves.push({old_space_index: old,

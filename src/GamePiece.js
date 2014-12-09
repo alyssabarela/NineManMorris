@@ -37,8 +37,11 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
         thisObj.gameBoard.remove_piece(thisObj);
         
         if(thisObj.get_color() == "red" && thisObj.gameBoard.ai_is_active()) {
-            thisObj.gameBoard.its_ais_turn();
+            thisObj.gameBoard.update_status("white removed a piece");
+            thisObj.gameBoard.update_status("white's turn");
+            thisObj.gameBoard.setTurn("white");
         }
+
     });
 }
 
@@ -76,7 +79,6 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
                                    !this.space_array[i].occupied) {
             if(!this.gameBoard.has_3_spaces_or_less(this.color)) {
                 var are_we_neighbors = this.gameBoard.neighbors(this.old_space.spaceNumber, i);
-                console.log(are_we_neighbors);
                 if(are_we_neighbors) {
                     return this.space_array[i];
                 } else {
@@ -179,24 +181,29 @@ GamePiece.prototype.confirm_move = function() {
         }
         circle.gameBoard.setTurn(circle.turn);
     } else {
-        console.log("is this where I am failing?");
         legal_space = this.get_legal_space_I_am_on();
         player = circle.gameBoard.whos_turn_is_it();
         if(legal_space && player.match("^white$|^red$")) {
             this.set_previous_position_to_this_one(legal_space, player);
             legal_space.set_occupied(this);
+            console.log(player);
             status_update = circle.gameBoard.opposite_color(player) + "'s turn";
             this.current_space = legal_space;
             return_value = true;
             circle.gameBoard.setTurn(circle.turn);
         } else {
             this.reset_to_previous_position();
+            console.log("didn't move");
+            status_update = (player) + "'s turn";
         }
     }
 
     layer.draw();
     if(!this.gameBoard.check_for_mills()) {
         circle.gameBoard.update_status(status_update);
+    }
+    else{
+        console.log("here");
     }
     this.space = space;
     this.removable = removable;
