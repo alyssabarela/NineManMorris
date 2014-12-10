@@ -318,3 +318,40 @@ describe("Play a 2 player game", function() {
     });
     
 });
+
+
+describe("New Antonio tests", function() {
+  
+    beforeEach(function() {
+      this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
+    });
+
+    beforeEach(function() {
+      this.aiFactory = new ArtificialIntelligence(this.gameFactory);
+    });
+
+
+    it("checks if ai is active", function(){
+        expect(false).toEqual(this.gameFactory.ai_is_active());
+    });
+
+
+    it("checks if ai in ArtificialIntelligence class is active", function(){
+        expect(false).toEqual(this.aiFactory.is_active());
+    });
+
+    it("checks if ai in ArtificialIntelligence class toggle_active is equal to this.active", function(){
+        expect(this.active).toEqual(this.aiFactory.toggle_active());
+    });
+
+    it("checks if ai in ArtificialIntelligence class remove's piece correctly", function(){
+        expect(this.setTimeout).toEqual(this.aiFactory.remove_opponents_piece ());
+    });
+
+    it("checks if gameBoard toggle_ai is active", function(){
+        expect(this.active).toEqual(this.gameFactory.toggle_ai());
+    });
+
+
+
+});
