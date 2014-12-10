@@ -3,6 +3,7 @@ function ArtificialIntelligence(gameBoard) {
     this.active = false;
 }
     ArtificialIntelligence.prototype.your_turn = function(game_piece) {
+        var returnVal = false;
         var in_phase_1 = gameBoard.in_phase_1();
         var in_phase_2 = gameBoard.in_phase_2();
         var in_phase_3 = gameBoard.in_phase_3();
@@ -11,11 +12,12 @@ function ArtificialIntelligence(gameBoard) {
            var available_spaces = gameBoard.get_available_spaces();
            var chosen_space = this.choose_random_array_element(available_spaces);
            gameBoard.place_piece("red", chosen_space);
+           returnVal = true;
+           return returnVal;
         }
         else if(in_phase_2) {
             possible_moves = new Array();
             gameBoard.get_available_ai_pieces().forEach(function(piece) {
-                console.log(piece);
                 neighbors = gameBoard.space_neighbors[piece.get_space().spaceNumber];
 
             for(var n = 0; n < neighbors.length; n++){
@@ -28,7 +30,6 @@ function ArtificialIntelligence(gameBoard) {
                 neighbors[n] = neighbor;
             }
             }
-            console.log(neighbors);
                 neighbors.forEach(function(neighbor) {
                     if(neighbor && !(neighbor.occupied)) {
                         old = piece.get_space().spaceNumber;
@@ -40,25 +41,31 @@ function ArtificialIntelligence(gameBoard) {
             });
 
             there_are = function(array) { return array.length > 0; }
-            console.log(possible_moves);
             if(there_are(possible_moves)) {
                 chosen_move = this.choose_random_array_element(possible_moves);
                 console.log(chosen_move);
                 gameBoard.move_piece(chosen_move.old_space_index, chosen_move.new_space_index);
+                returnVal = true;
+                return returnVal;
             } else {
                 console.error("Ai in blocked state but not detected where it ought to be.");
             }
+        return returnVal;
         }
         else if(in_phase_3){
             var available_spaces = gameBoard.get_available_spaces();
             var chosen_space = this.choose_random_array_element(available_spaces);
             gameBoard.move_AI_on_space(game_piece, chosen_space);
+            returnVal = true;
+            return returnVal;
         }
         else{
-            gameBoard.update_status("something went wrong...")
+            gameBoard.update_status("something went wrong...");
+            return returnVal;
         }
         //if in phase 2, move piece randomly
         //if in phase 3, move piece anywhere randomly
+        return returnVal;
     }
     ArtificialIntelligence.prototype.is_active = function() {
         return this.active;

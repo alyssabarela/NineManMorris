@@ -34,8 +34,8 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
     layer.add(this.circle);
     
     this.circle.on('click', function() {
-        thisObj.gameBoard.remove_piece(thisObj);
-        
+        var bool = thisObj.gameBoard.remove_piece(thisObj);
+        console.log(bool);
         if(thisObj.get_color() == "red" && thisObj.gameBoard.ai_is_active()) {
             thisObj.gameBoard.update_status("white removed a piece");
             thisObj.gameBoard.update_status("white's turn");
@@ -186,7 +186,6 @@ GamePiece.prototype.confirm_move = function() {
         if(legal_space && player.match("^white$|^red$")) {
             this.set_previous_position_to_this_one(legal_space, player);
             legal_space.set_occupied(this);
-            console.log(player);
             status_update = circle.gameBoard.opposite_color(player) + "'s turn";
             this.current_space = legal_space;
             return_value = true;
@@ -203,7 +202,6 @@ GamePiece.prototype.confirm_move = function() {
         circle.gameBoard.update_status(status_update);
     }
     else{
-        console.log("here");
     }
     this.space = space;
     this.removable = removable;
