@@ -281,6 +281,7 @@ GameBoard.prototype.set_win_message_for_blocked_state = function(){
                     loser = "white";
                 }
                 game_board.update_status(loser + " is blocked, " + winner + " wins!");
+                return true;
 }
 
 GameBoard.prototype.check_for_mills = function() {
@@ -500,6 +501,7 @@ GameBoard.prototype.remove_piece = function(game_piece_or_space_index) {
 
     if(winner) {
         this.update_status(winner + " wins!");
+        return true;
     } else if(this.number_of_pieces_to_remove <= 0) {
         this.update_status(game_piece.color + "'s turn");
     } else {
