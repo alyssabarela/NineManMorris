@@ -20,16 +20,15 @@ function ArtificialIntelligence(gameBoard) {
             gameBoard.get_available_ai_pieces().forEach(function(piece) {
                 neighbors = gameBoard.space_neighbors[piece.get_space().spaceNumber];
 
-            for(var n = 0; n < neighbors.length; n++){
-                something = neighbors[n];
-                if(something && something.spaceNumber){
-                break;
+                for(var n = 0; n < neighbors.length; n++) {
+                    something = neighbors[n];
+                    if(something && something.spaceNumber) {
+                        break;
+                    } else {
+                        neighbor = gameBoard.gameSpaceArray[something];
+                        neighbors[n] = neighbor;
+                    }
                 }
-                else{
-                neighbor = gameBoard.gameSpaceArray[something];
-                neighbors[n] = neighbor;
-            }
-            }
                 neighbors.forEach(function(neighbor) {
                     if(neighbor && !(neighbor.occupied)) {
                         old = piece.get_space().spaceNumber;
@@ -43,14 +42,13 @@ function ArtificialIntelligence(gameBoard) {
             there_are = function(array) { return array.length > 0; }
             if(there_are(possible_moves)) {
                 chosen_move = this.choose_random_array_element(possible_moves);
-                console.log(chosen_move);
                 gameBoard.move_piece(chosen_move.old_space_index, chosen_move.new_space_index);
                 returnVal = true;
                 return returnVal;
             } else {
                 console.error("Ai in blocked state but not detected where it ought to be.");
             }
-        return returnVal;
+            return returnVal;
         }
         else if(in_phase_3){
             var available_spaces = gameBoard.get_available_spaces();
@@ -71,11 +69,23 @@ function ArtificialIntelligence(gameBoard) {
         return this.active;
     }
     ArtificialIntelligence.prototype.toggle_active = function() {
-        var active = this.active;
-        if(active === true)
-            this.active = false;
-        else if(active === false)
-            this.active = true;
+        if(this.is_active()) {
+            this.deactivate();
+        } else {
+            this.activate();
+        }
+    }
+
+    ArtificialIntelligence.prototype.deactivate = function() {
+        this.active = false;
+    }
+
+    ArtificialIntelligence.prototype.activate = function() {
+        this.active = true;
+    }
+
+    ArtificialIntelligence.prototype.is_active = function() {
+        return this.active;
     }
 
     ArtificialIntelligence.prototype.remove_opponents_piece = function() {

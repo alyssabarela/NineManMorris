@@ -35,7 +35,6 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
     
     this.circle.on('click', function() {
         var bool = thisObj.gameBoard.remove_piece(thisObj);
-        console.log(bool);
         if(thisObj.get_color() == "red" && thisObj.gameBoard.ai_is_active()) {
             thisObj.gameBoard.update_status("white removed a piece");
             thisObj.gameBoard.update_status("white's turn");
@@ -82,7 +81,6 @@ GamePiece.prototype.get_legal_space_I_am_on = function() {
                 if(are_we_neighbors) {
                     return this.space_array[i];
                 } else {
-                    console.log("failing with " + this.old_space.spaceNumber + " and " + i);
                     return false;
                 }
             } else {
@@ -192,7 +190,6 @@ GamePiece.prototype.confirm_move = function() {
             circle.gameBoard.setTurn(circle.turn);
         } else {
             this.reset_to_previous_position();
-            console.log("didn't move");
             status_update = (player) + "'s turn";
         }
     }

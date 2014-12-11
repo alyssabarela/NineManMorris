@@ -500,6 +500,7 @@ GameBoard.prototype.remove_piece = function(game_piece_or_space_index) {
     this.number_of_pieces_to_remove--;
 
     if(winner) {
+        this.ai.deactivate();
         this.update_status(winner + " wins!");
         return true;
     } else if(this.number_of_pieces_to_remove <= 0) {
@@ -579,8 +580,6 @@ GameBoard.prototype.get_piece_on = function(index) {
 GameBoard.prototype.move_piece = function(starting_space_index, ending_space_index) {
     within_range = function(index) { return index >= 0 && index <= 23; }
     if(!(within_range(starting_space_index) && within_range(ending_space_index))) {
-        
-        console.log("not within range...");
         return false;
     }
 
@@ -591,7 +590,6 @@ GameBoard.prototype.move_piece = function(starting_space_index, ending_space_ind
         piece_to_move.circle.x(game_space_circle.x() + this.x);
         piece_to_move.circle.y(game_space_circle.y() + this.y);
         moved = piece_to_move.confirm_move();
-        console.log(moved);
         this.gameBoardLayer.draw();
         return moved;
     }

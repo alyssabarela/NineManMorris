@@ -8,7 +8,6 @@ function Decrementer() {
         } else if(string == "red") {
             this.red--;
         }
-        console.log(string + ", red: " + this.red + ", white: " + this.white);
         if(this.red < 3) {
             return "white";
         } else if(this.white < 3) {
