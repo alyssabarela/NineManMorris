@@ -602,3 +602,45 @@ GameBoard.prototype.ai_is_active = function() {
 GameBoard.prototype.its_ais_turn = function() {
     this.ai.your_turn();
 }
+
+GameBoard.prototype.get_placed_pieces = function(player_color) {
+    placed_pieces = new Array();
+    this.gamePieceArray.forEach(function(piece) {
+        if(piece.get_color() == player_color && piece.get_space()) {
+            placed_pieces.push(piece);
+        }
+    });
+    return placed_pieces;
+}
+
+GameBoard.prototype.get_mill_maker_spaces = function(player_color) {
+    mill_maker_spaces = new Array();
+    this.get_placed_pieces(player_color).forEach(function(piece) {
+        this.mills.forEach(function(mill) {
+            if(!mill.recognized) {
+                mill_indexes = new Array();
+                mill.space_indexes.forEach(function(space_index) {
+                    white_does_not_have_a_piece_in_this_mill = true;
+                    piece_on_space_index = this.get_piece_on(space_index);
+                    if(piece_on_space_index) {
+                        if(piece_on_space_index.get_color() == "white") {
+                            white_does_not_have_a_piece_in_this_mill = false;
+                        }
+                    }
+
+                    if(white_does_not_have_a_piece_in_this_mill &&
+                       piece.get_space().spaceNumber != space_index) {
+                        mill_indexes.push(space_index);
+                        white_does_not_have_a_piece_in_this_mill = false;
+                    }
+                });
+                if(mill_indexes.length != 3) {
+                    mill_indexes.forEach(function(mill_index) {
+                        mill_maker_spaces.push(this.gameSpaceArray[mill_index]);
+                    });
+                }
+            }
+        });
+    });
+    return mill_maker_spaces;
+}

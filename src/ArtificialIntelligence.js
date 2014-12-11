@@ -3,17 +3,23 @@ function ArtificialIntelligence(gameBoard) {
     this.active = false;
 }
     ArtificialIntelligence.prototype.your_turn = function(game_piece) {
+        there_are = function(array) {return array.length != 0;}
         var returnVal = false;
         var in_phase_1 = gameBoard.in_phase_1();
         var in_phase_2 = gameBoard.in_phase_2();
         var in_phase_3 = gameBoard.in_phase_3();
         //if in phase 1, place piece randomly
         if(in_phase_1){
-           var available_spaces = gameBoard.get_available_spaces();
-           var chosen_space = this.choose_random_array_element(available_spaces);
-           gameBoard.place_piece("red", chosen_space);
-           returnVal = true;
-           return returnVal;
+            mill_maker_spaces = gameBoard.get_mill_maker_spaces();
+
+            if(there_are(mill_maker_spaces)) {
+                available_spaces = mill_maker_spaces;
+            } else {
+                available_spaces = gameBoard.get_available_spaces();
+            }
+
+            chosen_space = this.choose_random_array_element(available_spaces);
+            return gameBoard.place_piece("red", chosen_space);
         }
         else if(in_phase_2) {
             possible_moves = new Array();
