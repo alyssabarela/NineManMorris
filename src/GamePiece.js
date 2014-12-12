@@ -26,7 +26,6 @@ function GamePiece(x, y, fill, draggable, layer, space_array, gameBoard, config)
     this.circle.on_board = false;
     this.turn = "";
     this.circle.gameBoard = this.gameBoard;
-	var removable = false;
 	var thisObj = this;
     var space_array = this.space_array;
     this.circle.on('dragend', function() {thisObj.confirm_move();});
@@ -128,7 +127,6 @@ GamePiece.prototype.confirm_move = function() {
     layer = this.gameBoard.gameBoardLayer;
     circle = this.circle;
     fill = this.color;
-    removable = false;
     circle.moved = 0;
     new_space = null;
     status_update = "error, status not properly updated in game_piece.confirm_move()";
@@ -155,7 +153,6 @@ GamePiece.prototype.confirm_move = function() {
                         circle.turn = "white";
                     }
                     circle.moved = 1;
-                    removable = false;
                     var space = i;
                 }
             }
@@ -201,7 +198,7 @@ GamePiece.prototype.confirm_move = function() {
     else{
     }
     this.space = space;
-    this.removable = removable;
+    this.removable = false;
     this.gameBoard.check_for_blocked_state();
 
     return return_value;

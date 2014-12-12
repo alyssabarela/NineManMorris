@@ -96,14 +96,17 @@ function ArtificialIntelligence(gameBoard) {
 
     ArtificialIntelligence.prototype.remove_opponents_piece = function() {
         //ai is always red
-        var removable_pieces = this.gameBoard.get_removable_pieces("white");
-        var piece = this.choose_random_array_element(removable_pieces);
+        thisAI = this;
+        game_board = this.gameBoard;
+        var removable_pieces = game_board.get_removable_pieces("white");
+        var piece = thisAI.choose_random_array_element(removable_pieces);
         setTimeout(function() {
-            this.gameBoard.remove_piece(piece);
+            piece.removable = true;
+            game_board.remove_piece(piece);
             setTimeout(function() {
-                this.gameBoard.update_status("white's turn");
-            }, 2000);
-        }, 2000);
+                game_board.update_status("white's turn");
+            }, 1000);
+        }, 1000);
     }
 
     ArtificialIntelligence.prototype.choose_random_array_element = function(array) {

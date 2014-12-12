@@ -400,15 +400,18 @@ GameBoard.prototype.whos_turn_is_it = function() {
 }
 
 GameBoard.prototype.setTurn = function(player_whose_turn_it_is){
-    this.player_whose_turn_it_is = player_whose_turn_it_is
-	if(player_whose_turn_it_is != "red" && player_whose_turn_it_is != "white"){
-		this.update_status("Invalid player color: " + player_whose_turn_it_is);
-        return;
-	}
+    game_board = this;
+    setTimeout(function() {
+        game_board.player_whose_turn_it_is = player_whose_turn_it_is
+        if(player_whose_turn_it_is != "red" && player_whose_turn_it_is != "white"){
+            game_board.update_status("Invalid player color: " + player_whose_turn_it_is);
+            return;
+        }
 
-    this.gamePieceArray.forEach(function(game_piece) {
-        game_piece.setDraggable(game_piece.color == player_whose_turn_it_is);
-    });
+        game_board.gamePieceArray.forEach(function(game_piece) {
+            game_piece.setDraggable(game_piece.color == player_whose_turn_it_is);
+        });
+    }, 1000);
 }
 
 GameBoard.prototype.get_available_spaces = function() {
