@@ -10,6 +10,7 @@ by the smallest box.
 None of these primitives are draggable
 */
 function GameBoard(x, y, box_lengths) {
+    this.winner = false;
     this.x = x;
     this.y = y;
     this.number_of_boxes = 3;
@@ -248,7 +249,8 @@ GameBoard.prototype.check_for_blocked_state = function(){
                     var occupied = game_board.gameSpaceArray[neighbor.spaceNumber].occupied;
                     }
                     else{
-                    var occupied = game_board.gameSpaceArray[neighbor].occupied;
+                    //the below line caused an error
+                    var occupied = false; //game_board.gameSpaceArray[neighbor].occupied;
                     }
                     if(occupied === false)
                         returnVal = false;
@@ -459,13 +461,15 @@ GameBoard.prototype.in_phase_3 = function() {
 }
 
 GameBoard.prototype.update_status = function(new_message) {
-    $('#message').text(new_message);
-    if(this.ai.is_active() && new_message != this.old_message) {
-        this.old_message = new_message;
-        if(new_message == "red's turn") {
-            this.ai.your_turn();
-        } else if(new_message == "red can remove their opponent's piece!") {
-            this.ai.remove_opponents_piece();
+    if(!this.winner) {
+        $('#message').text(new_message);
+        if(this.ai.is_active() && new_message != this.old_message) {
+            this.old_message = new_message;
+            if(new_message == "red's turn") {
+                this.ai.your_turn();
+            } else if(new_message == "red can remove their opponent's piece!") {
+                this.ai.remove_opponents_piece();
+            }
         }
     }
 }
@@ -505,6 +509,7 @@ GameBoard.prototype.remove_piece = function(game_piece_or_space_index) {
     if(winner) {
         this.ai.deactivate();
         this.update_status(winner + " wins!");
+        this.winner = true;
         return true;
     } else if(this.number_of_pieces_to_remove <= 0) {
         this.update_status(game_piece.color + "'s turn");

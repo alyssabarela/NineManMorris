@@ -48,8 +48,16 @@ function ArtificialIntelligence(gameBoard) {
             there_are = function(array) { return array.length > 0; }
             if(there_are(possible_moves)) {
                 mill_maker_spaces = gameBoard.get_mill_maker_spaces("red");
+                mill_maker_moves = new Array();
                 if(there_are(mill_maker_spaces)) {
-                    console.log("in phase2 have mill makers");
+                    possible_moves.forEach(function(possible_move) {
+                        if(mill_maker_spaces.indexOf(possible_move.new_space_index) != -1) {
+                            mill_maker_moves.push(possible_move);
+                        }
+                    });
+                }
+                if(there_are(mill_maker_moves)) {
+                    possible_moves = mill_maker_moves;
                 }
 
                 chosen_move = this.choose_random_array_element(possible_moves);
