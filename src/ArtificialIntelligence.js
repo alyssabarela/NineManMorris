@@ -47,8 +47,14 @@ function ArtificialIntelligence(gameBoard) {
 
             there_are = function(array) { return array.length > 0; }
             if(there_are(possible_moves)) {
+                mill_maker_spaces = gameBoard.get_mill_maker_spaces("red");
+                if(there_are(mill_maker_spaces)) {
+                    console.log("in phase2 have mill makers");
+                }
+
                 chosen_move = this.choose_random_array_element(possible_moves);
                 gameBoard.move_piece(chosen_move.old_space_index, chosen_move.new_space_index);
+                gameBoard.update_status("white's turn");
                 returnVal = true;
                 return returnVal;
             } else {
