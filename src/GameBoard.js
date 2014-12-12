@@ -606,7 +606,7 @@ GameBoard.prototype.its_ais_turn = function() {
 GameBoard.prototype.get_placed_pieces = function(player_color) {
     placed_pieces = new Array();
     this.gamePieceArray.forEach(function(piece) {
-        if(piece.get_color() == player_color && piece.get_space()) {
+        if(piece.get_color() == player_color && piece.get_space() != false) {
             placed_pieces.push(piece);
         }
     });
@@ -614,33 +614,36 @@ GameBoard.prototype.get_placed_pieces = function(player_color) {
 }
 
 GameBoard.prototype.get_mill_maker_spaces = function(player_color) {
-    mill_maker_spaces = new Array();
-    this.get_placed_pieces(player_color).forEach(function(piece) {
-        this.mills.forEach(function(mill) {
-            if(!mill.recognized) {
-                mill_indexes = new Array();
-                mill.space_indexes.forEach(function(space_index) {
-                    white_does_not_have_a_piece_in_this_mill = true;
-                    piece_on_space_index = this.get_piece_on(space_index);
-                    if(piece_on_space_index) {
-                        if(piece_on_space_index.get_color() == "white") {
-                            white_does_not_have_a_piece_in_this_mill = false;
-                        }
-                    }
+        there_are = function(array) {return array.length != 0;}
 
-                    if(white_does_not_have_a_piece_in_this_mill &&
-                       piece.get_space().spaceNumber != space_index) {
-                        mill_indexes.push(space_index);
-                        white_does_not_have_a_piece_in_this_mill = false;
-                    }
-                });
-                if(mill_indexes.length != 3) {
-                    mill_indexes.forEach(function(mill_index) {
-                        mill_maker_spaces.push(this.gameSpaceArray[mill_index]);
+        mill_maker_spaces = new Array();
+        piece_count = 2;
+        while(piece_count >= 1) {
+            game_board = this;
+            game_board.mills.forEach(function(mill) {
+                count = {"white":0, "red":0}
+                if(!mill.recognized) {
+                    mill.space_indexes.forEach(function(space_index) {
+                        piece_on_index = game_board.get_piece_on(space_index);
+                        if(piece_on_index) {
+                            count[piece_on_index.get_color()]++;
+                        }
                     });
                 }
+                
+                if(count[player_color] == piece_count &&
+                   count[game_board.opposite_color(player_color)] == 0) {
+                    mill.space_indexes.forEach(function(space_index) {
+                        if(!game_board.gameSpaceArray[space_index].occupied) {
+                            mill_maker_spaces.push(space_index);
+                        }
+                    });
+                }
+            });
+            if(there_are(mill_maker_spaces)) {
+                return mill_maker_spaces;
             }
-        });
-    });
-    return mill_maker_spaces;
+            piece_count--;
+        }
+        return mill_maker_spaces;
 }

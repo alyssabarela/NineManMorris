@@ -10,7 +10,7 @@ function ArtificialIntelligence(gameBoard) {
         var in_phase_3 = gameBoard.in_phase_3();
         //if in phase 1, place piece randomly
         if(in_phase_1){
-            mill_maker_spaces = gameBoard.get_mill_maker_spaces();
+            mill_maker_spaces = gameBoard.get_mill_maker_spaces("red");
 
             if(there_are(mill_maker_spaces)) {
                 available_spaces = mill_maker_spaces;
