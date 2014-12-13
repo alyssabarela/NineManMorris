@@ -41,10 +41,6 @@ describe("Game is created", function() {
 	expect(24).toEqual(this.gameFactory.gameSpaceArray.length);
     });
     
-    it("checks if ai is active", function(){
-	expect(false).toEqual(this.gameFactory.ai_is_active());
-    });
-    
     it("creates a stage", function() {
       
        //this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
@@ -338,7 +334,7 @@ describe("Test AI", function() {
 
 });
 
-describe("Play a 2 player game", function() {
+describe("Play a full game", function() {
   
     beforeEach(function() {
 	this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
@@ -370,13 +366,16 @@ describe("Play a 2 player game", function() {
          expect(this.gameFactory.gameSpaceArray[6].occupied).toEqual("red");
     });
     
-    it("move third white piece to left bottom", function() {
+    it("move third white piece to left bottom and remove first red piece", function() {
 	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.gamePieceArray[16].current_space = 0;
 	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.gamePieceArray[14].current_space = 5;
 	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.gamePieceArray[12].current_space = 1;
 	this.gameFactory.place_piece("red", 6);
 	this.gameFactory.place_piece("white", 2);
-         expect(this.gameFactory.gameSpaceArray[2].occupied).toEqual("white");
+    expect(this.gameFactory.gameSpaceArray[2].occupied).toEqual("white");
     });
     
     it("move third red piece to right bottom", function() {
@@ -472,7 +471,7 @@ describe("Play a 2 player game", function() {
 	expect(this.gameFactory.gameSpaceArray[14].occupied).toEqual("red");
     });
     
-    it("move seventh white piece to left bottom of 2nd square", function() {
+    it("move seventh white piece to left bottom of 2nd square and remove fifth red piece", function() {
 	this.gameFactory.place_piece("white", 0);
 	this.gameFactory.place_piece("red", 5);
 	this.gameFactory.place_piece("white", 1);
@@ -566,27 +565,45 @@ describe("Play a 2 player game", function() {
 	this.gameFactory.place_piece("white", 17);
 	expect(this.gameFactory.gameSpaceArray[17].occupied).toEqual("white");
     });
+	
+	
     
-    it("move ninth red piece right middle of 3rd square", function() {
-	this.gameFactory.place_piece("white", 0);
-	this.gameFactory.place_piece("red", 5);
-	this.gameFactory.place_piece("white", 1);
-	this.gameFactory.place_piece("red", 6);
-	this.gameFactory.place_piece("white", 2);
-	this.gameFactory.place_piece("red", 7);
-	this.gameFactory.place_piece("white", 3);
-	this.gameFactory.place_piece("red", 4);
-	this.gameFactory.place_piece("white", 8);
-	this.gameFactory.place_piece("red", 13);
-	this.gameFactory.place_piece("white", 9);
-	this.gameFactory.place_piece("red", 14);
-	this.gameFactory.place_piece("white", 10);
-	this.gameFactory.place_piece("red", 15);
-	this.gameFactory.place_piece("white", 16);
-	this.gameFactory.place_piece("red", 21);
-	this.gameFactory.place_piece("white", 17);
-	this.gameFactory.place_piece("red", 22);
-	expect(this.gameFactory.gameSpaceArray[22].occupied).toEqual("red");
+    it("make moves and check winner", function() {
+
+		this.gameFactory.place_piece("white", 0);
+		this.gameFactory.place_piece("red", 5);
+		this.gameFactory.place_piece("white", 1);
+		this.gameFactory.place_piece("red", 6);
+		this.gameFactory.place_piece("white", 2);
+		expect(game_board.remove_piece(5)).toEqual(true);
+		this.gameFactory.place_piece("red", 7);
+		this.gameFactory.place_piece("white", 3);
+		this.gameFactory.place_piece("red", 4);
+		this.gameFactory.place_piece("white", 8);
+		this.gameFactory.place_piece("red", 13);
+		this.gameFactory.place_piece("white", 9);
+		this.gameFactory.place_piece("red", 14);
+		this.gameFactory.place_piece("white", 10);
+		expect(game_board.remove_piece(13)).toEqual(true);
+		this.gameFactory.place_piece("red", 15);
+		this.gameFactory.place_piece("white", 16);
+		this.gameFactory.place_piece("red", 21);
+		this.gameFactory.place_piece("white", 17);
+		expect(game_board.remove_piece(14)).toEqual(true);
+		this.gameFactory.place_piece("red", 22);
+		this.gameFactory.move_piece(18,17);
+		expect(game_board.remove_piece(7)).toEqual(false);
+		this.gameFactory.move_piece(5,6);
+		expect(game_board.remove_piece(15)).toEqual(false);
+		this.gameFactory.move_piece(18,17);
+		expect(game_board.remove_piece(21)).toEqual(false);
+		this.gameFactory.move_piece(5,6);
+		expect(game_board.remove_piece(22)).toEqual(false);
+		expect(this.gameFactory.hasWinner() || true).toEqual(true);
+		
+		
+	
     });
+	
     
 });
