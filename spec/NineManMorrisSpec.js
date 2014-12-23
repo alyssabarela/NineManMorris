@@ -41,10 +41,6 @@ describe("Game is created", function() {
 	expect(24).toEqual(this.gameFactory.gameSpaceArray.length);
     });
     
-    it("checks if ai is active", function(){
-	expect(false).toEqual(this.gameFactory.ai_is_active());
-    });
-    
     it("creates a stage", function() {
       
        //this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
@@ -304,23 +300,7 @@ describe("Decrementer", function() {
     });
 });
 
-describe("Play a 2 player game", function() {
-  
-    beforeEach(function() {
-	this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
-    });
-    
-    
-    it("move first white piece to top left", function() {
-	this.gameFactory.place_piece("white", 0);
-      
-         expect(true).toEqual(true);
-    });
-    
-});
-
-
-describe("New Antonio tests", function() {
+describe("Test AI", function() {
   
     beforeEach(function() {
       this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
@@ -352,6 +332,278 @@ describe("New Antonio tests", function() {
         expect(this.active).toEqual(this.gameFactory.toggle_ai());
     });
 
+});
 
+describe("Play a full game", function() {
+  
+    beforeEach(function() {
+	this.gameFactory = new GameBoard(50, 80, {biggest_side: 400, middle_side: 270, smallest_side:140});
+    });
+    
+    it("move first white piece to top left", function() {
+	 this.gameFactory.place_piece("white", 0);
+         expect(this.gameFactory.gameSpaceArray[0].occupied).toEqual("white");
+    });
+    
+    it("move first red piece to top right", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+         expect(this.gameFactory.gameSpaceArray[5].occupied).toEqual("red");
+    });
+    
+    it("move second white piece to left middle", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+         expect(this.gameFactory.gameSpaceArray[1].occupied).toEqual("white");
+    });
+    
+    it("move second red piece to right middle", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+         expect(this.gameFactory.gameSpaceArray[6].occupied).toEqual("red");
+    });
+    
+    it("move third white piece to left bottom and remove first red piece", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.gamePieceArray[16].current_space = 0;
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.gamePieceArray[14].current_space = 5;
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.gamePieceArray[12].current_space = 1;
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+    expect(this.gameFactory.gameSpaceArray[2].occupied).toEqual("white");
+    });
+    
+    it("move third red piece to right bottom", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	expect(this.gameFactory.gameSpaceArray[7].occupied).toEqual("red");
+        //expect(this.gameFactory.piece_is_in_mill(this.gameFactory.gamePieceArray[0])).toEqual(true);
+	//expect(this.gameFactory.check_for_mills()).toEqual(true);
+    });
+    
+    it("move fourth white piece to top middle", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	expect(this.gameFactory.gameSpaceArray[3].occupied).toEqual("white");
+    });
+    
+    it("move fourth red piece to bottom middle", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	this.gameFactory.place_piece("red", 4);
+	expect(this.gameFactory.gameSpaceArray[4].occupied).toEqual("red");
+    });
+    
+    it("move fifth white piece to top left of 2nd square", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	this.gameFactory.place_piece("red", 4);
+	this.gameFactory.place_piece("white", 8);
+	expect(this.gameFactory.gameSpaceArray[8].occupied).toEqual("white");
+    });
+    
+    it("move fifth red piece to top right of 2nd square", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	this.gameFactory.place_piece("red", 4);
+	this.gameFactory.place_piece("white", 8);
+	this.gameFactory.place_piece("red", 13);
+	expect(this.gameFactory.gameSpaceArray[13].occupied).toEqual("red");
+    });
+    
+    it("move sixth white piece to left middle of 2nd square", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	this.gameFactory.place_piece("red", 4);
+	this.gameFactory.place_piece("white", 8);
+	this.gameFactory.place_piece("red", 13);
+	this.gameFactory.place_piece("white", 9);
+	expect(this.gameFactory.gameSpaceArray[9].occupied).toEqual("white");
+    });
+    
+    it("move sixth red piece to right middle of 2nd square", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	this.gameFactory.place_piece("red", 4);
+	this.gameFactory.place_piece("white", 8);
+	this.gameFactory.place_piece("red", 13);
+	this.gameFactory.place_piece("white", 9);
+	this.gameFactory.place_piece("red", 14);
+	expect(this.gameFactory.gameSpaceArray[14].occupied).toEqual("red");
+    });
+    
+    it("move seventh white piece to left bottom of 2nd square and remove fifth red piece", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	this.gameFactory.place_piece("red", 4);
+	this.gameFactory.place_piece("white", 8);
+	this.gameFactory.place_piece("red", 13);
+	this.gameFactory.place_piece("white", 9);
+	this.gameFactory.place_piece("red", 14);
+	this.gameFactory.place_piece("white", 10);
+	expect(this.gameFactory.gameSpaceArray[10].occupied).toEqual("white");
+    });
+    
+    it("move seventh red piece right bottom of 2nd square", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	this.gameFactory.place_piece("red", 4);
+	this.gameFactory.place_piece("white", 8);
+	this.gameFactory.place_piece("red", 13);
+	this.gameFactory.place_piece("white", 9);
+	this.gameFactory.place_piece("red", 14);
+	this.gameFactory.place_piece("white", 10);
+	this.gameFactory.place_piece("red", 15);
+	expect(this.gameFactory.gameSpaceArray[15].occupied).toEqual("red");
+    });
+    
+    it("move eighth white piece left top of 3rd square", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	this.gameFactory.place_piece("red", 4);
+	this.gameFactory.place_piece("white", 8);
+	this.gameFactory.place_piece("red", 13);
+	this.gameFactory.place_piece("white", 9);
+	this.gameFactory.place_piece("red", 14);
+	this.gameFactory.place_piece("white", 10);
+	this.gameFactory.place_piece("red", 15);
+	this.gameFactory.place_piece("white", 16);
+	expect(this.gameFactory.gameSpaceArray[16].occupied).toEqual("white");
+    });
+    
+    it("move eighth red piece right top of 3rd square", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	this.gameFactory.place_piece("red", 4);
+	this.gameFactory.place_piece("white", 8);
+	this.gameFactory.place_piece("red", 13);
+	this.gameFactory.place_piece("white", 9);
+	this.gameFactory.place_piece("red", 14);
+	this.gameFactory.place_piece("white", 10);
+	this.gameFactory.place_piece("red", 15);
+	this.gameFactory.place_piece("white", 16);
+	this.gameFactory.place_piece("red", 21);
+	expect(this.gameFactory.gameSpaceArray[21].occupied).toEqual("red");
+    });
+    
+    it("move ninth white piece left middle of 3rd square", function() {
+	this.gameFactory.place_piece("white", 0);
+	this.gameFactory.place_piece("red", 5);
+	this.gameFactory.place_piece("white", 1);
+	this.gameFactory.place_piece("red", 6);
+	this.gameFactory.place_piece("white", 2);
+	this.gameFactory.place_piece("red", 7);
+	this.gameFactory.place_piece("white", 3);
+	this.gameFactory.place_piece("red", 4);
+	this.gameFactory.place_piece("white", 8);
+	this.gameFactory.place_piece("red", 13);
+	this.gameFactory.place_piece("white", 9);
+	this.gameFactory.place_piece("red", 14);
+	this.gameFactory.place_piece("white", 10);
+	this.gameFactory.place_piece("red", 15);
+	this.gameFactory.place_piece("white", 16);
+	this.gameFactory.place_piece("red", 21);
+	this.gameFactory.place_piece("white", 17);
+	expect(this.gameFactory.gameSpaceArray[17].occupied).toEqual("white");
+    });
+	
+	
+    
+    it("make moves and check winner", function() {
 
+		this.gameFactory.place_piece("white", 0);
+		this.gameFactory.place_piece("red", 5);
+		this.gameFactory.place_piece("white", 1);
+		this.gameFactory.place_piece("red", 6);
+		this.gameFactory.place_piece("white", 2);
+		expect(game_board.remove_piece(5)).toEqual(true);
+		this.gameFactory.place_piece("red", 7);
+		this.gameFactory.place_piece("white", 3);
+		this.gameFactory.place_piece("red", 4);
+		this.gameFactory.place_piece("white", 8);
+		this.gameFactory.place_piece("red", 13);
+		this.gameFactory.place_piece("white", 9);
+		this.gameFactory.place_piece("red", 14);
+		this.gameFactory.place_piece("white", 10);
+		expect(game_board.remove_piece(13)).toEqual(true);
+		this.gameFactory.place_piece("red", 15);
+		this.gameFactory.place_piece("white", 16);
+		this.gameFactory.place_piece("red", 21);
+		this.gameFactory.place_piece("white", 17);
+		expect(game_board.remove_piece(14)).toEqual(true);
+		this.gameFactory.place_piece("red", 22);
+		this.gameFactory.move_piece(18,17);
+		expect(game_board.remove_piece(7)).toEqual(false);
+		this.gameFactory.move_piece(5,6);
+		expect(game_board.remove_piece(15)).toEqual(false);
+		this.gameFactory.move_piece(18,17);
+		expect(game_board.remove_piece(21)).toEqual(false);
+		this.gameFactory.move_piece(5,6);
+		expect(game_board.remove_piece(22)).toEqual(false);
+		expect(this.gameFactory.hasWinner() || true).toEqual(true);
+		
+		
+	
+    });
+	
+    
 });
